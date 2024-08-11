@@ -1,3 +1,5 @@
+### CONTINUATION: https://github.com/Lotus-AU/LotusContinued
+
 <p align="center">
   <img width="400" height="400" src="https://avatars.githubusercontent.com/u/173427715">
 </p>
