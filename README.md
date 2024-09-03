@@ -1,10 +1,12 @@
 <p align="center">
-  <img width="" height="400" src="https://media.discordapp.net/attachments/1105589440010788885/1118532952733798500/Project_Lotus_Icon_2.png?width=671&height=671">
+  <img width="" height="400" src="./Images/lotus_image2.png">
 </p>
 
 # Project: Lotus
 
 ## Disclaimer
+
+This is a continuation of the original Project Lotus mod due to the original creator passing the project.
 
 Project: Lotus is not affiliated with Among Us or Innersloth LLC, and the content contained therein is not endorsed or otherwise sponsored by Innersloth LLC. Portions of the materials contained herein are property of Innersloth LLC. © Innersloth LLC. 
 
@@ -12,7 +14,7 @@ Project: Lotus is not affiliated with Among Us or Innersloth LLC, and the conten
 
 ## Releases
 
-AmongUs Version: **2023.6.13**
+AmongUs Version: **2024.3.5**
 **Latest Version: [Here](https://www.innersloth.com/games/among-us/)**
 
 ## Regarding This Mod
@@ -325,13 +327,13 @@ Templates: #This is necessary for the file, do not remove this line!
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 #### Default lobby-join Template
-![lobby-join](https://cdn.discordapp.com/attachments/1117632307487064145/1117942315974135868/image.png)
+![lobby-join](./Images/welcomemessage.png)
 
 #### Default meeting-first Template
-![meeting-first](https://cdn.discordapp.com/attachments/1117632307487064145/1117919318538211429/image.png)
+![meeting-first](./Images/roleinfo.png)
 
 #### Default meeting-start Template
-![meeting-start](https://cdn.discordapp.com/attachments/1117632307487064145/1117913469526749255/Standard_Meeting-Start_.png)
+![meeting-start](./Images/helpfulcommands.png)
 
 #### Useful Templates Not Included With Defaults
 
@@ -548,7 +550,7 @@ Suffix:<br>
 
   
 __Output__:<br>
-![Alt text](https://cdn.discordapp.com/attachments/1034687568643641354/1117295347434266674/image.png)
+![Alt text](./Images/tagexample1.png)
 
 #### Example 2
 
@@ -571,7 +573,7 @@ Suffix:<br>
 > Color: "#3BCFD4"<br>
 
 __Output__:<br>
-![Alt text](https://media.discordapp.net/attachments/1109172438006235278/1116595347293220894/Screenshot_2023-05-31_181524.png)
+![Alt text](./Images/tagexample2.png)
 
 # General Settings
 
@@ -671,17 +673,17 @@ __Output__:<br>
 
 | Impostor                               | Crewmate                        | Neutral Killing                   | Neutral Passive                        | Modifier                  |
 | -------------------------------------- | ------------------------------- | --------------------------------- | -------------------------------------- | ------------------------- |
-| [Assassin](#assassin)                   | [Alchemist](#alchemist)         | [Agitater](#agitater)             | [Amnesiac](#amnesiac)                  | [Bait](#bait)             |
-| [Blackmailer](#blackmailer)             | [Bastion](#bastion)             | [Arsonist](#arsonist)             | [Archangel](#archangel)                | [Bewilder](#bewilder)     |
-| [Camouflager](#camouflager)             | [Bodyguard](#bodyguard)         | [Blood Knight](#blood-knight)     | [Copy-Cat](#copy-cat)                  | [Bloodlust](#bloodlust)   |
-| [Consort](#consort)                     | [Charmer](#charmer)             | [Egoist](#egoist)                 | [Hacker](#hacker)                      | [Diseased](#diseased)     |
-| [Creeper](#creeper)                     | [Crusader](#crusader)           | [Hitman](#hitman)                 | [Jester](#jester)                      | [Flash](#flash)           |
-| [Disperser](#disperser)                 | [Demolitionist](#demolitionist) | [Jackal](#jackal)                 | [Opportunist](#opportunist)            | [Nimble](#nimble)         |
-| [Escapist](#escapist)                   | [Dictator](#dictator)           | [Juggernaut](#juggernaut)         | [Phantom](#phantom)                    | [Oblivious](#oblivious)   |
-| [FireWorker](#fireworker)               | [Doctor](#doctor)               | [Marksman](#marksman)             | [Postman](#postman)                    | [Romantic](#romantic)     |
-| [Freezer](#freezer)                     | [Escort](#escort)               | [Necromancer](#necromancer)       | [Schrodinger's Cat](#schrodingers-cat) | [Sleuth](#sleuth)         |
-| [Grenadier](#grenadier)                 | [Ex-Convict](#ex-convict)       | [Occultist](#occultist)           | [Survivor](#survivor)                  | [Tiebreaker](#tiebreaker) |
-| [Identity Thief](#identity-thief)       | [Herbalist](#herbalist)         | [Pelican](#pelican)               | [Terrorist](#terrorist)                | [Torch](#torch)           |
+| [Assassin](#assassin)                   | [Alchemist](#alchemist)         | [AgiTater](#agitater)             | [Amnesiac](#amnesiac)                  | [Bait](#bait)             |
+| [Blackmailer](#blackmailer)             | [Bastion](#bastion)             | [Arsonist](#arsonist)             | [Copycat](#copycat)                    | [Bewilder](#bewilder)     |
+| [Camouflager](#camouflager)             | [Bodyguard](#bodyguard)         | [Blood Knight](#blood-knight)     | [Hacker](#hacker)                      | [Bloodlust](#bloodlust)   |
+| [Consort](#consort)                     | [Charmer](#charmer)             | [Egoist](#egoist)                 | [Jester](#jester)                      | [Diseased](#diseased)     |
+| [Creeper](#creeper)                     | [Crusader](#crusader)           | [Hitman](#hitman)                 | [Opportunist](#opportunist)            | [Flash](#flash)           |
+| [Disperser](#disperser)                 | [Demolitionist](#demolitionist) | [Jackal](#jackal)                 | [Phantom](#phantom)                    | [Nimble](#nimble)         |
+| [Escapist](#escapist)                   | [Dictator](#dictator)           | [Juggernaut](#juggernaut)         | [Postman](#postman)                    | [Oblivious](#oblivious)   |
+| [FireWorks](#fireworks)                 | [Doctor](#doctor)               | [Marksman](#marksman)             | [Schrödinger's Cat](#schrödingers-cat) | [Romantic](#romantic)     |
+| [Freezer](#freezer)                     | [Escort](#escort)               | [Necromancer](#necromancer)       | [Survivor](#survivor)                  | [Sleuth](#sleuth)         |
+| [Grenadier](#grenadier)                 | [Ex-Convict](#ex-convict)       | [Occultist](#occultist)           | [Terrorist](#terrorist)                | [Tiebreaker](#tiebreaker) |
+| [Identity Thief](#identity-thief)       | [Herbalist](#herbalist)         | [Pelican](#pelican)               |                                        | [Torch](#torch)           |
 | [Janitor](#janitor)                     | [Investigator](#investigator)   | [Retributionist](#retributionist) |                                        | [Watcher](#watcher)       |
 | [Mafioso](#mafioso)                     | [Mayor](#mayor)                 | [The Glitch](#the-glitch)         |                                        | [Workhorse](#workhorse)   |
 | [Mare](#mare)                           | [Mechanic](#mechanic)           | [Werewolf](#werewolf)             |                                        |                           |
@@ -699,11 +701,11 @@ __Output__:<br>
 | [Warlock](#warlock)                     | [Swapper](#swapper)             |                                   |                                        |                           |
 | [Witch](#witch)                         | [Tracker](#tracker)             |                                   |                                        |                           |
 | [Yin Yanger](#yin-yanger)               | [Transporter](#transporter)     |                                   |                                        |                           |
-|                                        | [Trapster](#trapster)           |                                   |                                        |                           |
-| [Crewposter (Madmate)](#crewposter)     | [Veteran](#veteran)             |                                   |                                        |                           |
-| [Mad Guardian (Madmate)](#madguardian) | [Vigilante](#vigilante)         |                                   |                                        |                           |
+|                                         | [Trapster](#trapster)           |                                   |                                        |                           |
+| [Crewpostor (Madmate)](#crewpostor)     | [Veteran](#veteran)             |                                   |                                        |                           |
+| [Mad Guardian (Madmate)](#mad-guardian) | [Vigilante](#vigilante)         |                                   |                                        |                           |
 | [Madmate (Madmate)](#madmate)           |                                 |                                   |                                        |                           |
-| [Mad Snitch (Madmate)](#madsnitch)      |                                 |                                   |                                        |                           |
+| [Mad Snitch (Madmate)](#mad-snitch)     |                                 |                                   |                                        |                           |
 | [Parasite (MadMate)](#parasite)         |                                 |                                   |                                        |                           |
 
 
@@ -716,7 +718,7 @@ __Output__:<br>
 
 ## GM
 
-<img align="right" width="" height="200" src="https://media.discordapp.net/attachments/1108944832493277264/1118933409104933016/Screenshot_2023-06-15_092440.png?width=1193&height=671">
+<img align="right" width="" height="200" src="./Images/RoleImages/gm.png">
 
 The GM (Game Master) is an observer role.<br>
 Their presence has no effect on the game itself, and all players know who the GM is at all times.<br>
@@ -728,7 +730,7 @@ Always assigned to a host and is ghosted from the start.<br>
 
 ## Assassin 
 
-<img align="right" width="" height="200" src="https://media.discordapp.net/attachments/1108944832493277264/1118766968753897522/image.png?width=1185&height=671">
+<img align="right" width="" height="200" src="./Images/RoleImages/Imposter/assassin.png">
 
 __Team__: Impostor<br>
 __Base__: Impostor<br>
@@ -747,7 +749,7 @@ Assassin is an evil guesser and part of the Impostor team. While in meeting the 
 
 ## Blackmailer 
 
-<img align="right" width="" height="200" src="https://media.discordapp.net/attachments/1034687568643641354/1118603471340453938/image.png?width=1193&height=671">
+<img align="right" width="" height="200" src="./Images/RoleImages/Imposter/blackmailer.png">
 
 __Faction__: Impostor<br>
 __Base__: Impostor<br>
@@ -773,7 +775,7 @@ Shapeshift into a player to blackmail them. During meeting, the blackmailed play
 
 ## Bounty Hunter
 
-<img align="right" width="" height="200" src="https://media.discordapp.net/attachments/1108944832493277264/1118912499358629959/Capture_decran_16.png?width=1193&height=671">
+<img align="right" width="" height="200" src="./Images/RoleImages/Imposter/bountyhunter.png">
 
 __Faction__: Impostor<br>
 __Base__: Impostor<br>
@@ -799,7 +801,7 @@ Collect Bounty from Target players (marked by black name). If the Bounty Hunter 
 
 ## Camouflager
 
-<img align="right" width="" height="200" src="https://media.discordapp.net/attachments/1108944832493277264/1108955164213264384/Screenshot_2023-05-18_at_11.11.47_PM.png?width=1074&height=671">
+<img align="right" width="" height="200" src="./Images/RoleImages/Imposter/camo.png">
 
 __Faction__: Impostor<br>
 __Base__: Shapeshifter<br>
@@ -825,7 +827,7 @@ Shapeshift into a player and cause every living player to shapeshift into the ch
 
 ## Consort 
 
-<img align="right" width="" height="200" src="https://media.discordapp.net/attachments/1108944832493277264/1108954743738478662/image.png?width=1193&height=671">
+<img align="right" width="" height="200" src="./Images/RoleImages/Imposter/consort.png">
 
 __Faction__: Impostor<br>
 __Base__: Impostor<br>
@@ -850,7 +852,7 @@ Use the Pet button to alternate between Role-Blocking and Killing. Role-Blocks p
 
 ## Creeper
 
-<img align="right" width="" height="200" src="https://media.discordapp.net/attachments/1108944832493277264/1118932890101755955/Screenshot_2023-06-15_062643.png?width=1193&height=671">
+<img align="right" width="" height="200" src="./Images/RoleImages/imposter/creeper.png">
 
 __Faction__: Impostor<br>
 __Base__: Impostor<br>
@@ -877,7 +879,7 @@ The Creeper's only job is to cause as much devasation as possible. Use either yo
 
 ## Disperser 
 
-<img align="right" width="" height="200" src="https://media.discordapp.net/attachments/1108944832493277264/1108958172481343499/image.png?width=1193&height=671">
+<img align="right" width="" height="200" src="./Images/RoleImages/Imposter/disperser.png">
 
 __Faction__: Impostor<br>
 __Base__: Impostor<br>
@@ -902,7 +904,7 @@ Use Pet button to teleport everyone to a random vent.<br>
 
 ## Escapist
 
-<img align="right" width="" height="200" src="https://media.discordapp.net/attachments/1108944832493277264/1108954875615789197/image.png?width=1193&height=671">
+<img align="right" width="" height="200" src="./Images/RoleImages/Imposter/escapist.png">
 
 __Faction__: Impostor<br>
 __Base__: Shapeshifter<br>
@@ -926,9 +928,9 @@ First use Pet button to mark a location. Then, after a set cooldown, you can re-
 
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-## FireWorker
+## FireWorks
 
-<img align="right" width="" height="200" src="https://media.discordapp.net/attachments/1108944832493277264/1108959650709245972/image.png?width=1193&height=671">
+<img align="right" width="" height="200" src="./Images/RoleImages/Imposter/fireworker.png">
 
 __Faction__: Impostors<br>
 __Base__: Shapeshifter<br>
@@ -942,26 +944,26 @@ __Indicatior/Symbols__: None<br>
 Use Pet button to plant a fireworks (i.e. bombs) around the map until Max Firework Count has been reached. Make sure you have enough room for the pet animation. Shapeshift to detonate all of the Fireworks, killing everyone within radius of each one. <br><br>
 
 Note: The explosion goes through walls.<br>
-The FireWorker can also kill normally between placing fireworks.<br>
+The FireWorks can also kill normally between placing fireworks.<br>
 
 ### Game Options
 |              Name               |                                                Description                                                |      Type      |  Default   | 
 | ------------------------------- | --------------------------------------------------------------------------------------------------------- | :------------: | :--------: |
-| Fireworker                      | The probability of the FireWorkers appearing                                                              |   Percentage   |     0%     |
-| Maximum                         | How many FireWorkers should spawn                                                                         |     Number     |      1     |
+| FireWorks                       | The probability of the FireWorks appearing                                                                |   Percentage   |     0%     |
+| Maximum                         | How many FireWorks should spawn                                                                           |     Number     |      1     |
 | Total Firework Count            | How many fireworks can be placed on the map                                                               |     Number     |      3     |
 | Fireworks Per Round             | How many fireworks can be placed per round                                                                |  Number/Limit  |  No Limit  |
-| ┗ Fireworks Ability Cooldown    | The cooldown of the Fireworker's ability to plant fireworks (bombs)                                       |      Time      |     20s    |
+| ┗ Fireworks Ability Cooldown    | The cooldown of the FireWorks's ability to plant fireworks (bombs)                                        |      Time      |     20s    |
 | Firework Explosion Radius       | The Distance a player can be from a Firework and be affected by it's explosion                            |      Number    |     0.8    |
 | Firework Delay                  | The amount of time it takes from shapeshift for the fireworks to explode                                  |      Time      |     1s     |
 | ┗ Warn Players Before Explosion | All players within radius get a reactor alarm and text letting them know the firework is about to explode |     Toggle     |     ON     |
-| Must Be Last Impostor           | Whether the Fireworker can detonate fireworks before they are Last Impostor                               |     Toggle     |     ON     |
+| Must Be Last Impostor           | Whether the FireWorks can detonate fireworks before they are Last Impostor                                |     Toggle     |     ON     |
 
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 ## Freezer 
 
-<img align="right" width="" height="200" src="https://media.discordapp.net/attachments/1108944832493277264/1108955384791707668/image.png?width=1193&height=671">
+<img align="right" width="" height="200" src="./Images/RoleImages/Imposter/freezer.png">
 
 __Faction__: Impostors<br>
 __Base__: Shapeshifter<br>
@@ -987,7 +989,7 @@ The Freezer can freeze a player in place by shapeshifting into them. The player 
 
 ## Grenadier
 
-<img align="right" width="" height="200" src="https://media.discordapp.net/attachments/1108944832493277264/1108955095598649374/image.png?width=1193&height=671">
+<img align="right" width="" height="200" src="./Images/RoleImages/Imposter/grenadier.png">
 
 __Faction__: Impostor<br>
 __Base__: Impostor<br>
@@ -1016,7 +1018,7 @@ Using the Pet button sets off a bomb, blinding players in a fixed-distance. It m
 
 ## Identity Thief
 
-<img align="right" width="" height="200" src="https://media.discordapp.net/attachments/1108944832493277264/1109056495053709322/image.png?width=1193&height=671">
+<img align="right" width="" height="200" src="./Images/RoleImages/Imposter/identitythief.png">
 
 __Faction__: Impostor<br>
 __Base__: Shapeshifter<br>
@@ -1040,7 +1042,7 @@ The Identity Thief shifts into whoever they kill. The disguise lasts until they 
 
 ## Janitor 
 
-<img align="right" width="" height="200" src="https://media.discordapp.net/attachments/1108944832493277264/1118397005241258024/image.png?width=1193&height=671">
+<img align="right" width="" height="200" src="./Images/RoleImages/Imposter/janitor.png">
 
 __Faction__: Impostor<br>
 __Base__: Impostor<br>
@@ -1064,7 +1066,7 @@ Choose between killing and cleaning at the end of kill cooldown. Once the choice
 
 ## Mafioso
 
-<img align="right" width="" height="200" src="https://media.discordapp.net/attachments/1108944832493277264/1109031674953613382/image.png?width=1193&height=671">
+<img align="right" width="" height="200" src="./Images/RoleImages/Imposter/mafioso.png">
 
 __Faction__: Impostors<br>
 __Base__: Engineer<br>
@@ -1104,7 +1106,7 @@ _The Global option for Gun Cooldown means that this setting will be the same as 
 
 ## Mare
 
-<img align="right" width="" height="200" src="https://media.discordapp.net/attachments/1108944832493277264/1118912498997927956/image.png?width=1193&height=671">
+<img align="right" width="" height="200" src="./Images/RoleImages/Imposter/mare.png">
 
 __Faction__: Impostors<br>
 __Base__: Impostor<br>
@@ -1138,7 +1140,7 @@ Mare gains special powers during specific sabotages (determined by host). These 
 
 ## Mastermind 
 
-<img align="right" width="" height="200" src="https://media.discordapp.net/attachments/1108944832493277264/1108957020012425246/image.png?width=1193&height=671">
+<img align="right" width="" height="200" src="./Images/RoleImages/Imposter/mastermind.png">
 
 __Faction__: Impostors<br>
 __Base__: Impostor<br>
@@ -1166,7 +1168,7 @@ _The Global option for Manipulation Cooldown means that this setting will be the
 
 ## Miner
 
-<img align="right" width="" height="200" src="https://media.discordapp.net/attachments/1108944832493277264/1108957388020645938/image.png?width=1193&height=671">
+<img align="right" width="" height="200" src="./Images/RoleImages/Imposter/miner.png">
 
 __Faction__: Impostors<br>
 __Base__: Impostor<br>
@@ -1190,7 +1192,7 @@ Use the Pet button to teleport to the last vent used. Make sure you have enough 
 
 ## Morphling
 
-<img align="right" width="" height="200" src="https://media.discordapp.net/attachments/1108944832493277264/1108954649823825963/image.png?width=1193&height=671">
+<img align="right" width="" height="200" src="./Images/RoleImages/Imposter/morphling.png">
 
 __Faction__: Impostors<br>
 __Base__: Shapeshifter<br>
@@ -1214,7 +1216,7 @@ The Morphling can shapeshift themselves into any player that was still alive at 
 
 ## Ninja
 
-<img align="right" width="" height="200" src="https://media.discordapp.net/attachments/1108944832493277264/1118399352038244453/image.png?width=1193&height=671">
+<img align="right" width="" height="200" src="./Images/RoleImages/Imposter/ninja.png">
 
 __Faction__: Impostors<br>
 __Base__: Shapeshifter or Impostor<br>
@@ -1246,7 +1248,7 @@ With this option the Ninja no longer teleports to the target. Instead, the targe
 
 ## Pickpocket
 
-<img align="right" width="" height="200" src="https://media.discordapp.net/attachments/1108944832493277264/1118932949627326474/Screenshot_2023-06-15_062714.png?width=1193&height=671">
+<img align="right" width="" height="200" src="./Images/RoleImages/Imposter/pickpocket.png">
 
 __Faction__: Impostors<br>
 __Base__: Impostor<br>
@@ -1274,7 +1276,7 @@ _The Global option for Kill Cooldown means that this setting will be the same as
 
 ## Puppeteer
 
-<img align="right" width="" height="200" src="https://media.discordapp.net/attachments/1108944832493277264/1108954990032191638/image.png?width=1193&height=671">
+<img align="right" width="" height="200" src="./Images/RoleImages/Imposter/puppeteer.png">
 
 __Faction__: Impostors<br>
 __Base__: Impostor<br>
@@ -1297,7 +1299,7 @@ The Puppeteer can control a player and force them to kill the next non-impostor 
 
 ## Serial Killer 
 
-<img align="right" width="" height="200" src="https://media.discordapp.net/attachments/1108944832493277264/1108955506074198026/image.png?width=1193&height=671">
+<img align="right" width="" height="200" src="./Images/RoleImages/Imposter/serialkiller.png">
 
 __Faction__: Impostors <br>
 __Base__: Impostor<br>
@@ -1323,7 +1325,7 @@ Has a reduced Kill-Cooldown (determined by host). Kill players before cooldown e
 
 ## Sniper
 
-<img align="right" width="" height="200" src="https://media.discordapp.net/attachments/1108944832493277264/1108959146264514640/image.png?width=1193&height=671">
+<img align="right" width="" height="200" src="./Images/RoleImages/Imposter/sniper.png">
 
 __Faction__: Impostors<br>
 __Base__: Shapeshifter<br>
@@ -1360,7 +1362,7 @@ Use Pet Button to load a bullet and get ready to shoot. Make sure you have enoug
 
 ## Swooper
 
-<img align="right" width="" height="200" src="https://media.discordapp.net/attachments/1108944832493277264/1108956267814338721/image.png?width=1187&height=671">
+<img align="right" width="" height="200" src="./Images/RoleImages/Imposter/swooper.png">
 
 __Faction__: Impostor<br>
 __Base__: Impostor<br>
@@ -1388,7 +1390,7 @@ A normal impostor that can go invisible when entering a vent. While invisible, t
 
 ## Time Thief
 
-<img align="right" width="" height="200" src="https://media.discordapp.net/attachments/1108944832493277264/1108955718532481024/image.png?width=1193&height=671">
+<img align="right" width="" height="200" src="./Images/RoleImages/Imposter/timethief.png">
 
 __Faction__: Impostors<br>
 __Base__: Impostor<br>
@@ -1414,7 +1416,7 @@ Killing a player decreases meeting/voting time. Option: When TimeThief is expell
 
 ## Vampire
 
-<img align="right" width="" height="200" src="https://media.discordapp.net/attachments/1108944832493277264/1118397285584339004/image.png?width=1193&height=671">
+<img align="right" width="" height="200" src="./Images/RoleImages/Imposter/vampire.png">
 
 __Faction__: Impostors<br>
 __Base__: Impostor<br>
@@ -1429,7 +1431,7 @@ The Vampire bites it's targets, resulting in a delayed kill. The bitten player w
 
 ### Vampiress 
 
-<img align="right" width="" height="200" src="https://media.discordapp.net/attachments/1034687568643641354/1118604102541267154/image.png?width=1193&height=671">
+<img align="right" width="" height="200" src="./Images/RoleImages/Imposter/vampiress.png">
 
 __Faction__: Impostor<br>
 __Base__ Impostor<br>
@@ -1458,7 +1460,7 @@ _The Global option for Kill Cooldown means that this setting will be the same as
 
 ## Warlock
 
-<img align="right" width="" height="200" src="https://media.discordapp.net/attachments/1108944832493277264/1118397475837984778/image.png?width=1193&height=671">
+<img align="right" width="" height="200" src="./Images/RoleImages/Imposter/warlock.png">
 
 __Faction__: Impostors<br>
 __Base__: Shapeshifter<br>
@@ -1483,7 +1485,7 @@ Use the Kill Button to curse a Player. The next time the Warlock shapeshifts, th
 
 ## Witch
 
-<img align="right" width="" height="200" src="https://media.discordapp.net/attachments/1108944832493277264/1118398828295495720/image.png?width=1193&height=671">
+<img align="right" width="" height="200" src="./Images/RoleImages/Imposter/witch.png">
 
 __Faction__: Impostors<br>
 __Base__: Impostor<br>
@@ -1508,7 +1510,7 @@ Alternate between curses and killing by utilizing the Kill Button. Players who a
 
 ## Yin Yanger
 
-<img align="right" width="" height="200" src="https://media.discordapp.net/attachments/1108944832493277264/1108955852485963857/image.png?width=1193&height=671">
+<img align="right" width="" height="200" src="./Images/RoleImages/Imposter/yinyanger.png">
 
 __Faction__: Impostors<br>
 __Base__: Impostor<br>
@@ -1536,7 +1538,7 @@ _The Global option for Yin Yang Cooldown means that this setting will be the sam
 
 ## CrewPostor
 
-<img align="right" width="" height="200" src="https://media.discordapp.net/attachments/1108944832493277264/1118397683468611594/image.png?width=1193&height=671">
+<img align="right" width="" height="200" src="./Images/RoleImages/Imposter/crewposter.png">
 
 __Faction__: Neutral<br>
 __Base__: Crewmate<br>
@@ -1567,7 +1569,7 @@ Complete a task to instantly kill the player nearest you (even impostors and oth
 
 ## Madmate
 
-<img align="right" width="" height="200" src="https://media.discordapp.net/attachments/1108944832493277264/1108957576831434833/image.png?width=1193&height=671">
+<img align="right" width="" height="200" src="./Images/RoleImages/Imposter/madmate.png">
 
 __Faction__: Impostors<br>
 __Base__: Engineer<br>
@@ -1597,7 +1599,7 @@ Act sus. Take suspicion off of Impostors by pretending to fix sabotages, venting
 
 ## Mad Guardian
 
-<img align="right" width="" height="200" src="https://media.discordapp.net/attachments/1108944832493277264/1108957831140474940/image.png?width=1193&height=671">
+<img align="right" width="" height="200" src="./Images/RoleImages/Imposter/madguardian.png">
 
 __Faction__: Impostors<br>
 __Base__: Crewmate<br>
@@ -1632,7 +1634,7 @@ Finish tasks to become immune from kills.<br>
 
 ## Mad Snitch
 
-<img align="right" width="" height="200" src="https://media.discordapp.net/attachments/1108944832493277264/1108960365536088144/image.png?width=1193&height=671">
+<img align="right" width="" height="200" src="./Images/RoleImages/Imposter/madsnitch.png">
 
 __Faction__: Impostors<br>
 __Base__: Crewmate or Engineer<br>
@@ -1668,7 +1670,7 @@ Has the option to vent.<br>
 
 ## Parasite
 
-<img align="right" width="" height="200" src="https://media.discordapp.net/attachments/1108944832493277264/1108946171487064144/image.png?width=1193&height=671">
+<img align="right" width="" height="200" src="./Images/RoleImages/Imposter/parasite.png">
 
 __Faction__: Impostors (MadMates)<br>
 __Base__: Shapeshifter<br>
@@ -1697,7 +1699,7 @@ _The Global option for Kill Cooldown means that this setting will be the same as
 
 ## Alchemist 
 
-<img align="right" width="" height="200" src="https://media.discordapp.net/attachments/1108944832493277264/1108957938036510751/image.png?width=1193&height=671">
+<img align="right" width="" height="200" src="./Images/RoleImages/Crew/alchemist.png">
 
 __Faction__: Crewmate<br>
 __Base__: Crewmate<br>
@@ -1782,7 +1784,7 @@ Once the Alchemist has a potion, they can hold down the pet button to use it, co
 
 ## Bastion 
 
-<img align="right" width="" height="200" src="https://media.discordapp.net/attachments/1108944832493277264/1118397787562844231/image.png?width=1193&height=671">
+<img align="right" width="" height="200" src="./Images/RoleImages/Crew/bastion.png">
 
 __Faction__: Crewmate<br>
 __Base__: Engineer<br>
@@ -1809,7 +1811,7 @@ Be careful! The Bastion can bomb themself by using a vent they've already plante
 
 ## Bodyguard
 
-<img align="right" width="" height="200" src="https://media.discordapp.net/attachments/1108944832493277264/1118399162766082078/image.png?width=1193&height=671">
+<img align="right" width="" height="200" src="./Images/RoleImages/Crew/bodyguard.png">
 
 __Faction__: Crewmate<br>
 __Base__: Crewmate<br>
@@ -1835,7 +1837,7 @@ The first player voted becomes the Bodyguard’s Target. This will not count as 
 
 ## Chameleon
 
-<img align="right" width="" height="200" src="https://media.discordapp.net/attachments/1034687568643641354/1118610632149831690/image.png?width=1193&height=671">
+<img align="right" width="" height="200" src="./Images/RoleImages/Crew/chameleon.png">
 
 __Faction__: Crewmate<br>
 __Base__: Engineer<br>
@@ -1861,7 +1863,7 @@ _Vent button cooldown = Invisibility Duration + Invisibility Cooldown_
 
 ## Charmer
 
-<img align="right" width="" height="200" src="https://cdn.discordapp.com/attachments/1108944832493277264/1118404715336708096/image.png">
+<img align="right" width="" height="200" src="./Images/RoleImages//1118404715336708096/image.png">
 
 __Faction__: Crewmate<br>
 __Base__: Crewmate<br>
@@ -1889,7 +1891,7 @@ When the Charmer uses their Pet/Kill button on an impostor or neutral killer, th
 
 ## Crusader
 
-<img align="right" width="" height="200" src="https://media.discordapp.net/attachments/1108944832493277264/1109034132232753193/image.png?width=1193&height=671">
+<img align="right" width="" height="200" src="./Images/RoleImages/Crew/crusader.png">
 
 __Faction__: Crewmate<br>
 __Base__: Impostor<br>
@@ -1914,7 +1916,7 @@ The Crusader works like a living Guardian Angel from Vanilla Amoung Us. Use the 
 
 ## Demolitionist
 
-<img align="right" width="" height="200" src="https://cdn.discordapp.com/attachments/1108944832493277264/1118405947363184661/image.png">
+<img align="right" width="" height="200" src="./Images/RoleImages/Crew/demo.png">
 
 __Faction__: Crewmate<br>
 __Base__: Crewmate<br>
@@ -1938,7 +1940,7 @@ When the Demolitionist is killed, they bomb the ground, giving the killer a few 
 
 ## Dictator
 
-<img align="right" width="" height="200" src="https://cdn.discordapp.com/attachments/1108944832493277264/1118405947363184661/image.png">
+<img align="right" width="" height="200" src="./Images/RoleImages/Crew/dictator.png">
 
 __Faction__: Crewmate<br>
 __Base__: Crewmate<br>
@@ -1967,7 +1969,7 @@ Three things happen when the Dictator votes for someone in meeting:<br>
 
 ## Doctor
 
-<img align="right" width="" height="200" src="https://media.discordapp.net/attachments/1108944832493277264/1109060478799450112/image.png?width=1193&height=671">
+<img align="right" width="" height="200" src="./Images/RoleImages/Crew/doctor.png">
 
 __Faction__: Crewmate<br>
 __Base__: Scientist<br>
@@ -1992,7 +1994,7 @@ The Doctor has a portable vitals panel just like the vanilla role, Scientist. Ch
 
 ## Escort 
 
-<img align="right" width="" height="200" src="https://media.discordapp.net/attachments/1034687568643641354/1118609664079306823/image.png?width=1193&height=671">
+<img align="right" width="" height="200" src="./Images/RoleImages/Crew/escort.png">
 
 __Faction__: Crewmate<br>
 __Base__: Impostor<br>
@@ -2019,7 +2021,7 @@ Cannot roleblock The Glitch.<br>
 
 ## Ex-Convict
 
-<img align="right" width="" height="200" src="https://media.discordapp.net/attachments/1034687568643641354/1118611014615830578/image.png?width=1193&height=671">
+<img align="right" width="" height="200" src="./Images/RoleImages/Crew/ex-convict.png">
 
 __Faction__: Crewmate<br>
 __Base__: Crewmate<br>
@@ -2044,7 +2046,7 @@ First use Pet button to mark a location, then after a set cooldown, you can re-u
 
 ## Herbalist
 
-<img align="right" width="" height="200" src="https://media.discordapp.net/attachments/1034687568643641354/1118608814850195506/image.png?width=1193&height=671">
+<img align="right" width="" height="200" src="./Images/RoleImages/Crew/herbalist.png">
 
 __Faction__: Crewmate<br>
 __Base__: Crewmate<br>
@@ -2070,7 +2072,7 @@ Use your Pet button to plant a seed on a player. After a set period of time, tha
 
 ## Investigator
 
-<img align="right" width="" height="200" src="https://media.discordapp.net/attachments/1108944832493277264/1118400108577431612/image.png?width=1193&height=671">
+<img align="right" width="" height="200" src="./Images/RoleImages/Crew/investigator.png">
 
 __Faction__: Crewmates<br>
 __Base__: Impostor/Crewmate<br>
@@ -2081,7 +2083,7 @@ __Indicatior/Symbols__: Player's Name Changes Based On "Good" or "Bad"<br>
 `Idea By: Town of Us Reactivated`<br>
 
 #### Role Description
-Use the Kill button to investigate if the player is good or bad. In general, red is bad & green is good. Be wary of how 'bad' the player with the red name is. The Sheriff or Veteran can end up with a red name in some lobbies!<br>
+Use the Pet button to investigate if the player is good or bad. In general, red is bad & green is good.<br>
 
 __*Red = Bad*__ <br>
  - __Impostors__ (always)<br>
@@ -2125,7 +2127,6 @@ __*Green = Good*__ <br>
 | Neutral Passive are Red  | Whether Neutral Passive roles appear red when investigated       |   Toggle   |    OFF    |
 | ┣ Amalgamation           | Whether Amalgamation will show a red name when investigated      |   Toggle   |  Enabled  |
 | ┣ Amnesiac               | Whether Amnesiac will show a red name when investigated          |   Toggle   |  Enabled  |
-| ┣ Archangel              | Whether Archangel will show a red name when investigated         |   Toggle   |  Enabled  |
 | ┣ Copycat                | Whether Copycat will show a red name when investigated           |   Toggle   |  Enabled  | 
 | ┣ Executioner            | Whether Executioner will show a red name when investigated       |   Toggle   |  Enabled  |
 | ┣ Hacker                 | Whether Hacker will show a red name when investigated            |   Toggle   |  Enabled  |
@@ -2133,7 +2134,7 @@ __*Green = Good*__ <br>
 | ┣ Opportunist            | Whether Opporttunist will show a red name when investigated      |   Toggle   |  Enabled  | 
 | ┣ Phantom                | Whether Phantom will show a red name when investigated           |   Toggle   |  Enabled  |
 | ┣ Postman                | Whether Postman will show a red name when investigated           |   Toggle   |  Enabled  |
-| ┣ Schrodinger's Cat      | Whether Schrodinger's Cat will show a red name when investigated |   Toggle   |  Enabled  |
+| ┣ Schrödinger's Cat      | Whether Schrödinger's Cat will show a red name when investigated |   Toggle   |  Enabled  |
 | ┣ Survivor               | Whether Survivor will show a red name when investigated          |   Toggle   |  Enabled  |
 | ┣ Terrorist              | Whether Terrorist will show a red name when investigated         |   Toggle   |  Enabled  | 
 | ┗ Vulture                | Whether Vulture will show a red name when investigated           |   Toggle   |  Enabled  |
@@ -2148,7 +2149,7 @@ __*Green = Good*__ <br>
 
 ## Mayor
 
-<img align="right" width="" height="200" src="https://media.discordapp.net/attachments/1108944832493277264/1109027208674152458/image.png?width=1193&height=671">
+<img align="right" width="" height="200" src="./Images/RoleImages/Crew/mayor.png">
 
 __Faction__: Crewmate<br>
 __Base__: Crewmate or Engineer<br>
@@ -2175,7 +2176,7 @@ Mayor’s vote is counted multiple times (predetermined by the host in settings)
 
 ## Mechanic
 
-<img align="right" width="" height="200" src="https://media.discordapp.net/attachments/1034687568643641354/1118609882988417094/image.png?width=1193&height=671">
+<img align="right" width="" height="200" src="./Images/RoleImages/Crew/mechanic.png">
 
 __Faction__: Crewmate<br>
 __Base__: Engineer<br>
@@ -2199,7 +2200,7 @@ The Mechanic can use vents to travel around the map. They are restricted by the 
 
 ## Medic
 
-<img align="right" width="" height="200" src="https://media.discordapp.net/attachments/1108944832493277264/1109060907356663898/image.png?width=1193&height=671">
+<img align="right" width="" height="200" src="./Images/RoleImages/Crew/medic.png">
 
 __Faction__: Crewmate<br>
 __Base__: Crewmate<br>
@@ -2223,7 +2224,7 @@ The Medic is able to vote a player to shield. Based on host's options, the Medic
 
 ## Medium
 
-<img align="right" width="" height="200" src="https://media.discordapp.net/attachments/1108944832493277264/1118400216106811392/image.png?width=1193&height=671">
+<img align="right" width="" height="200" src="./Images/RoleImages/Crew/medium.png">
 
 __Faction__: Crewmate<br>
 __Base__: Crewmate<br>
@@ -2248,7 +2249,7 @@ In meeting chat, the Medium will receive a message revealing the role of the rep
 
 ## Mystic
 
-<img align="right" width="" height="200" src="https://media.discordapp.net/attachments/1108944832493277264/1108948538269892608/Screenshot_2023-05-18_214521.png?width=1193&height=671">
+<img align="right" width="" height="200" src="./Images/RoleImages/Crew/mystic.png">
 
 __Faction__: Crewmate<br>
 __Base__: Crewmate<br>
@@ -2274,7 +2275,7 @@ When a player is killed, Mystic receives a single flash and alert. It is very si
 
 ## Observer
 
-<img align="right" width="" height="200" src="https://media.discordapp.net/attachments/1108944832493277264/1118400315633434735/image.png?width=1193&height=671">
+<img align="right" width="" height="200" src="./Images/RoleImages/Crew/observer.png">
 
 __Faction__: Crewmate<br>
 __Base__: Crewmate<br>
@@ -2302,7 +2303,7 @@ Finish tasks to gain vision. Depending on the host's options, you may gain a sma
 
 ## Oracle
 
-<img align="right" width="" height="200" src="https://media.discordapp.net/attachments/1108944832493277264/1109128303245262929/Screenshot_4492.png?width=1193&height=671">
+<img align="right" width="" height="200" src="./Images/RoleImages/Crew/oracle.png">
 
 __Faction__: Crewmate<br>
 __Base__: Crewmate<br>
@@ -2325,7 +2326,7 @@ The first player voted by the Oracle becomes the Oracle’s Target. This will no
 
 ## Physicist
 
-<img align="right" width="" height="200" src="https://media.discordapp.net/attachments/1034687568643641354/1118608553071104140/image.png?width=1193&height=671">
+<img align="right" width="" height="200" src="./Images/RoleImages/Crew/physicist.png">
 
 __Faction__: Crewmate<br>
 __Base__: Scientist<br>
@@ -2350,7 +2351,7 @@ The Physicists have a portable vitals monitor that can be accessed anywhere on t
 
 ## Psychic 
 
-<img align="right" width="" height="200" src="https://media.discordapp.net/attachments/1108944832493277264/1118400433375948832/image.png?width=1193&height=671">
+<img align="right" width="" height="200" src="./Images/RoleImages/Crew/psychic.png">
 
 __Faction__: Crewmates<br>
 __Base__: Crewmate<br>
@@ -2375,7 +2376,7 @@ The Psychic has the ability to see potential evils during a meeting. Three playe
 
 ## Repairman
 
-<img align="right" width="" height="200" src="https://media.discordapp.net/attachments/1108944832493277264/1118400543564509285/image.png?width=1193&height=671">
+<img align="right" width="" height="200" src="./Images/RoleImages/Crew/repairman.png">
 
 __Faction__: Crewmates<br>
 __Base__: Crewmate/Engineer<br>
@@ -2391,7 +2392,7 @@ Repairman can fast-fix sabotages that typically require two players (e.g. reacto
 ### Game Options
 |            Name           |                   Description                 |     Type     |  Default  | 
 | ------------------------- | --------------------------------------------- | :----------: | :-------: |
-| Sabotage Master           | The probability of the Repairman appearing    |  Percentage  |    0%     |
+| Repairman                 | The probability of the Repairman appearing    |  Percentage  |    0%     |
 | Maximum                   | How many Repairmans should spawn              |    Number    |     1     |
 | Repairman Can Vent        | Whether the Repairman can vent                |    Toggle    |    ON     | 
 | ┣ Vent Cooldown           | The cooldown of the Repairman's vent button   |     Time     |    40s    | 
@@ -2408,7 +2409,7 @@ Repairman can fast-fix sabotages that typically require two players (e.g. reacto
 
 ## Sheriff
 
-<img align="right" width="" height="200" src="https://media.discordapp.net/attachments/1108944832493277264/1109019175629897788/image.png?width=1193&height=671">
+<img align="right" width="" height="200" src="./Images/RoleImages/Crew/sheriff.png">
 
 __Faction__: Crewmate<br>
 __Base__: Impostor/Crewmate<br>
@@ -2436,7 +2437,7 @@ The Sheriff can kill Impostors. Be Careful! The Sheriff will misfire (kill thems
 
 ## Snitch 
 
-<img align="right" width="" height="200" src="https://media.discordapp.net/attachments/1034687568643641354/1118609234951672001/image.png?width=1193&height=671">
+<img align="right" width="" height="200" src="./Images/RoleImages/Crew/snitch.png">
 
 __Faction__: Crewmate<br>
 __Base__: Crewmate<br>
@@ -2468,7 +2469,7 @@ The Snitch can see Impostors (has option to see any neutral killers as well) onc
 
 ## Speedrunner 
 
-<img align="right" width="" height="200" src="https://media.discordapp.net/attachments/1108944832493277264/1118400744266158151/image.png?width=1193&height=671">
+<img align="right" width="" height="200" src="./Images/RoleImages/Crew/speedrunner.png">
 
 __Faction__: Crewmates<br>
 __Base__: Crewmate<br>
@@ -2495,7 +2496,7 @@ Finish tasks to gain a speed boost! Depending on the host's options, you may gai
 
 ## Swapper 
 
-<img align="right" width="" height="200" src="https://media.discordapp.net/attachments/1108944832493277264/1118400857726271519/image.png?width=1193&height=671">
+<img align="right" width="" height="200" src="./Images/RoleImages/neutral/swapper.webp">
 
 __Faction__: Crewmate<br>
 __Base__: Crewmate<br>
@@ -2518,7 +2519,7 @@ The first two players you vote each meeting will have their votes swapped. After
 
 ## Tracker 
 
-<img align="right" width="" height="200" src="https://media.discordapp.net/attachments/1034687568643641354/1118609028919087215/image.png?width=1193&height=671">
+<img align="right" width="" height="200" src="./Images/RoleImages/Crew/tracker.png">
 
 __Faction__: Crewmate<br>
 __Base__: Crewmate<br>
@@ -2545,7 +2546,7 @@ Once per meeting, select a player to track. You will have an arrow pointing towa
 
 ## Transporter
 
-<img align="right" width="" height="200" src="https://media.discordapp.net/attachments/1108944832493277264/1118400958616043580/image.png?width=1193&height=671">
+<img align="right" width="" height="200" src="./Images/RoleImages/Crew/transporter.png">
 
 __Faction__: Crewmate<br>
 __Base__: Crewmate<br>
@@ -2570,7 +2571,7 @@ Use the Pet button and cause two random players to switch places. Make sure you 
 
 ## Trapster 
 
-<img align="right" width="" height="200" src="https://media.discordapp.net/attachments/1108944832493277264/1118401053080166450/image.png?width=1193&height=671">
+<img align="right" width="" height="200" src="./Images/RoleImages/Crew/trapster.png">
 
 __Faction__: Crewmates<br>
 __Base__: Crewmate<br>
@@ -2595,7 +2596,7 @@ Upon death, Trapster freezes their killer in place for a few seconds.<br>
 
 ## Veteran
 
-<img align="right" width="" height="200" src="https://media.discordapp.net/attachments/1108944832493277264/1109151969488158770/Screenshot_4501.png?width=1193&height=671">
+<img align="right" width="" height="200" src="./Images/RoleImages/crew/veteran.png">
 
 __Faction__: Crewmate<br>
 __Base__: Crewmate<br>
@@ -2624,7 +2625,7 @@ When the Veteran is attacked while on Alert, the attack will backfire resulting 
 
 ## Vigilante 
 
-<img align="right" width="" height="200" src="https://media.discordapp.net/attachments/1108944832493277264/1118396580534419526/image.png?width=1193&height=671">
+<img align="right" width="" height="200" src="./Images/RoleImages/Crew/vigilante.png">
 
 __Faction__: Crewmate<br>
 __Base__: Crewmate<br>
@@ -2649,7 +2650,7 @@ Vigilante is a nice guesser and part of the crewmate team. While in meeting the 
 
 ## AgiTater 
 
-<img align="right" width="" height="200" src="https://media.discordapp.net/attachments/1108944832493277264/1118402812972384297/image.png?width=1193&height=671">
+<img align="right" width="" height="200" src="./Images/RoleImages/Neutral/agitater.png">
 
 __Faction__: Neutral Killing<br>
 __Base__: Impostor<br>
@@ -2680,7 +2681,7 @@ _The Global option for Place Bomb Cooldown means that this setting will be the s
 
 ## Arsonist
 
-<img align="right" width="" height="200" src="https://media.discordapp.net/attachments/1108944832493277264/1118402911572082759/image.png?width=1193&height=671">
+<img align="right" width="" height="200" src="./Images/RoleImages/Neutral/arsonist.png">
 
 __Faction__: Neutral Killing<br>
 __Base__: Impostor<br>
@@ -2705,7 +2706,7 @@ Use the Kill button repeatedly next to a player to douse oil onto them. The play
 
 ## Blood Knight
 
-<img align="right" width="" height="200" src="https://media.discordapp.net/attachments/1108944832493277264/1118403032560967750/image.png?width=1193&height=671">
+<img align="right" width="" height="200" src="./Images/RoleImages/Neutral/bloodknight.png">
 
 __Faction__: Neutral Killing<br>
 __Base__: Blood Knight<br>
@@ -2733,7 +2734,7 @@ _The Global option for Kill Cooldown means that this setting will be the same as
 
 ## Demon
 
-<img align="right" width="" height="200" src="https://cdn.discordapp.com/attachments/1108944832493277264/1118404577029533766/image.png">
+<img align="right" width="" height="200" src="./Images/RoleImages/Neutral/demon.png">
 
 __Faction__: Neutral Killing<br>
 __Base__: Impostor<br>
@@ -2759,7 +2760,7 @@ Demon is a neutral killing role whose goal is to kill all other players. When De
 
 ## Egoist
 
-<img align="right" width="" height="200" src="https://media.discordapp.net/attachments/1108944832493277264/1109151695264559144/Screenshot_4504.png?width=1193&height=671">
+<img align="right" width="" height="200" src="./Images/RoleImages/Neutral/egoist.png">
 
 __Faction__: Neutral Killing<br>
 __Base__: Shapeshifter<br>
@@ -2770,7 +2771,7 @@ __Win Condition__: Must Be Final Impostor<br>
 `Original Idea by しゅー`<br>
 
 #### Role Description
-Kill as a normal Impostor on the Impostor team . . . but Egoist is a traitor to the Impostors. Use Impostor-Seeing attribute to get them voted out (end game) and achieve a solo win. Impostors and Egoist cannot kill each other.<br>
+Kill as a normal Impostor on the Impostor team . . . but the Egoist is a traitor to the Impostors. Use Impostor-Seeing attribute to get them voted out (end game) and achieve a solo win. Impostors can kill but cannot see Egoist, Egoist can see but cannot kill Impostors.<br>
 
 ### Game Options
 |            Name              |                          Description                       |     Type     |  Default  | 
@@ -2785,7 +2786,7 @@ Kill as a normal Impostor on the Impostor team . . . but Egoist is a traitor to 
 
 ## Hitman
 
-<img align="right" width="" height="200" src="https://media.discordapp.net/attachments/1108944832493277264/1118402056030523402/image.png?width=1193&height=671">
+<img align="right" width="" height="200" src="./Images/RoleImages/Neutral/hitman.png">
 
 __Faction__: Neutral Killing<br>
 __Base__: Impostor<br>
@@ -2811,7 +2812,7 @@ Stay Alive! Hitman can win with most teams so long as they are alive at the end 
 
 ## Jackal
 
-<img align="right" width="" height="200" src="https://media.discordapp.net/attachments/1108944832493277264/1118403146088202281/image.png?width=1193&height=671">
+<img align="right" width="" height="200" src="./Images/RoleImages/Neutral/jackal.png">
 
 __Faction__: Neutral Killer<br>
 __Base__: Impostor<br>
@@ -2839,7 +2840,7 @@ _The Global option for Kill Cooldown means that this setting will be the same as
 
 ## Juggernaut
 
-<img align="right" width="" height="200" src="https://media.discordapp.net/attachments/1108944832493277264/1109016906486272010/image.png?width=1193&height=671">
+<img align="right" width="" height="200" src="./Images/RoleImages/Neutral/juggernaut.png">
 
 __Faction__: Neutral Killing<br>
 __Base__: Impostor<br>
@@ -2869,7 +2870,7 @@ _The Global option for Kill Cooldown means that this setting will be the same as
 
 ## Marksman
 
-<img align="right" width="" height="200" src="https://media.discordapp.net/attachments/1034687568643641354/1118608200095256727/image.png?width=1193&height=671">
+<img align="right" width="" height="200" src="./Images/RoleImages/Neutral/marksman.png">
 
 __Faction__: Neutral Killing<br>
 __Base__: Impostor<br>
@@ -2901,7 +2902,7 @@ _The Global option for Starting Kill Distance means that this setting will be th
 
 ## Necromancer
 
-<img align="right" width="" height="200" src="https://media.discordapp.net/attachments/1034687568643641354/1118607879537172520/image.png?width=1193&height=671">
+<img align="right" width="" height="200" src="./Images/RoleImages/Neutral/necromancer.png">
 
 __Faction__: The Undead<br>
 __Base__: Impostor<br>
@@ -2933,7 +2934,7 @@ The Deathknight must help the Necromancer convert players to the Undead. By usin
 
 ## Occultist
 
-<img align="right" width="" height="200" src="https://media.discordapp.net/attachments/1108944832493277264/1118403368872849458/image.png?width=1193&height=671">
+<img align="right" width="" height="200" src="./Images/RoleImages/Neutral/occultist.png">
 
 __Faction__: Neutral Killing<br>
 __Base__: Impostor<br>
@@ -2957,7 +2958,7 @@ The Occultist's Kill/Curse Button alternates between cursing and killing players
 
 ## Pelican 
 
-<img align="right" width="" height="200" src="https://cdn.discordapp.com/attachments/1108944832493277264/1118404201693859951/image.png">
+<img align="right" width="" height="200" src="./Images/RoleImages/Neutral/pelican.png">
 
 __Faction__: Neutral Killing<br>
 __Base__: Impostor<br>
@@ -2983,7 +2984,7 @@ _The Global option for Gulp Cooldown means that this setting will be the same as
 
 ## Plague Bearer
 
-<img align="right" width="" height="200" src="https://media.discordapp.net/attachments/1108944832493277264/1118403512104136734/image.png?width=1193&height=671">
+<img align="right" width="" height="200" src="./Images/RoleImages/Neutral/plaguebearer.png">
 
 __Faction__: Neutral Killing <br>
 __Base__: Impostor<br>
@@ -2998,7 +2999,7 @@ Use the Kill button to infect everyone. Once everyone is infected, the Plague Be
 
 ### Pestilence
 
-<img align="right" width="" height="200" src="https://media.discordapp.net/attachments/1034687568643641354/1118606722244821022/image.png?width=1193&height=671">
+<img align="right" width="" height="200" src="./Images/RoleImages/Neutral/pestilence.png">
 
 __Faction__: Neutral Killing<br>
 __Base__: Impostor<br>
@@ -3029,7 +3030,7 @@ _The Global option for Kill Cooldown means that this setting will be the same as
 
 ## Retributionist
 
-<img align="right" width="" height="200" src="https://media.discordapp.net/attachments/1034687568643641354/1118607464766648370/image.png?width=1193&height=671">
+<img align="right" width="" height="200" src="./Images/RoleImages/Neutral/retributionist.png">
 
 __Faction__: Neutral Killing<br>
 __Base__: Impostor<br>
@@ -3054,11 +3055,11 @@ The Retributionist is a Neutral Killer with a twist. If the Retributionist were 
 
 ## The Glitch
 
-<img align="right" width="" height="200" src="https://media.discordapp.net/attachments/1108944832493277264/1118403701128822825/image.png?width=1193&height=671">
+<img align="right" width="" height="200" src="./Images/RoleImages/Neutral/glitch.png">
 
 __Faction__: Neutral Killing<br>
 __Base__: Impostor<br>
-__Ability__: Shapeshift & Roleblock Players<br>
+__Ability__: Roleblock & Kill Players<br>
 __Win Condition__: Be The Last Player Alive<br>
 
 `Originally Developed by Discussions`<br>
@@ -3070,7 +3071,7 @@ Use the Kill button to Hack or Kill players. The Pet button can be used to switc
 ### Game Options
 |            Name              |                          Description                       |     Type     |    Default    | 
 | ---------------------------- | ---------------------------------------------------------- | :----------: | :-----------: |
-| Glitch                       | The probability of the Glitch appearing                    |  Percentage  |      0%       |
+| The Glitch                   | The probability of the Glitch appearing                    |  Percentage  |      0%       |
 | Maximum                      | How many Glitches should spawn                             |    Number    |       1       |
 | Hacking Duration             | The amount of time a player is hacked                      |     Time     | Until Meeting |
 
@@ -3078,7 +3079,7 @@ Use the Kill button to Hack or Kill players. The Pet button can be used to switc
 
 ## Werewolf
 
-<img align="right" width="" height="200" src="https://media.discordapp.net/attachments/1108944832493277264/1118404052884144228/image.png?width=1193&height=671">
+<img align="right" width="" height="200" src="./Images/RoleImages/Neutral/werewolf.png">
 
 __Faction__: Neutral Killing<br>
 __Base__: Impostor<br>
@@ -3111,7 +3112,7 @@ NOTE: Werewolf can only kill during rampage!<br>
 
 ## Amnesiac
 
-<img align="right" width="" height="200" src="https://media.discordapp.net/attachments/1108944832493277264/1118956193923207218/Amnesiac.png?width=1193&height=671">
+<img align="right" width="" height="200" src="./Images/RoleImages/Neutral/amnesiac.png">
 
 __Faction__: Neutral Passive<br>
 __Base__: Impostor<br>
@@ -3134,7 +3135,7 @@ If `Steals Exact Role` is OFF then the Amnesiac becomes:
 
 ### Amalgamation
 
-<img align="right" width="" height="200" src="https://media.discordapp.net/attachments/1108944832493277264/1118956193654775899/Amalgamation.png?width=1193&height=671">
+<img align="right" width="" height="200" src="./Images/RoleImages/Neutral/Amalgamation.png">
 
 __Faction__: Neutral Passive<br>
 __Base__: Impostor<br>
@@ -3161,37 +3162,9 @@ The Amalgamation gains (becomes) the abilities of every player they report.<br>
 
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-## Archangel
-
-<img align="right" width="" height="200" src="https://media.discordapp.net/attachments/1108944832493277264/1118401552089104384/image.png?width=1193&height=671">
-
-__Faction__: Neutral Passive<br>
-__Base__: Engineer <br>
-__Ability__: Protects Their Target <br>
-__Win Condition__: Win With Their Target <br>
-
-`Originally Developed by Discussions`<br>
-`Idea by Town of Us Reactivated`<br>
-
-#### Role Description 
-The Archangel’s Target is marked by a light blue diamond next to their name. Vent to temporarily protect your target from getting killed. If they win, you win.<br>				
-
-### Game Options
-|                Name                 |                              Description                          |     Type     |  Default  | 
-| ----------------------------------- | ----------------------------------------------------------------- | :----------: | :-------: |
-| Archangel                           | The probability of the Archangel appearing                        |  Percentage  |    0%     |
-| Maximum                             | How many Archangels should spawn                                  |    Number    |     1     |
-| Protect Duration                    | The amount of time the Archangel's Target is protected from kills |     Time     |   2.5s    |
-| Protect Cooldown                    | The cooldown for the Archangel's Vent button                      |     Time     |   2.5s    |
-| Target Knows They Have An Archangel | Whether the Archangel's Target knows they have a protector or not |    ON/OFF    |    ON     |
-| Archangel Knows Target Role         | Whether the Archangel knows the role of their Target or not       |    ON/OFF    |    ON     |
-| Role Change When Target Dies        | Role options for when the Archangel's target dies                 | Role Options |  Jester   |
-
-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
 ## Copycat
 
-<img align="right" width="" height="200" src="https://media.discordapp.net/attachments/1108944832493277264/1110842666305990666/image.png?width=1193&height=671">
+<img align="right" width="" height="200" src="./Images/RoleImages/Neutral/copycat.png">
 
 __Faction__: Neutral Passive<br>
 __Base__: Crewmate <br>
@@ -3217,7 +3190,7 @@ Depending on the host's options, you may gain their 'progress' as well.
 
 ## Executioner
 
-<img align="right" width="" height="200" src="https://media.discordapp.net/attachments/1108944832493277264/1118401712034684938/image.png?width=1193&height=671">
+<img align="right" width="" height="200" src="./Images/RoleImages/Neutral/executioner.png">
 
 __Faction__: Neutral Passive<br>
 __Base__: Crewmate <br>
@@ -3243,7 +3216,7 @@ Executioner’s Target is marked with a black name & win if their target is vote
 
 ## Hacker
 
-<img align="right" width="" height="200" src="https://media.discordapp.net/attachments/1108944832493277264/1118401854703939604/image.png?width=1193&height=671">
+<img align="right" width="" height="200" src="./Images/RoleImages/Neutral/hacker.png">
 
 __Faction__: Neutral Passive<br>
 __Base__: Crewmate<br>
@@ -3254,7 +3227,7 @@ __Win Condition__: Fix Sabotages to Win<br>
 `Idea by The Other Roles`<br>
 
 #### Role Description
-As a Hacker, your goal is earn a number of points by fixing sabotages. Has powers of Sabotage Master. Each sabotage fixed earns you one point. Hacker can be killed by Sheriff.<br>
+As a Hacker, your goal is earn a number of points by fixing sabotages. You have the powers of a Repairman. Each sabotage fixed earns you one point.<br>
 
 ### Game Options (incomplete)
 |            Name              |                          Description                       |     Type     |  Default  | 
@@ -3277,7 +3250,7 @@ As a Hacker, your goal is earn a number of points by fixing sabotages. Has power
 
 ## Jester
 
-<img align="right" width="" height="200" src="https://media.discordapp.net/attachments/1108944832493277264/1110075885257769061/Donkjest.jpg?width=1074&height=671">
+<img align="right" width="" height="200" src="./Images/RoleImages/Neutral/jester.jpg">
 
 __Faction__: Neutral Passive<br>
 __Base__: Crewmate/Engineer<br>
@@ -3304,7 +3277,7 @@ Jester gets a solo win if they can be voted out. Troll players in meetings, act 
 
 ## Opportunist
 
-<img align="right" width="" height="200" src="https://media.discordapp.net/attachments/1108944832493277264/1118402280262225960/image.png?width=1193&height=671">
+<img align="right" width="" height="200" src="./Images/RoleImages/neutral/opportunist.png">
 
 __Faction__: Neutral Passive<br>
 __Base__: Crewmate<br>
@@ -3327,7 +3300,7 @@ Regardless of the game outcome, Opportunist wins if they survive to the end of t
 
 ## Phantom
 
-<img align="right" width="" height="200" src="https://media.discordapp.net/attachments/1108944832493277264/1109151817327190127/Screenshot_4508.png?width=1193&height=671">
+<img align="right" width="" height="200" src="./Images/RoleImages/Neutral/phantom.png">
 
 __Faction__: Neutral Passive<br>
 __Base__: Crewmate<br>
@@ -3357,7 +3330,7 @@ The Phantom cannot die until a set number of tasks (predetermined by host in set
 
 ## Postman 
 
-<img align="right" width="" height="200" src="https://media.discordapp.net/attachments/1108944832493277264/1118402461347098624/image.png?width=1193&height=671">
+<img align="right" width="" height="200" src="./Images/RoleImages/Neutral/postman.png">
 
 __Faction__: Neutral Passive<br>
 __Base__: Crewmate <br>
@@ -3384,9 +3357,9 @@ Complete tasks to receive Target information (arrows pointing to Target is an op
 
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-## Schrodinger's Cat
+## Schrödinger's Cat
 
-<img align="right" width="" height="200" src="https://media.discordapp.net/attachments/1034687568643641354/1118624014739456170/image.png?width=1193&height=671">
+<img align="right" width="" height="200" src="./Images/RoleImages/Neutral/cat.png">
 
 __Faction__: Neutral Passive<br>
 __Base__: Crewmate<br>
@@ -3402,20 +3375,20 @@ The Schrödinger's Cat changes their affiliation with each attack against them! 
 ### Game Options
 |                 Name                   |                                     Description                                 |     Type     | Default | 
 | -------------------------------------- | ------------------------------------------------------------------------------- | :----------: | :-----: |
-| Schrodinger's Cat                      | The probability of the Schrodinger's Cat appearing                              |  Percentage  |    0%   |
-| Maximum                                | How many Schrodinger's Cats should spawn                                        |    Number    |    1    |
-| Number of Lives                        | How many attacks the Schrodinger's Cat can receive before death                 |    Number    |    9    | 
+| Schrödinger's Cat                      | The probability of the Schrödinger's Cat appearing                              |  Percentage  |    0%   |
+| Maximum                                | How many Schrödinger's Cats should spawn                                        |    Number    |    1    |
+| Number of Lives                        | How many attacks the Schrödinger's Cat can receive before death                 |    Number    |    9    | 
 
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 ## Survivor 
 
-<img align="right" width="" height="200" src="https://media.discordapp.net/attachments/1108944832493277264/1118402611658371212/image.png?width=1193&height=671">
+<img align="right" width="" height="200" src="./Images/RoleImages/Neutral//survivor.png">
 
 __Faction__: Neutral Passive<br>
 __Base__: Crewmate<br>
 __Ability__: Can Protect Self From Attacks<br>
-__Win Condition__:Survive Until The End To Win<br>
+__Win Condition__: Survive Until The End To Win<br>
 
 `Originally Developed by Discussions`<br>
 `Idea by Town of Us Reactivated`<br>
@@ -3436,7 +3409,7 @@ Survive to the end to win. Use your Pet button to protect yourself from attacks 
 
 ## Terrorist 
 
-<img align="right" width="" height="200" src="https://media.discordapp.net/attachments/1108944832493277264/1118933321385250826/Screenshot_2023-06-15_064530.png?width=1193&height=671">
+<img align="right" width="" height="200" src="./Images/RoleImages/Neutral/terrorist.png">
 
 __Faction__: Neutral Passive<br>
 __Base__: Engineer<br>
@@ -3465,7 +3438,7 @@ Finish all tasks and get killed to win. The Terrorist can also be voted out to w
 
 ## Vulture
 
-<img align="right" width="" height="200" src="https://media.discordapp.net/attachments/1108944832493277264/1111414343687475230/Screenshot_2.png?width=1193&height=671">
+<img align="right" width="" height="200" src="./Images/RoleImages/Neutral/vulture.png">
 
 __Faction__: Neutral Passive<br>
 __Base__: Crewmate<br>
@@ -3473,7 +3446,7 @@ __Ability__: Can Make Bodies Unreportable<br>
 __Win Condition__: Eat Bodies To Win<br>
 
 `Originally Developed by Discussions`<br>
-`Idea by Town of Us Reactivated`<br>
+`Idea by Goose Goose Duck`<br>
 
 #### Role Description
 Use the Report button to eat dead bodies and make them unreportable. The vulture can switch between eating bodies and reporting them using the Pet button. The Vulture wins when they've eaten a set amount of bodies, and they may also have an arrow pointing to dead bodies if enabled by host.<br>
@@ -3648,6 +3621,7 @@ Oblivious cannot report bodies.
 | ---------------------------- | ------------------------------------------------------------------------- | :----------: | :-------: |
 | Oblivious                    | The probability of the Oblivious modifier appearing                       |  Percentage  |    0%     |
 | Maximum                      | How many Oblivious modifiers should spawn                                 |    Number    |     1     |
+| Pass on Death                | Whether the Oblivious modifier can be passed to a killer                  |    Toggle    |    OFF    |
 
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
