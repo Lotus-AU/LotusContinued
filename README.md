@@ -38,8 +38,8 @@ This Mod only needs to be installed on the **Host**, whom needs to be on a PC. O
 |         [Installing the mod!](https://lotusau.top/rd/install)         |   [Custom Cosmetics](https://lotusau.top/rd/touhats)   | [VentFramework Docs](https://dev.lotusau.top/rd/vf) |
 | [Setting up your First Templates.](https://lotusau.top/rd/f-template) |    [User Tags/Titles](https://lotusau.top/rd/tags)     |                          .                          |
 |      [Making your first Tag!](https://lotusau.top/rd/first-tag)       | [Custom Friend System](https://lotusau.top/rd/friends) |                          .                          |
-|        [Afterthought.](https://lotusau.top/rd/gs-afterthought)        |          [Online Template Maker (Planned)](#)          | [🪷Lotus Credits 🪷](https://lotusau.top/credits)  |
-
+|        [Afterthought.](https://lotusau.top/rd/gs-afterthought)        | [All Commands](https://lotusau.top/rd/commands)        |                          .                          |
+|                              .                                        | [Online Template Maker (Planned)](#)                   |                          .                          |
 <br>
 <br>
 <br>
