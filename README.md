@@ -32,13 +32,13 @@ This Mod only needs to be installed on the **Host**, whom needs to be on a PC. O
 
 > [**Click here to get taken to the roles!**](https://lotusau.top/en/roles)
 
-|                  Getting Started with Project: Lotus                  |                 Features of This Mod.                  |                     Developers                      |
+|                  Getting Started with Project: Lotus                  |                 Features of This Mod.                  |                    For Developers                   |
 | :-------------------------------------------------------------------: | :----------------------------------------------------: | :-------------------------------------------------: |
 |   [**Converting from other mods**](https://lotusau.top/rd/convert)    |     [Templates](https://lotusau.top/rd/templates)      | [Add-On System](https://dev.lotusau.top/rd/addons)  |
 |         [Installing the mod!](https://lotusau.top/rd/install)         |   [Custom Cosmetics](https://lotusau.top/rd/touhats)   | [VentFramework Docs](https://dev.lotusau.top/rd/vf) |
 | [Setting up your First Templates.](https://lotusau.top/rd/f-template) |    [User Tags/Titles](https://lotusau.top/rd/tags)     |                          .                          |
 |      [Making your first Tag!](https://lotusau.top/rd/first-tag)       | [Custom Friend System](https://lotusau.top/rd/friends) |                          .                          |
-|        [Afterthought.](https://lotusau.top/rd/gs-afterthought)        |          [Online Template Maker (Planned)](#)          |   [🪷Lotus Credits 🪷](https://lotusau.top/credits)   |
+|        [Afterthought.](https://lotusau.top/rd/gs-afterthought)        |          [Online Template Maker (Planned)](#)          | [🪷Lotus Credits 🪷](https://lotusau.top/credits)  |
 
 <br>
 <br>
