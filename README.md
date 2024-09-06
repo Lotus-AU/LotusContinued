@@ -8,6 +8,12 @@
 <h3 align="center">This is a continuation of the <a href="https://github.com/ImaMapleTree/Lotus">original Project Lotus mod</a> due to the original creator passing the project. </h3>
 <i align="center">This mod is not affiliated with Among Us or Innersloth LLC, and the content contained therein is not endorsed or otherwise sponsored by Innersloth LLC. Portions of the materials contained herein are the property of Innersloth LLC.</i>
 
+---
+
+| <img align="center" width="1000" height="600" src="./.github/main_menu.png"> |
+| :--------------------------------------------------------------------------: |
+|               A screenshot of the Main Menu of Project: Lotus.               |
+
 ## Regarding This Mod
 
 #### ⭐Please consider starring our repo if you enjoy the mod!⭐
@@ -32,13 +38,13 @@ This Mod only needs to be installed on the **Host**, whom needs to be on a PC. O
 
 > [**Click here to get taken to the roles!**](https://lotusau.top/en/roles)
 
-|                  Getting Started with Project: Lotus                  |                 Features of This Mod.                  |                   For Developers                    |  🪷  |       Information        |                    🪷                     |
-| :-------------------------------------------------------------------: | :----------------------------------------------------: | :-------------------------------------------------: | :-: | :----------------------: | :--------------------------------------: |
-|   [**Converting from other mods**](https://lotusau.top/rd/convert)    |     [Templates](https://lotusau.top/rd/templates)      |                          .                          |  🪷  | **ALL General Options**  | [Here.](https://lotusau.top/rd/options)  |
-|         [Installing the mod!](https://lotusau.top/rd/install)         |   [Custom Cosmetics](https://lotusau.top/rd/touhats)   | [Add-On System](https://dev.lotusau.top/rd/addons)  |  🪷  | **All Commands/Hotkeys** | [Here.](https://lotusau.top/rd/commands) |
-| [Setting up your First Templates.](https://lotusau.top/rd/f-template) |    [User Tags/Titles](https://lotusau.top/rd/tags)     | [VentFramework Docs](https://dev.lotusau.top/rd/vf) |  🪷  |      **All Roles**       |  [Here.](https://lotusau.top/en/roles)   |
-|      [Making your first Tag!](https://lotusau.top/rd/first-tag)       | [Custom Friend System](https://lotusau.top/rd/friends) |                          .                          |  🪷  |     **Mod Credits**      |   [Here.](https://lotusau.top/credits)   |
-|        [Afterthought.](https://lotusau.top/rd/gs-afterthought)        |          [Online Template Maker (Planned)](#)          |                          .                          |  🪷  |            .             |                    .                     |
+|                  Getting Started with Project: Lotus                  |                 Features of This Mod.                  |                   For Developers                    |  🪷  |     Information      |                    🪷                     |
+| :-------------------------------------------------------------------: | :----------------------------------------------------: | :-------------------------------------------------: | :-: | :------------------: | :--------------------------------------: |
+|   [**Converting from other mods**](https://lotusau.top/rd/convert)    |     [Templates](https://lotusau.top/rd/templates)      |                          .                          |  🪷  | **General Options**  | [Here.](https://lotusau.top/rd/options)  |
+|         [Installing the mod!](https://lotusau.top/rd/install)         |   [Custom Cosmetics](https://lotusau.top/rd/touhats)   | [Add-On System](https://dev.lotusau.top/rd/addons)  |  🪷  | **Commands/Hotkeys** | [Here.](https://lotusau.top/rd/commands) |
+| [Setting up your First Templates.](https://lotusau.top/rd/f-template) |    [User Tags/Titles](https://lotusau.top/rd/tags)     | [VentFramework Docs](https://dev.lotusau.top/rd/vf) |  🪷  |    **All Roles**     |  [Here.](https://lotusau.top/en/roles)   |
+|      [Making your first Tag!](https://lotusau.top/rd/first-tag)       | [Custom Friend System](https://lotusau.top/rd/friends) |                          .                          |  🪷  |   **Mod Credits**    |   [Here.](https://lotusau.top/credits)   |
+|        [Afterthought.](https://lotusau.top/rd/gs-afterthought)        |          [Online Template Maker (Planned)](#)          |                          .                          |  🪷  |          .           |                    .                     |
 
 <br>
 <br>
