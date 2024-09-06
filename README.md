@@ -18,7 +18,7 @@
 
 #### ⭐Please consider starring our repo if you enjoy the mod!⭐
 
-This Mod only needs to be installed on the **Host**, whom needs to be on a PC. Once it is, anyone on any device may join the lobby to enjoy the mod. <br>
+This Mod only needs to be installed on the **Host**, which needs to be on a PC. Once the mod is installed, anyone on any device may join the lobby to enjoy the mod. <br>
 
 - Anyone with a PC may also install the mod to join the **Host** to unlock extra features (See Below), but this is not required.
 - Please note though, that if the **Host** of the modded lobby leaves, the modded lobby will end and the game will go back to being vanilla. This is the case unless another modded player becomes **Host** of the lobby.
@@ -38,7 +38,7 @@ This Mod only needs to be installed on the **Host**, whom needs to be on a PC. O
 
 > [**Click here to get taken to the roles!**](https://lotusau.top/en/roles)
 
-|                  Getting Started with Project: Lotus                  |                 Features of This Mod.                  |                         For Developers                         |     |                       Information                       |
+|                  Getting Started with Project: Lotus                  |                 Features of This Mod.                  |                         For Developers                         |  🪷  |                       Information                       |
 | :-------------------------------------------------------------------: | :----------------------------------------------------: | :------------------------------------------------------------: | :-: | :-----------------------------------------------------: |
 |   [**Converting from other mods**](https://lotusau.top/rd/convert)    |     [Templates](https://lotusau.top/rd/templates)      | [Making Your First Addon](https://dev.lotusau.top/rd/firstadn) |     |  [**General Options**](https://lotusau.top/rd/options)  |
 |         [Installing the mod!](https://lotusau.top/rd/install)         |   [Custom Cosmetics](https://lotusau.top/rd/touhats)   |       [Add-On System](https://dev.lotusau.top/rd/addons)       |     | [**Commands/Hotkeys**](https://lotusau.top/rd/commands) |
