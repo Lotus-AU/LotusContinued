@@ -10,9 +10,9 @@
 
 ---
 
-| <img align="center" width="1000" height="600" src="./.github/main_menu.png"> |
-| :--------------------------------------------------------------------------: |
-|               A screenshot of the Main Menu of Project: Lotus.               |
+| <img align="center" width="960" height="540" src="./.github/main_menu.png"> |
+| :-------------------------------------------------------------------------: |
+|              A screenshot of the Main Menu of Project: Lotus.               |
 
 ## Regarding This Mod
 
