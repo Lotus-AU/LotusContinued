@@ -3,7 +3,7 @@
 </p>
 <h1 align="center">Project: Lotus</h1>
 
-<h2 align="center"> <a href="https://discord.gg/projectlotus">Discord</a> | <a href="#table-of-contents">Table Of Contents</a> | <a href="https://beta.lotusau.top/">Website</a> | <a href="https://github.com/lotus-au/lotuscontinued/releases/latest">Latest Release (For AU 2024.8.13)</a>
+<h2 align="center"> <a href="https://discord.gg/projectlotus">Discord</a> | <a href="#table-of-contents">Table Of Contents</a> | <a href="https://lotusau.top/">Website</a> | <a href="https://github.com/Lotus-AU/LotusContinued/releases/latest">Latest Release (For AU 2024.9.4)</a>
 
 <h3 align="center">This is a continuation of the <a href="https://github.com/ImaMapleTree/Lotus">original Project Lotus mod</a> due to the original creator passing the project. </h3>
 <i align="center">This mod is not affiliated with Among Us or Innersloth LLC, and the content contained therein is not endorsed or otherwise sponsored by Innersloth LLC. Portions of the materials contained herein are the property of Innersloth LLC.</i>
@@ -12,7 +12,7 @@
 
 | <img align="center" width="960" height="540" src="./.github/main_menu.png"> |
 | :-------------------------------------------------------------------------: |
-|              A screenshot of the Main Menu of Project: Lotus.               |
+|     <u>**A screenshot of the Main Menu of Project: Lotus. (v1.1)**</u>      |
 
 ## Regarding This Mod
 
@@ -34,7 +34,7 @@ This Mod only needs to be installed on the **Host**, which needs to be on a PC. 
 
 # Table of Contents.
 
-> Note: Most of these will link to our Website, [lotusau.top](https://lotusau.top). <br>
+> **Note:** Most of these will link to our Website, [**lotusau.top**](https://lotusau.top). <br>
 
 > [**Click here to get taken to the roles!**](https://lotusau.top/en/roles)
 
