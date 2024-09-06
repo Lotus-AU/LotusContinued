@@ -10,9 +10,9 @@
 
 ---
 
-| <img align="center" width="960" height="540" src="./.github/main_menu.png"> |
-| :-------------------------------------------------------------------------: |
-|     <u>**A screenshot of the Main Menu of Project: Lotus. (v1.1)**</u>      |
+| <img align="center" width="854" height="480" src="./.github/main_menu2.png"> |
+| :--------------------------------------------------------------------------: |
+|      <u>**A screenshot of the Main Menu of Project: Lotus. (v1.1)**</u>      |
 
 ## Regarding This Mod
 
@@ -37,14 +37,18 @@ This Mod only needs to be installed on the **Host**, which needs to be on a PC. 
 > **Note:** Most of these will link to our Website, [**lotusau.top**](https://lotusau.top). <br>
 
 > [**Click here to get taken to the roles!**](https://lotusau.top/en/roles)
+>
+> - [**General Options**](https://lotusau.top/rd/options)
+> - [**Commands/Hotkeys**](https://lotusau.top/rd/commands)
+> - [**Mod Credits**](https://lotusau.top/credits)
 
-|                  Getting Started with Project: Lotus                  |                 Features of This Mod.                  |                         For Developers                         |  🪷  |                       Information                       |
-| :-------------------------------------------------------------------: | :----------------------------------------------------: | :------------------------------------------------------------: | :-: | :-----------------------------------------------------: |
-|   [**Converting from other mods**](https://lotusau.top/rd/convert)    |     [Templates](https://lotusau.top/rd/templates)      | [Making Your First Addon](https://dev.lotusau.top/rd/firstadn) |     |  [**General Options**](https://lotusau.top/rd/options)  |
-|         [Installing the mod!](https://lotusau.top/rd/install)         |   [Custom Cosmetics](https://lotusau.top/rd/touhats)   |       [Add-On System](https://dev.lotusau.top/rd/addons)       |     | [**Commands/Hotkeys**](https://lotusau.top/rd/commands) |
-| [Setting up your First Templates.](https://lotusau.top/rd/f-template) |    [User Tags/Titles](https://lotusau.top/rd/tags)     |      [VentFramework Docs](https://dev.lotusau.top/rd/vf)       |     |      [**All Roles**](https://lotusau.top/en/roles)      |
-|      [Making your first Tag!](https://lotusau.top/rd/first-tag)       | [Custom Friend System](https://lotusau.top/rd/friends) |                               .                                |     |     [**Mod Credits**](https://lotusau.top/credits)      |
-|        [Afterthought.](https://lotusau.top/rd/gs-afterthought)        |          [Online Template Maker (Planned)](#)          |                               .                                |     |                            .                            |
+|                  Getting Started with Project: Lotus                  |                 Features of This Mod.                  |                         For Developers                         |
+| :-------------------------------------------------------------------: | :----------------------------------------------------: | :------------------------------------------------------------: |
+|   [**Converting from other mods**](https://lotusau.top/rd/convert)    |     [Templates](https://lotusau.top/rd/templates)      | [Making Your First Addon](https://dev.lotusau.top/rd/firstadn) |
+|         [Installing the mod!](https://lotusau.top/rd/install)         |   [Custom Cosmetics](https://lotusau.top/rd/touhats)   |       [Add-On System](https://dev.lotusau.top/rd/addons)       |
+| [Setting up your First Templates.](https://lotusau.top/rd/f-template) |    [User Tags/Titles](https://lotusau.top/rd/tags)     |      [VentFramework Docs](https://dev.lotusau.top/rd/vf)       |
+|      [Making your first Tag!](https://lotusau.top/rd/first-tag)       | [Custom Friend System](https://lotusau.top/rd/friends) |                               .                                |
+|        [Afterthought.](https://lotusau.top/rd/gs-afterthought)        |          [Online Template Maker (Planned)](#)          |                               .                                |
 
 <br>
 <br>
