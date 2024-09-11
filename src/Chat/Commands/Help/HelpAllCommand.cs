@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Lotus.Managers;
 using UnityEngine;
 using VentLib.Commands.Attributes;
 using VentLib.Localization.Attributes;
@@ -59,7 +60,7 @@ public class HelpAllCommand : CommandTranslations
     [Command("help", "h")]
     public static void HelpCommand(PlayerControl source)
     {
-        string result = HelpSetions.Where(s => source.IsHost() || s.Key is not CommandSection.Host).Select(section =>
+        string result = HelpSetions.Where(s => source.IsHost() || s.Key is not CommandSection.Host || PluginDataManager.ModManager.IsPlayerModded(source)).Select(section =>
         {
             string content = section.Value.Select(v => v.ToString()).Fuse("\n");
             return $"★ {section.Key.SectionName()}\n{content}";

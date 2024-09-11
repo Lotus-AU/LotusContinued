@@ -11,11 +11,21 @@ using VentLib.Localization.Attributes;
 using VentLib.Options.UI;
 using VentLib.Utilities.Optionals;
 using Lotus.GameModes.Standard;
+using System.Collections.Generic;
+using System;
+using Lotus.Roles.RoleGroups.Crew;
 
 namespace Lotus.Roles.Subroles;
 
 public class Oblivious : Subrole
 {
+    /// <summary>
+    /// A list of roles that Sleuth is not compatiable with. Add your role to this list to make it not be assigned with your role.
+    /// </summary>
+    public static readonly List<Type> IncompatibleRoles = new()
+    {
+        typeof(Altruist)
+    };
     public override string Identifier() => "⁈";
 
     private bool passOnDeath;
@@ -31,9 +41,17 @@ public class Oblivious : Subrole
     [RoleAction(LotusActionType.ReportBody, priority: Priority.VeryLow)]
     private void CancelReportBody(Optional<NetworkedPlayerInfo> deadBody, ActionHandle handle)
     {
-        if (deadBody.Exists())
-            handle.Cancel(); // easiest role lol
+        if (deadBody.Exists()) handle.Cancel(); // easiest role lol
     }
+
+    public override HashSet<Type>? RestrictedRoles()
+    {
+        HashSet<Type>? restrictedRoles = base.RestrictedRoles();
+        IncompatibleRoles.ForEach(r => restrictedRoles?.Add(r));
+        return restrictedRoles;
+    }
+
+    public override CompatabilityMode RoleCompatabilityMode => CompatabilityMode.Blacklisted;
 
     protected override GameOptionBuilder RegisterOptions(GameOptionBuilder optionStream) =>
         base.RegisterOptions(optionStream)

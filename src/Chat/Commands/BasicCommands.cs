@@ -8,6 +8,7 @@ using Lotus.Chat.Patches;
 using Lotus.Factions.Neutrals;
 using Lotus.Logging;
 using Lotus.Managers;
+using Lotus.Managers.Blackscreen;
 using Lotus.Options;
 using Lotus.Roles;
 using Lotus.Roles.Internals.Enums;

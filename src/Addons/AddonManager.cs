@@ -67,7 +67,7 @@ public class AddonManager
     {
         if (AmongUsClient.Instance.AmHost) return;
         List<AddonInfo> addonsToSend = Addons.Select(AddonInfo.From).ToList();
-        Vents.FindRPC((uint)ModCalls.RecieveAddons)!.Send([-1], addonsToSend);
+        Vents.FindRPC((uint)ModCalls.RecieveAddons)!.Send(null, addonsToSend);
     }
 
     [ModRPC((uint)ModCalls.RecieveAddons, RpcActors.NonHosts, RpcActors.Host)]

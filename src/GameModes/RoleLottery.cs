@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Lotus.GameModes.Standard;
 using Lotus.Roles;
+using Lotus.Roles.Interfaces;
 using VentLib.Utilities.Collections;
 using VentLib.Utilities.Extensions;
 
@@ -30,6 +31,10 @@ public class RoleLottery : IEnumerator<CustomRole>, IEnumerable<CustomRole>
 
     public virtual void AddRole(CustomRole role, bool useSubsequentChance = false)
     {
+        if (role is IRoleCandidate candidate)
+        {
+            if (candidate.ShouldSkip()) return;
+        }
         int chance = useSubsequentChance ? role.AdditionalChance : role.Chance;
         if (chance == 0 || role.RoleFlags.HasFlag(RoleFlag.Unassignable)) return;
         uint id = Roles.Add(role);

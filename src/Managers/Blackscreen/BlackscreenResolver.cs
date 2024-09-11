@@ -16,10 +16,11 @@ using VentLib.Networking.RPC;
 using VentLib.Utilities;
 using VentLib.Utilities.Extensions;
 using AmongUs.GameOptions;
+using Lotus.src.Managers.Blackscreen.Interfaces;
 
-namespace Lotus.Managers;
+namespace Lotus.Managers.Blackscreen;
 
-internal class BlackscreenResolver
+internal class BlackscreenResolver : IBlackscreenResolver
 {
     private static readonly StandardLogger log = LoggerFactory.GetLogger<StandardLogger>(typeof(BlackscreenResolver));
 
@@ -54,7 +55,7 @@ internal class BlackscreenResolver
         return true;
     }
 
-    internal void BeginProcess()
+    public void OnMeetingEnd()
     {
         if (!AmongUsClient.Instance.AmHost) return;
         unpatchable = StoreAndSendFallbackData();
@@ -64,7 +65,7 @@ internal class BlackscreenResolver
         else log.Fatal("Could not find dead player to patch every player.");
     }
 
-    internal void ClearBlackscreen(Action callback)
+    public void FixBlackscreens(Action callback)
     {
         if (!AmongUsClient.Instance.AmHost) return;
         float deferredTime = 0; // Used if needing to teleport the player

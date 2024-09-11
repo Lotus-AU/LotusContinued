@@ -9,18 +9,23 @@ using Lotus.Roles.RoleGroups.Vanilla;
 using UnityEngine;
 using VentLib.Options.UI;
 using VentLib.Utilities;
+using System.Collections.Generic;
+using VentLib.Utilities.Collections;
 
 namespace Lotus.Roles.RoleGroups.Crew;
 
 public class Doctor : Scientist
 {
+    [NewOnSetup] private Dictionary<byte, Remote<TextComponent>> codComponents = null!;
+
     [RoleAction(LotusActionType.PlayerDeath, ActionFlag.GlobalDetector)]
     private void DoctorAnyDeath(PlayerControl dead, IDeathEvent causeOfDeath)
     {
+        if (codComponents.ContainsKey(dead.PlayerId)) codComponents[dead.PlayerId].Delete();
         string coloredString = "<size=1.6>" + Color.white.Colorize($"({RoleColor.Colorize(causeOfDeath.SimpleName())})") + "</size>";
 
         TextComponent textComponent = new(new LiveString(coloredString), GameState.InMeeting, viewers: MyPlayer);
-        dead.NameModel().GetComponentHolder<TextHolder>().Add(textComponent);
+        codComponents[dead.PlayerId] = dead.NameModel().GetComponentHolder<TextHolder>().Add(textComponent);
     }
 
     protected override GameOptionBuilder RegisterOptions(GameOptionBuilder optionStream) =>

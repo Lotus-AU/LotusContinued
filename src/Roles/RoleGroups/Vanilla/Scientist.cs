@@ -3,6 +3,7 @@ using Lotus.Options;
 using Lotus.Roles.Overrides;
 using VentLib.Localization.Attributes;
 using VentLib.Options.UI;
+using VentLib.Utilities;
 
 namespace Lotus.Roles.RoleGroups.Vanilla;
 
@@ -27,13 +28,33 @@ public class Scientist : Crewmate
                 .Build());
     }
 
+    protected override GameOptionBuilder RegisterOptions(GameOptionBuilder optionStream)
+    {
+        try
+        {
+            var callingMethod = Mirror.GetCaller();
+            var callingType = callingMethod?.DeclaringType;
+
+            if (callingType == null)
+            {
+                return base.RegisterOptions(optionStream);
+            }
+            if (callingType == typeof(AbstractBaseRole)) return AddVitalsOptions(base.RegisterOptions(optionStream));
+            else return base.RegisterOptions(optionStream);
+        }
+        catch
+        {
+            return base.RegisterOptions(optionStream);
+        }
+    }
+
     protected override RoleModifier Modify(RoleModifier roleModifier) => base.Modify(roleModifier)
         .VanillaRole(RoleTypes.Scientist)
         .OptionOverride(Override.VitalsCooldown, () => VitalsCooldown)
         .OptionOverride(Override.VitalsBatteryCharge, () => VitalsBatteryCharge);
 
     [Localized(nameof(Scientist))]
-    private static class Translations
+    public static class Translations
     {
         [Localized(ModConstants.Options)]
         public static class Options

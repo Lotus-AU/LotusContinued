@@ -36,7 +36,7 @@ public static class Game
         Hooks.NetworkHooks.GameJoinHook.Bind("GameHook", ev =>
         {
             if (!ev.IsNewLobby) return;
-            log.Trace("Joined new lobby. Cleaning up old game states.", "GameCleanupCheck");
+            log.Trace("Joined new lobby. Cleaning up old game states.");
             Cleanup(true);
         });
     }

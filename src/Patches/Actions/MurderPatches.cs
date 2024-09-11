@@ -83,10 +83,11 @@ public static class MurderPatches
     }
 
     [QuickPostfix(typeof(PlayerControl), nameof(PlayerControl.MurderPlayer))]
-    public static void MurderPlayer(PlayerControl __instance, PlayerControl target)
+    public static void MurderPlayer(PlayerControl __instance, PlayerControl target, MurderResultFlags resultFlags)
     {
         if (!AmongUsClient.Instance.AmHost) return;
         if (!target.Data.IsDead) return;
+        if (resultFlags.HasFlag(MurderResultFlags.FailedError)) return;
         if (Game.MatchData.GetFrozenPlayer(target)?.Status is not PlayerStatus.Alive) return;
 
         MurderPatches.Lock(__instance.PlayerId);
@@ -101,6 +102,8 @@ public static class MurderPatches
 
         Game.MatchData.GameHistory.AddEvent(deathEvent);
         Game.MatchData.GameHistory.SetCauseOfDeath(target.PlayerId, deathEvent);
+
+        Game.MatchData.RegenerateFrozenPlayers(target);
 
         RoleOperations.Current.TriggerForAll(LotusActionType.PlayerDeath, target, __instance, deathEvent.Instigator(), deathEvent);
 

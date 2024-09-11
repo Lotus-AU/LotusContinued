@@ -12,7 +12,7 @@ public class ProtectedRpc
     public static void CheckMurder(PlayerControl killer, PlayerControl target)
     {
         if (AmongUsClient.Instance.IsGameOver || !AmongUsClient.Instance.AmHost) return;
-        log.Trace($"Protected Check Murder ({killer?.name ?? "null"} => {target?.name ?? "null"})");
+        log.Trace($"Protected Check Murder ({killer.name ?? "null"} => {target?.name ?? "null"})");
         if (target == null) return;
         NetworkedPlayerInfo data = target.Data;
         if (data == null)

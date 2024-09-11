@@ -1,20 +1,31 @@
 using System.Reflection;
 using System.Text;
-using CsvHelper;
 using HarmonyLib;
-using Il2CppSystem.IO;
 using Lotus.Utilities;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using VentLib.Utilities.Harmony.Attributes;
 using Object = UnityEngine.Object;
 
 namespace Lotus.GUI.Patches;
 
-[HarmonyPatch(typeof(CreditsController), nameof(CreditsController.Start))]
-class CreditsControllerStartPatch
+public static class CreditsControllerPatch
 {
-    static void PassCreditsController(GameObject mainObject)
+    private static readonly StandardLogger log = LoggerFactory.GetLogger<StandardLogger>(typeof(CreditsControllerPatch));
+
+    private static string GetCreditsText()
+    {
+        string creditsText = "";
+
+        System.IO.Stream stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("Lotus.assets.Credits.plcredits.txt")!;
+        byte[] buffer = new byte[stream.Length];
+        stream.Read(buffer, 0, buffer.Length);
+
+        creditsText = Encoding.UTF8.GetString(buffer);
+        return creditsText;
+    }
+    private static void PassCreditsController(GameObject mainObject)
     {
         mainObject.transform.parent.FindChild("FollowUs").gameObject.SetActive(false); // nobody is following my facebook!!!!!! 😡😡
         // mainObject.transform.localPosition -= new Vector3(0, 5, 0);
@@ -31,12 +42,15 @@ class CreditsControllerStartPatch
         renderer.sprite = AssetLoader.LoadLotusSprite("Credits.Images.background.png", 180);
     }
 
-    // Postfix method to modify the return value
-    static bool Prefix(CreditsController __instance)
+    [QuickPrefix(typeof(CreditsController), nameof(CreditsController.LoadCredits))]
+    public static void LoadCreditsPrefix(CreditsController __instance) => __instance.CSVCredits = new TextAsset(GetCreditsText());
+
+    [QuickPrefix(typeof(CreditsController), nameof(CreditsController.Start))]
+    public static bool StartPrefix(CreditsController __instance)
     {
         __instance.initialDelay = 1f;
         __instance.remainingDelay = __instance.initialDelay;
-        StaticLogger.Debug("First Credit: " + __instance.credits[0].columns[0]);
+        log.Debug("First Credit: " + __instance.credits[0].columns[0]);
         GameObject mainObject = __instance.gameObject;
         PassCreditsController(mainObject);
         for (int i = 0; i < __instance.credits.Count; i++)
@@ -74,26 +88,5 @@ class CreditsControllerStartPatch
             }
         }
         return false;
-    }
-}
-
-[HarmonyPatch(typeof(CreditsController), nameof(CreditsController.LoadCredits))]
-class CreditsControllerLoadCreditsPatch
-{
-    static string GetCreditsText()
-    {
-        string creditsText = "";
-
-        System.IO.Stream stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("Lotus.assets.Credits.plcredits.txt")!;
-        byte[] buffer = new byte[stream.Length];
-        stream.Read(buffer, 0, buffer.Length);
-
-        creditsText = Encoding.UTF8.GetString(buffer);
-        return creditsText;
-    }
-    static bool Prefix(CreditsController __instance)
-    {
-        __instance.CSVCredits = new TextAsset(GetCreditsText());
-        return true;
     }
 }

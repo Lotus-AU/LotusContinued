@@ -16,6 +16,7 @@ namespace Lotus.Roles.RoleGroups.Neutral;
 
 public class Hitman : NeutralKillingBase
 {
+    private static readonly StandardLogger log = LoggerFactory.GetLogger<StandardLogger>(typeof(Hitman));
     private static HitmanFaction _hitmanFaction = new();
     public List<string> AdditionalWinRoles = new();
 
@@ -31,10 +32,13 @@ public class Hitman : NeutralKillingBase
     private void GameEnd(WinDelegate winDelegate)
     {
         if (MyPlayer == null) return;
+        log.Debug("Hitman Win Check");
+        log.Debug($"Is Alive? {MyPlayer.IsAlive()}");
+        log.Debug($"Cod Exists? {Game.MatchData.GameHistory.GetCauseOfDeath(MyPlayer.PlayerId).Exists()}");
         if (!MyPlayer.IsAlive()) return;
         if (Game.MatchData.GameHistory.GetCauseOfDeath(MyPlayer.PlayerId).Exists())
         {
-            StaticLogger.Debug($"{MyPlayer.name} was found alive, but a cause of death existed so we do not assign them as a winner.");
+            log.Debug($"{MyPlayer.name} was found alive, but a cause of death existed so we do not assign them as a winner.");
             return;
         }
         if (winDelegate.GetWinReason().ReasonType is ReasonType.SoloWinner && !AdditionalWinRoles.Contains(winDelegate.GetWinners()[0].PrimaryRole().EnglishRoleName)) return;
@@ -63,7 +67,10 @@ public class Hitman : NeutralKillingBase
                     .Build())
                 .Build());
 
-    protected override RoleModifier Modify(RoleModifier roleModifier) => base.Modify(roleModifier).Faction(_hitmanFaction);
+    protected override RoleModifier Modify(RoleModifier roleModifier) => base
+        .Modify(roleModifier)
+        .Faction(_hitmanFaction)
+        .RoleFlags(RoleFlag.CannotWinAlone);
 
 
     private class HitmanFaction : Factions.Neutrals.Neutral

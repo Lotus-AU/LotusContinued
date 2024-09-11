@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Lotus.API.Player;
 using Lotus.Extensions;
 using Lotus.Factions;
@@ -30,7 +29,6 @@ public static class PhantomActionsPatch
         if (!AmongUsClient.Instance.AmHost) return;
         log.Debug($"{__instance.name} {(isActive ? "is going invisible as Phantom." : "is appearing as Phantom.")}");
         IEnumerable<byte> alliedPlayerIds = Players.GetPlayers().Where(p => __instance.Relationship(p) is Relation.FullAllies).Where(__instance.PrimaryRole().Faction.CanSeeRole).Select(p => p.PlayerId);
-        PlayerControl[] nonAlliedImpostors = Players.GetPlayers().Where(p => p.GetVanillaRole().IsImpostor()).Where(p => !alliedPlayerIds.Contains(p.PlayerId) && p.PlayerId != __instance.PlayerId).ToArray();
         Vent farthestVent = Utils.GetFurthestVentFromPlayers();
         bool isImpFaction = __instance.PrimaryRole().Faction is ImpostorFaction;
         Players.GetAllPlayers().ForEach(p =>
@@ -38,34 +36,34 @@ public static class PhantomActionsPatch
             if (__instance == p) return; // skip player going invis
             CustomRole role = p.PrimaryRole();
             if (role.RealRole.IsCrewmate() && isImpFaction) return; // they are crewmate and we are imp so we are phantom for them
-            if (nonAlliedImpostors.Contains(p)) return; // if we are non-allied than continue
+            if (alliedPlayerIds.Contains(p.PlayerId)) return; // if we are allied than continue
             if (isActive)
             {
                 if (p.AmOwner)
                 {
-                    p.MyPhysics.StopAllCoroutines();
-                    p.NetTransform.SnapTo(farthestVent.transform.position);
-                    p.MyPhysics.StartCoroutine(p.MyPhysics.CoEnterVent(farthestVent.Id));
+                    __instance.MyPhysics.StopAllCoroutines();
+                    __instance.NetTransform.SnapTo(farthestVent.transform.position);
+                    __instance.MyPhysics.StartCoroutine(__instance.MyPhysics.CoEnterVent(farthestVent.Id));
                 }
                 else
                 {
-                    Utils.TeleportDeferred(p.NetTransform, farthestVent.transform.position).Send(p.GetClientId());
-                    RpcV3.Immediate(p.MyPhysics.NetId, RpcCalls.EnterVent).WritePacked(farthestVent.Id).Send(p.GetClientId());
+                    Utils.TeleportDeferred(__instance.NetTransform, farthestVent.transform.position).Send(p.GetClientId());
+                    RpcV3.Immediate(__instance.MyPhysics.NetId, RpcCalls.EnterVent).WritePacked(farthestVent.Id).Send(p.GetClientId());
                 }
             }
             else
             {
                 if (p.AmOwner)
                 {
-                    var pos = p.GetTruePosition();
-                    p.MyPhysics.BootFromVent(farthestVent.Id);
-                    p.NetTransform.SnapTo(pos);
+                    var pos = __instance.GetTruePosition();
+                    __instance.MyPhysics.BootFromVent(farthestVent.Id);
+                    __instance.NetTransform.SnapTo(pos);
                 }
                 else
                 {
-                    var pos = p.GetTruePosition();
-                    RpcV3.Immediate(p.MyPhysics.NetId, RpcCalls.ExitVent).WritePacked(farthestVent.Id).Send(p.GetClientId());
-                    Utils.TeleportDeferred(p.NetTransform, pos).Send(p.GetClientId());
+                    var pos = __instance.GetTruePosition();
+                    RpcV3.Immediate(__instance.MyPhysics.NetId, RpcCalls.ExitVent).WritePacked(farthestVent.Id).Send(p.GetClientId());
+                    Utils.TeleportDeferred(__instance.NetTransform, pos).Send(p.GetClientId());
                 }
             }
         });

@@ -14,7 +14,7 @@ public class SoloPassiveWinCondition : IWinCondition
 {
     public bool IsConditionMet(out List<PlayerControl> winners)
     {
-        winners = null;
+        winners = null!;
         List<PlayerControl> allPlayers = Players.GetAllPlayers().ToList();
         if (allPlayers.Count != 1) return false;
 

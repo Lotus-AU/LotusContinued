@@ -166,7 +166,7 @@ public class Mafioso : Engineer
         }, () => HandleSkip(handle));
     }
 
-    [RoleAction(LotusActionType.Interaction, ActionFlag.GlobalDetector)]
+    [RoleAction(LotusActionType.Interaction)]
     private void HandleInteraction(Interaction interaction, ActionHandle handle)
     {
         switch (interaction.Intent)

@@ -1,7 +1,5 @@
 ﻿Format,Column1,Column2
-image,100;;Lotus.assets.Lotus_Icon.png,
-image,100;;Lotus.assets.Credits.Images.maintitlecredits.png,
-image,100;;Lotus.assets.Credits.Images.devstitle.png,
+image,100;;Lotus.assets.Credits.Images.topcredits.png,
 person,Discussions,Owner and Lead Developer
 person,Theta,Bot Developer & Translator (Eng)
 person,Piggy B,Art Director
@@ -20,20 +18,22 @@ person,Gotzon,Translator (French)
 image,100;;Lotus.assets.Credits.Images.testerstitle.png,
 person,AnonWorks,
 person,AlunnyBunny,
+person,ArayaAilsa,
 person,Citriondragon,
 person,DarkFedora,
 person,Demob,
 person,Donk,
 person,Essence,
+person,eur mom,
+person,Filipopoi,
 person,GD,
-person,Theta,
 person,Gotzon,
 person,HinataHyuga,
 person,J (fatherjgg),
 person,Mama BB,"""I'm a good bean"""
 person,Piggy B,
 person,pumpkingaming5548,
-person,Spike,
+person,Skarlat,
 person,Shapmaster,
 person,Theta,
 person,Timmay,"""Bestest Tester Ever!"""

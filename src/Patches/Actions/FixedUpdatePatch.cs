@@ -8,15 +8,19 @@ using Lotus.Options;
 using VentLib.Utilities;
 using VentLib.Utilities.Debug.Profiling;
 using VentLib.Utilities.Extensions;
+// using Lotus.RPC.CustomObjects;
+using System.Linq;
 
 namespace Lotus.Patches.Actions;
 
 [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.FixedUpdate))]
 static class FixedUpdatePatch
 {
+    private static readonly StandardLogger log = LoggerFactory.GetLogger<StandardLogger>(typeof(FixedUpdatePatch));
     private static readonly ActionHandle FixedUpdateHandle = ActionHandle.NoInit();
     private static void Postfix(PlayerControl __instance)
     {
+        // if (CustomNetObject.AllObjects.Any(obj => obj.playerControl == __instance)) return;
         Game.RecursiveCallCheck = 0;
         // DisplayModVersion(__instance);
 
@@ -26,12 +30,23 @@ static class FixedUpdatePatch
             AmongUsClient.Instance.KickPlayer(__instance.GetClientId(), false);
 
         if (Game.State is not GameState.Roaming) return;
+        bool isLocalPlayer = __instance.PlayerId == PlayerControl.LocalPlayer.PlayerId;
         uint id = Profilers.Global.Sampler.Start("Fixed Update Patch");
 
-        var player = __instance;
-        RoleOperations.Current.Trigger(LotusActionType.FixedUpdate, null, FixedUpdateHandle);
+        if (isLocalPlayer)
+        {
+            try
+            {
+                RoleOperations.Current.Trigger(LotusActionType.FixedUpdate, null, FixedUpdateHandle);
+                // CustomNetObject.FixedUpdate();
+            }
+            catch (System.Exception ex)
+            {
+                log.Exception(ex);
+            }
+        }
 
-        if (player.IsAlive() && GeneralOptions.GameplayOptions.EnableLadderDeath) FallFromLadder.FixedUpdate(player);
+        if (__instance.IsAlive() && GeneralOptions.GameplayOptions.EnableLadderDeath) FallFromLadder.FixedUpdate(__instance);
         Profilers.Global.Sampler.Stop(id);
         /*if (player.PlayerId == PlayerControl.LocalPlayer.PlayerId) DisableDevice.FixedUpdate();*/
         /*EnterVentPatch.CheckVentSwap(__instance);*/

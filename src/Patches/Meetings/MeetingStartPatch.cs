@@ -67,7 +67,7 @@ public class MeetingStartPatch
             }
             finally
             {
-                RoleOperations.Current.TriggerFor(p, LotusActionType.RoundEnd, null, handle, meetingDelegate, false);
+                // RoleOperations.Current.TriggerFor(p, LotusActionType.RoundEnd, null, handle, meetingDelegate, false);
             }
         });
 

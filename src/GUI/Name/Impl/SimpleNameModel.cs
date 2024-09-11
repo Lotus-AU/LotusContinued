@@ -7,6 +7,7 @@ using Lotus.API.Player;
 using Lotus.GUI.Name.Components;
 using Lotus.GUI.Name.Holders;
 using Lotus.GUI.Name.Interfaces;
+using Lotus.Patches.Actions;
 using UnityEngine;
 using VentLib.Networking.RPC;
 using VentLib.Utilities;
@@ -49,7 +50,12 @@ public class SimpleNameModel : INameModel
         this.player = player;
         SetHolders();
         this.unalteredName = player.name;
-        NameHolder.Add(new NameComponent(new LiveString(unalteredName, Color.white), new[] { GameState.Roaming, GameState.InMeeting }));
+        NameHolder.Add(new NameComponent(new LiveString(() =>
+        {
+            byte shapeshiftedId = player.GetShapeshifted();
+            if (shapeshiftedId != 255) return unalteredName;
+            else return Players.GetAllPlayers().FirstOrDefault(p => p.PlayerId == shapeshiftedId, PlayerControl.LocalPlayer).name; // use host's name as a "scapegoat"
+        }, Color.white), new[] { GameState.Roaming, GameState.InMeeting }));
     }
 
     public bool Updated() => didUpdate;

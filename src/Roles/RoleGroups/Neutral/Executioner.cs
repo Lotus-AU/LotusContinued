@@ -53,7 +53,7 @@ public class Executioner : CustomRole
     [RoleAction(LotusActionType.Exiled, ActionFlag.GlobalDetector)]
     private void CheckExecutionerWin(PlayerControl exiled)
     {
-        if (target == null || target.PlayerId != exiled.PlayerId) return;
+        if (target == null || target.PlayerId != exiled.PlayerId || !MyPlayer.IsAlive()) return;
         List<PlayerControl> winners = new() { MyPlayer };
         if (target.PrimaryRole() is Jester) winners.Add(target);
         ManualWin win = new(winners, ReasonType.SoloWinner);

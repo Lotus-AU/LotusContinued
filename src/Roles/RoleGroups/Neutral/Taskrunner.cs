@@ -114,7 +114,7 @@ public class Taskrunner : Crewmate, IPhantomRole
         .Faction(FactionInstances.Neutral)
         .RoleFlags(RoleFlag.CannotWinAlone);
 
-    [Localized(nameof(Phantom))]
+    [Localized(nameof(Taskrunner))]
     private static class Translations
     {
         [Localized(ModConstants.Options)]

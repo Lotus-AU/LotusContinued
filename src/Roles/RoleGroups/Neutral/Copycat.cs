@@ -81,7 +81,19 @@ public class Copycat : CustomRole
 
     private void AssignRole(PlayerControl attacker)
     {
-        CustomRole attackerRole = attacker.PrimaryRole();
+        CustomRole? attackerRole;
+        if (attacker.PrimaryRole().GetActions(LotusActionType.Attack).Any()) attackerRole = attacker.PrimaryRole();
+        else attackerRole = attacker.GetSubroles().FirstOrDefault(sub => sub.GetActions(LotusActionType.Attack).Any());
+        if (attackerRole == null)
+        {
+            if (!FallbackTypes.ContainsKey(attacker.PrimaryRole().GetType()))
+            {
+                turned = false;
+                log.Debug($"{attacker.GetNameWithRole()} has no attack attributes. So we will just cancel the kill and do nothing.");
+                return;
+            }
+            attackerRole = attacker.PrimaryRole();
+        }
         FallbackTypes.GetOptional(attackerRole.GetType()).IfPresent(r => attackerRole = r());
         CustomRole role = copyRoleProgress ? attackerRole : ProjectLotus.GameModeManager.CurrentGameMode.RoleManager.GetCleanRole(attackerRole);
 

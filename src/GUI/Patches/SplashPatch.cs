@@ -13,6 +13,8 @@ using VentLib.Utilities.Extensions;
 using VentLib.Utilities.Harmony.Attributes;
 using VentLib.Utilities.Optionals;
 using Object = UnityEngine.Object;
+using Il2CppInterop.Runtime.InteropTypes.Arrays;
+using Il2CppInterop.Runtime;
 
 namespace Lotus.GUI.Patches;
 
@@ -88,6 +90,15 @@ class SplashPatch
         Transform accountButtons = maskedBlackScreen.FindChild<Transform>("AccountButtons", true);
         accountButtons.gameObject.FindChild<Transform>("Divider", true).localPosition += new Vector3(1000f, 0f);
         accountButtons.gameObject.FindChild<Transform>("Header", true).localPosition += new Vector3(1000f, 0f);
+        accountButtons.FindChild("Account_CTA").localPosition += new Vector3(0, 1, 0);
+        accountButtons.FindChild("Stats_CTA").localPosition += new Vector3(0, 1, 0);
+
+        Async.Schedule(() =>
+        {
+            GameObject accountManager = FindAccountManager();
+            accountManager.transform.localPosition = new Vector3(0f, 1.6782f, 0f);
+        }, 0.1f);
+
         maskedBlackScreen.transform.localPosition = new Vector3(-3.345f, -2.05f);
         maskedBlackScreen.transform.localScale = new Vector3(7.35f, 4.5f, 4f);
 
@@ -241,10 +252,10 @@ class SplashPatch
         __instance.settingsButton.inactiveTextColor = Color.white;
 
         var tohLogo = new GameObject("titleLogo_TOH");
-        tohLogo.transform.position = new Vector3(4.55f, -2.1f);
+        tohLogo.transform.position = new Vector3(4.5f, -2.1f);
         tohLogo.transform.localScale = new Vector3(1f, 1f, 1f);
         var renderer = tohLogo.AddComponent<SpriteRenderer>();
-        renderer.sprite = AssetLoader.LoadSprite("Lotus.assets.Lotus_Icon.png", 700f);
+        renderer.sprite = AssetLoader.LoadSprite("Lotus.assets.Lotus_Icon.png", 1100f);
 
         _customSplash.OrElseSet(InitializeSplash);
         PlayerParticles particles = Object.FindObjectOfType<PlayerParticles>();
@@ -256,6 +267,7 @@ class SplashPatch
         // ModUpdateMenu.AnchorObject.transform.localPosition += new Vector3(0f, 0f, -9f);
 
         DevLogger.Log("?????c");
+
 
         /*GameObject updateButton = Object.Instantiate(playLocalButton, __instance.transform);*/
         /*Async.Schedule(() =>
@@ -338,5 +350,32 @@ class SplashPatch
     {
         if (__instance.activeSprites != null) return;
         if (__instance.inactiveSprites != null) __instance.inactiveSprites.SetActive(true);
+    }
+
+    // save me from my pain and suffering
+    static GameObject FindAccountManager()
+    {
+        Il2CppSystem.Type gameObjectType = Il2CppType.Of<GameObject>();
+
+        Il2CppReferenceArray<Object> allObjects = Resources.FindObjectsOfTypeAll(gameObjectType);
+        foreach (var obj in allObjects)
+        {
+            GameObject? gameObject = obj.TryCast<GameObject>();
+            if (gameObject != null)
+            {
+                if (gameObject.name == "AccountManager" && gameObject.hideFlags == HideFlags.None)
+                {
+                    return gameObject;
+                }
+
+                var accountManagerComponent = gameObject.GetComponent<AccountManager>();
+                if (accountManagerComponent != null && gameObject.hideFlags == HideFlags.None)
+                {
+                    return accountManagerComponent.gameObject;
+                }
+            }
+        }
+
+        return null!;
     }
 }

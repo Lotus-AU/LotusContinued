@@ -25,10 +25,11 @@ public class TitleManager
 
     public TitleManager(DirectoryInfo directory)
     {
-        Hooks.NetworkHooks.ReceiveVersionHook.Bind(nameof(TitleManager), _ => Players.GetPlayers().ForEach(ApplyTitleWithChatFix));
+        Hooks.NetworkHooks.ReceiveVersionHook.Bind(nameof(TitleManager), _ => Players.GetPlayers().ForEach(ApplyTitleWithChatFix), replace: true);
         if (!directory.Exists) directory.Create();
         this.directory = directory;
         LoadAll();
+        if (AmongUsClient.Instance.IsInGame) Players.GetPlayers().ForEach(p => p.RpcSetName(p.name));
     }
 
     public string ApplyTitle(string friendCode, string playerName, bool nameOnly = false)
@@ -107,7 +108,7 @@ public class TitleManager
             })
             .ForEach(pair =>
             {
-                if (pair.Item1 != null!) titles.GetOrCompute(pair.Item1, () => new List<CustomTitle>()).Add(pair.Item2);
+                if (!string.IsNullOrEmpty(pair.Item1)) titles.GetOrCompute(pair.Item1, () => new List<CustomTitle>()).Add(pair.Item2);
             });
     }
 

@@ -6,6 +6,7 @@ using InnerNet;
 using Lotus.API.Odyssey;
 using Lotus.API.Player;
 using Lotus.Logging;
+// using Lotus.RPC.CustomObjects;
 using UnityEngine;
 using VentLib.Utilities;
 using VentLib.Utilities.Extensions;
@@ -26,6 +27,7 @@ class EndGamePatch
     {
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         Game.Cleanup();
+        // CustomNetObject.Reset();
 
         SummaryText = new();
         /*foreach (var id in TOHPlugin.PlayerStates.Keys)

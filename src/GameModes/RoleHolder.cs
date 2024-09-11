@@ -35,5 +35,5 @@ public abstract class RoleHolder : IRoleHolder
             _initialized = true;
         }
     }
-    public bool _initialized;
+    private bool _initialized;
 }

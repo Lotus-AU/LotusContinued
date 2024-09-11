@@ -35,7 +35,7 @@ namespace Lotus.Roles.RoleGroups.Crew;
 public class Sheriff : Crewmate
 {
     private static readonly StandardLogger log = LoggerFactory.GetLogger<StandardLogger>(typeof(Sheriff));
-    private static IAccumulativeStatistic<int> _misfires = Statistic<int>.CreateAccumulative($"Roles.{nameof(Sheriff)}.Misfires", () => SheriffTranslations.MisfireStat);
+    private static IAccumulativeStatistic<int> _misfires = Statistic<int>.CreateAccumulative($"Roles.{nameof(Sheriff)}.Misfires", () => Translations.MisfireStat);
     public static readonly List<Statistic> SheriffStatistics = new() { VanillaStatistics.Kills, _misfires };
     public override List<Statistic> Statistics() => SheriffStatistics;
 
@@ -44,19 +44,19 @@ public class Sheriff : Crewmate
     public static List<(Func<CustomRole, bool> predicate, GameOptionBuilder builder, bool allKillable)> RoleTypeBuilders = new()
     {
         (r => r.SpecialType is SpecialType.NeutralKilling, new GameOptionBuilder()
-            .KeyName("Neutral Killing Settings", TranslationUtil.Colorize(SheriffTranslations.NeutralKillingSetting, ModConstants.Palette.NeutralColor, ModConstants.Palette.KillingColor))
+            .KeyName("Neutral Killing Settings", TranslationUtil.Colorize(Translations.NeutralKillingSetting, ModConstants.Palette.NeutralColor, ModConstants.Palette.KillingColor))
             .Value(v => v.Text(GeneralOptionTranslations.OffText).Value(0).Color(Color.red).Build())
             .Value(v => v.Text(GeneralOptionTranslations.AllText).Value(1).Color(Color.green).Build())
             .Value(v => v.Text(GeneralOptionTranslations.CustomText).Value(2).Color(new Color(0.73f, 0.58f, 1f)).Build())
             .ShowSubOptionPredicate(i => (int)i == 2), false),
         (r => r.SpecialType is SpecialType.Neutral, new GameOptionBuilder()
-            .KeyName("Neutral Passive Settings", TranslationUtil.Colorize(SheriffTranslations.NeutralPassiveSetting, ModConstants.Palette.NeutralColor, ModConstants.Palette.PassiveColor))
+            .KeyName("Neutral Passive Settings", TranslationUtil.Colorize(Translations.NeutralPassiveSetting, ModConstants.Palette.NeutralColor, ModConstants.Palette.PassiveColor))
             .Value(v => v.Text(GeneralOptionTranslations.OffText).Value(0).Color(Color.red).Build())
             .Value(v => v.Text(GeneralOptionTranslations.AllText).Value(1).Color(Color.green).Build())
             .Value(v => v.Text(GeneralOptionTranslations.CustomText).Value(2).Color(new Color(0.73f, 0.58f, 1f)).Build())
             .ShowSubOptionPredicate(i => (int)i == 2), false),
         (r => r.Faction is Factions.Impostors.Madmates, new GameOptionBuilder()
-            .KeyName("Madmates Settings", TranslationUtil.Colorize(SheriffTranslations.MadmateSetting, ModConstants.Palette.MadmateColor))
+            .KeyName("Madmates Settings", TranslationUtil.Colorize(Translations.MadmateSetting, ModConstants.Palette.MadmateColor))
             .Value(v => v.Text(GeneralOptionTranslations.OffText).Value(0).Color(Color.red).Build())
             .Value(v => v.Text(GeneralOptionTranslations.AllText).Value(1).Color(Color.green).Build())
             .Value(v => v.Text(GeneralOptionTranslations.CustomText).Value(2).Color(new Color(0.73f, 0.58f, 1f)).Build())
@@ -148,27 +148,27 @@ public class Sheriff : Crewmate
         base.RegisterOptions(optionStream)
             .Color(RoleColor)
             .SubOption(sub => sub
-                .Name("Kill On Misfire")
+                .KeyName("Kill On Misfire", Translations.Options.KillOnMisfire)
                 .Bind(v => canKillCrewmates = (bool)v)
                 .AddOnOffValues(false)
                 .Build())
             .SubOption(sub => sub
-                .Name("Kill Cooldown")
+                .KeyName("Kill Cooldown", Translations.Options.KillCooldown)
                 .BindFloat(this.shootCooldown.SetDuration)
                 .AddFloatRange(0, 120, 2.5f, 12, GeneralOptionTranslations.SecondsSuffix)
                 .Build())
             .SubOption(sub => sub
-                .Name("Total Shots")
+                .KeyName("Total Shots", Translations.Options.TotalShots)
                 .Bind(v => this.totalShots = (int)v)
                 .AddIntRange(1, 60, 1, 4)
                 .Build())
             .SubOption(sub => sub
-                .Name("One Shot Per Round")
+                .KeyName("One Shot Per Round", Translations.Options.OneShotPerRound)
                 .Bind(v => this.oneShotPerRound = (bool)v)
                 .AddOnOffValues()
                 .Build())
             .SubOption(sub => sub
-                .Name("Sheriff Action Button")
+                .KeyName("Sheriff Action Button", Translations.Options.SheriffActionButton)
                 .Bind(v => isSheriffDesync = (bool)v)
                 .Value(v => v.Text("Kill Button (legacy)").Value(true).Color(Color.green).Build())
                 .Value(v => v.Text("Pet Button").Value(false).Color(Color.cyan).Build())
@@ -212,7 +212,7 @@ public class Sheriff : Crewmate
     }
 
     [Localized(nameof(Sheriff))]
-    public static class SheriffTranslations
+    public static class Translations
     {
         [Localized(nameof(MisfireStat))]
         public static string MisfireStat = "Misfires";
@@ -225,5 +225,15 @@ public class Sheriff : Crewmate
 
         [Localized(nameof(MadmateSetting))]
         public static string MadmateSetting = "Can Kill Madmates::0 Settings";
+
+        [Localized(ModConstants.Options)]
+        public static class Options
+        {
+            [Localized(nameof(SheriffActionButton))] public static string SheriffActionButton = "Sheriff Action Button";
+            [Localized(nameof(OneShotPerRound))] public static string OneShotPerRound = "One Shot Per Round";
+            [Localized(nameof(KillOnMisfire))] public static string KillOnMisfire = "Kill Target On Misfire";
+            [Localized(nameof(KillCooldown))] public static string KillCooldown = "Shoot Cooldown";
+            [Localized(nameof(TotalShots))] public static string TotalShots = "Total Shots";
+        }
     }
 }

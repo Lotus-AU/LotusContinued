@@ -12,6 +12,8 @@ using Lotus.Utilities;
 using Lotus.Extensions;
 using VentLib.Options.UI;
 using VentLib.Utilities;
+using Lotus.Roles.RoleGroups.Vanilla;
+using Lotus.Options;
 
 namespace Lotus.Roles.RoleGroups.Impostors;
 
@@ -21,6 +23,10 @@ public class Ninja : Vanilla.Impostor
     private bool playerTeleportsToNinja;
     public NinjaMode Mode = NinjaMode.Killing;
     private ActivationType activationType;
+
+
+    private float ShapeshiftCooldown;
+    private float ShapeshiftDuration;
 
     [UIComponent(UI.Text)]
     private string CurrentMode() => RoleColor.Colorize(Mode == NinjaMode.Hunting ? "(Hunting)" : "(Killing)");
@@ -98,6 +104,16 @@ public class Ninja : Vanilla.Impostor
             .BindInt(v => activationType = (ActivationType)v)
             .Value(v => v.Text("Pet Button").Value(0).Build())
             .Value(v => v.Text("Shapeshift Button").Value(1).Build())
+            .ShowSubOptionPredicate(v => (int)v == 1)
+            .SubOption(sub => sub.KeyName("Shapeshift Cooldown", Shapeshifter.Translations.Options.ShapeshiftCooldown)
+                .AddFloatRange(0, 120, 2.5f, 12, GeneralOptionTranslations.SecondsSuffix)
+                .BindFloat(f => ShapeshiftCooldown = f)
+                .Build())
+            .SubOption(sub => sub.KeyName("Shapeshift Duration", Shapeshifter.Translations.Options.ShapeshiftDuration)
+                .Value(1f)
+                .AddFloatRange(2.5f, 120, 2.5f, 6, GeneralOptionTranslations.SecondsSuffix)
+                .BindFloat(f => ShapeshiftDuration = f)
+                .Build())
             .Build());
 
 
@@ -105,7 +121,9 @@ public class Ninja : Vanilla.Impostor
         base.Modify(roleModifier)
             .VanillaRole(activationType is ActivationType.Shapeshift ? RoleTypes.Shapeshifter : RoleTypes.Impostor)
             .OptionOverride(new IndirectKillCooldown(KillCooldown, () => Mode is NinjaMode.Hunting))
-            .RoleAbilityFlags(RoleAbilityFlag.UsesPet);
+            .RoleAbilityFlags(RoleAbilityFlag.UsesPet)
+            .OptionOverride(Override.ShapeshiftCooldown, () => ShapeshiftCooldown)
+            .OptionOverride(Override.ShapeshiftDuration, () => ShapeshiftDuration);
 
     public enum NinjaMode
     {

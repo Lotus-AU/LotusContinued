@@ -32,33 +32,52 @@ public class FrozenPlayer
 
     public PlayerControl NullablePlayer;
 
-    public FrozenPlayer(PlayerControl player)
+    public FrozenPlayer(PlayerControl player, bool changeStatus = true)
     {
         Name = player.name;
         ColorName = player.Data.ColoredName();
         Level = player.Data.PlayerLevel;
         FriendCode = player.FriendCode;
         PlayerId = player.PlayerId;
-        Outfit = player.CurrentOutfit;
+        Outfit = player.Data.DefaultOutfit.DeepCopy();
         MainRole = player.PrimaryRole();
         Subroles = player.SecondaryRoles();
         GameID = player.GetGameID();
+        Game.MatchData.GameHistory.GetCauseOfDeath(PlayerId).IfPresent(cod => CauseOfDeath = cod);
 
-        Hooks.PlayerHooks.PlayerDeathHook.Bind($"{nameof(FrozenPlayer)}-{PlayerId}", pd =>
-        {
-            if (pd.Player == null || pd.Player.PlayerId != PlayerId) return;
-            CauseOfDeath = pd.CauseOfDeath;
-            Status = PlayerStatus.Dead;
-        }, true);
+        if (changeStatus)
+            try
+            {
+                if (player.Data.Disconnected) Status = PlayerStatus.Disconnected;
+                else if (player.IsAlive()) Status = PlayerStatus.Alive;
+                else Status = Game.MatchData.GameHistory.Events
+                    .FirstOrOptional(ev => ev is ExiledEvent exiledEvent && exiledEvent.Player().PlayerId == PlayerId)
+                    .Map(_ => PlayerStatus.Exiled)
+                    .OrElse(PlayerStatus.Dead);
+            }
+            catch
+            {
+                Status = PlayerStatus.Disconnected;
+            }
+        NullablePlayer = player;
+    }
 
-        Hooks.PlayerHooks.PlayerDisconnectHook.Bind($"{nameof(FrozenPlayer)}-{PlayerId}", dc =>
+    public PlayerStatus RegenerateStatus()
+    {
+        try
         {
-            if (dc.Player == null || dc.Player.PlayerId != PlayerId) return;
-            if (Status is not PlayerStatus.Alive) return;
+            if (NullablePlayer.Data.Disconnected) Status = PlayerStatus.Disconnected;
+            else if (NullablePlayer.IsAlive()) Status = PlayerStatus.Alive;
+            else Status = Game.MatchData.GameHistory.Events
+                .FirstOrOptional(ev => ev is ExiledEvent exiledEvent && exiledEvent.Player().PlayerId == PlayerId)
+                .Map(_ => PlayerStatus.Exiled)
+                .OrElse(PlayerStatus.Dead);
+        }
+        catch
+        {
             Status = PlayerStatus.Disconnected;
-        }, true);
-
-        this.NullablePlayer = player;
+        }
+        return Status;
     }
 
     private PlayerControl GetPlayer()

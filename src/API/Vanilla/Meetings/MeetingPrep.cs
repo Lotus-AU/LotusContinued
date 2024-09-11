@@ -12,6 +12,7 @@ using VentLib.Utilities.Extensions;
 using VentLib.Utilities.Optionals;
 using Lotus.GameModes.Standard;
 using Lotus.Options;
+using HarmonyLib;
 
 namespace Lotus.API.Vanilla.Meetings;
 
@@ -45,10 +46,10 @@ public class MeetingPrep
         if (Prepped || !AmongUsClient.Instance.AmHost) return _meetingDelegate;
         if (Game.CurrentGameMode is StandardGameMode && deadBody == null && GeneralOptions.MeetingOptions.SyncMeetingButtons)
         {
-            if (GeneralOptions.MeetingOptions.MeetingButtonPool >= Game.MatchData.EmergencyButtonsUsed)
+            if (Game.MatchData.EmergencyButtonsUsed >= GeneralOptions.MeetingOptions.MeetingButtonPool)
             {
                 _meetingDelegate = null!;
-                log.Debug($"{reporter?.name ?? "null player"}'s was canceled because there are no more meetings. ({GeneralOptions.MeetingOptions.MeetingButtonPool}) >= {Game.MatchData.EmergencyButtonsUsed}");
+                log.Debug($"{reporter?.name ?? "null player"}'s meeting was canceled because there are no more meetings. {Game.MatchData.EmergencyButtonsUsed} >= {GeneralOptions.MeetingOptions.MeetingButtonPool}");
                 return _meetingDelegate;
             }
         }
@@ -71,6 +72,18 @@ public class MeetingPrep
                 QuickStartMeeting(reporter);
                 /*Async.Schedule(() => Players.GetPlayers().ForEach(p => p.CRpcRevertShapeshift(false)), 0.1f);*/
             }, 0.1f);
+        Players.GetPlayers().Do(p =>
+        {
+            ActionHandle handle = ActionHandle.NoInit();
+            try
+            {
+                RoleOperations.Current.TriggerFor(p, LotusActionType.RoundEnd, null, handle, _meetingDelegate, false);
+            }
+            catch
+            {
+                // ignored. just so a meeting isn't forcefully stopped
+            }
+        });
 
         Game.RenderAllForAll(GameState.InMeeting, true);
         Async.Schedule(FixChatNames, 5f);

@@ -6,6 +6,7 @@ using Lotus.API.Player;
 using Lotus.Extensions;
 using Lotus.Options;
 using Lotus.Roles.Interactions.Interfaces;
+using Lotus.Roles.Internals;
 using Lotus.Roles.Internals.Attributes;
 using Lotus.Roles.Overrides;
 using VentLib.Localization.Attributes;
@@ -22,9 +23,9 @@ public class Noisemaker : Crewmate
     protected float AlertDuration;
 
     [RoleAction(Internals.Enums.LotusActionType.Interaction, priority: API.Priority.Last)]
-    public virtual void SendGameOptionsOnDeath(Interaction interaction)
+    public virtual void SendGameOptionsOnDeath(Interaction interaction, ActionHandle handle)
     {
-        if (interaction.Intent is not IFatalIntent) return;
+        if (interaction.Intent is not IKillingIntent || handle.IsCanceled) return;
         // we assume that this player IS going to die
         // last should only be used for kind of postfix code since stuff should've been canceled before this
         List<Remote<GameOptionOverride>> remoteOverrides = new();
@@ -81,7 +82,7 @@ public class Noisemaker : Crewmate
         public static class Options
         {
             [Localized(nameof(ImpostorsGetAlert))]
-            public static string ImpostorsGetAlert = "Impostors Get Alert";
+            public static string ImpostorsGetAlert = "Killers Get Alert";
 
             [Localized(nameof(AlertDuration))]
             public static string AlertDuration = "Alert Duration";

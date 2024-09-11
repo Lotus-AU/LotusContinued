@@ -89,7 +89,7 @@ public class AgiTater : NeutralKillingBase
     private void KillPlayersBeforeMeeting()
     {
         if (Condition.HasFlag(ExplodeCondition.Meetings)) bombs.RemoveAll(b => b.Explode());
-        bombs.ForEach(b => b.DeleteBomb());
+        bombs.RemoveAll(b => b.DeleteBomb());
         bombs.Clear();
     }
 

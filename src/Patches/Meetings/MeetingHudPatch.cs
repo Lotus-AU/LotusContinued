@@ -43,7 +43,7 @@ class MeetingHudOnDestroyPatch
             return p.PlayerId != meetingDelegate.ExiledPlayer?.PlayerId;
         }).ForEach(p => p.RpcSetName(p.name));*/
 
-        meetingDelegate.BlackscreenResolver.BeginProcess();
+        meetingDelegate.BlackscreenResolver.OnMeetingEnd();
         Async.Schedule(PostMeetingSetups, NetUtils.DeriveDelay(0.5f));
     }
 

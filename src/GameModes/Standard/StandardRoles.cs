@@ -45,7 +45,7 @@ public class StandardRoles : RoleHolder
     public StandardRoles(Roles.Managers.RoleManager manager) : base(manager)
     {
         Instance = this;
-        roleManager = manager as StandardRoleManager;
+        roleManager = (manager as StandardRoleManager)!;
         AllRoles = new List<CustomRole>();
         Static = new StaticRoles();
         Mods = new Modifiers();
@@ -114,7 +114,7 @@ public class StandardRoles : RoleHolder
         bool isExtra = typeof(ExtraRoles).GetFields().Any(f => f.FieldType == roleType);
 
         CustomRole role = roleManager.GetRoleFromType(roleType);
-        RoleEditor editor = role.Editor;
+        RoleEditor editor = role.Editor!;
 
         if (isStatic)
         {
@@ -133,9 +133,8 @@ public class StandardRoles : RoleHolder
 
     public class StaticRoles
     {
-        //Impostors
+        /// Impostors
 
-        // public CustomRole LOAD_IMPOSTOR_OPTIONS = new EnforceFunctionOrderingRole(RoleOptions.ImpostorOptions.Start);
         //assassin
         //bomber
         public Assassin Assassin = new();
@@ -173,7 +172,7 @@ public class StandardRoles : RoleHolder
         public Witch Witch = new();
         public YinYanger YinYanger = new();
 
-        // public CustomRole MADMATE_TITLE = new EnforceFunctionOrderingRole(RoleOptions.MadmateOptions.Start);
+        /// Madmates
 
         public CrewPostor CrewPostor = new();
         public Madmate Madmate = new();
@@ -181,10 +180,10 @@ public class StandardRoles : RoleHolder
         public MadSnitch MadSnitch = new();
         public Parasite Parasite = new();
 
-        //Crewmates
-        // public CustomRole LOAD_CREW_OPTIONS = new EnforceFunctionOrderingRole(RoleOptions.CrewmateOptions.Start);
+        /// Crewmates
 
         public Alchemist Alchemist = new();
+        public Altruist Altruist = new();
         public Bastion Bastion = new();
         public Bodyguard Bodyguard = new();
         public Chameleon Chameleon = new();
@@ -194,6 +193,7 @@ public class StandardRoles : RoleHolder
         public Demolitionist Demolitionist = new();
         public Dictator Dictator = new();
         public Doctor Doctor = new();
+        public Duplicator Duplicator = new();
         public Engineer Engineer = new();
         public Escort Escort = new();
         public ExConvict ExConvict = new();
@@ -219,13 +219,7 @@ public class StandardRoles : RoleHolder
         public Veteran Veteran = new();
         public Vigilante Vigilante = new();
 
-
-        //Neutrals
-
-        // ReSharper disable once InconsistentNaming
-        // public CustomRole LOAD_NEUTRAL_OPTIONS = new EnforceFunctionOrderingRole(RoleOptions.NeutralOptions.Start);
-
-        // public CustomRole NEUTRAL_KILLING_TITLE = new EnforceFunctionOrderingRole(() => new GameOptionTitleBuilder().Title("<size=2.3>★ Neutral Killing ★</size>").Color(ModConstants.Palette.KillingColor).Tab(DefaultTabs.NeutralTab).Build());
+        /// Neutral Killing
 
         public AgiTater AgiTater = new();
         public Arsonist Arsonist = new();
@@ -243,8 +237,9 @@ public class StandardRoles : RoleHolder
         public Retributionist Retributionist = new();
         public Glitch Glitch = new();
         public Werewolf Werewolf = new();
-        // public CustomRole NEUTRAL_PASSIVE_TITLE = new EnforceFunctionOrderingRole(() => new GameOptionTitleBuilder().Title("<size=2.3>❀ Neutral Passive ❀</size>").Color(ModConstants.Palette.PassiveColor).Tab(DefaultTabs.NeutralTab).Build());
 
+        /// Neutral Non-Killing
+        public Amalgamation Amalgamation = new();
         public Amnesiac Amnesiac = new();
         public Archangel Archangel = new();
         public Copycat Copycat = new();
@@ -260,8 +255,8 @@ public class StandardRoles : RoleHolder
         public Terrorist Terrorist = new();
         public Vulture Vulture = new();
 
+        /// extra stuff
         public Guesser Guesser = new();
-        // public CustomRole LOAD_MODIFIER_OPTIONS = new EnforceFunctionOrderingRole(RoleOptions.SubroleOptions.Start);
     }
 
     public class Modifiers
@@ -295,14 +290,6 @@ public class StandardRoles : RoleHolder
         // public ImpGuesser ImpGuesser = new ImpGuesser();
         // public NeutralKillerGuesser NeutralKillerGuesser = new NeutralKillerGuesser();
         // public NeutralGuesser NeutralGuesser = new NeutralGuesser();
-
-        //double shot
-        //flash
-        //oblivious
-        //obvious
-        //sleuth
-        //torch
-        //watcher
     }
 }
 

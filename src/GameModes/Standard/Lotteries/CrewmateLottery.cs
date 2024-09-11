@@ -1,7 +1,7 @@
 using System.Linq;
 using Lotus.Factions.Crew;
-using Lotus.Managers;
 using Lotus.Roles;
+using Lotus.Roles.Interfaces;
 using VentLib.Utilities.Extensions;
 
 namespace Lotus.GameModes.Standard.Lotteries;
@@ -15,6 +15,10 @@ public class CrewmateLottery : RoleLottery
 
     public override void AddRole(CustomRole role, bool useSubsequentChance = false)
     {
+        if (role is IRoleCandidate candidate)
+        {
+            if (candidate.ShouldSkip()) return;
+        }
         int chance = useSubsequentChance ? role.AdditionalChance : role.Chance;
         if (chance == 0 || role.RoleFlags.HasFlag(RoleFlag.Unassignable)) return;
         uint id = Roles.Add(role);

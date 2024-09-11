@@ -34,18 +34,19 @@ public class FatalIntent : IFatalIntent
         Optional<IDeathEvent> deathEvent = CauseOfDeath();
         initiator.PrimaryRole().SyncOptions();
 
+        KillTarget(initiator, target);
         Game.MatchData.GameHistory.SetCauseOfDeath(target.PlayerId,
         deathEvent.OrElse(initiator.PlayerId == target.PlayerId
             ? new SuicideEvent(initiator)
             : new DeathEvent(target, initiator)
-         ));
-
-        KillTarget(initiator, target);
+        ));
+        Game.MatchData.RegenerateFrozenPlayers(target);
 
         if (!target.IsAlive()) return;
         log.Debug($"After executing the fatal action. The target \"{target.name}\" was still alive. Killer: {initiator.name}");
         RoleOperations.Current.Trigger(LotusActionType.SuccessfulAngelProtect, initiator, target);
         Game.MatchData.GameHistory.ClearCauseOfDeath(target.PlayerId);
+        Game.MatchData.RegenerateFrozenPlayers(target);
     }
 
     public void KillTarget(PlayerControl initiator, PlayerControl target)

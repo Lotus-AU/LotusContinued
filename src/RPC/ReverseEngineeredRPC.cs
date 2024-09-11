@@ -12,38 +12,39 @@ using VentLib.Networking.RPC;
 using VentLib.Networking.RPC.Interfaces;
 using VentLib.Utilities;
 using VentLib.Utilities.Extensions;
+using VentLib.Utilities.Harmony.Attributes;
 using Object = UnityEngine.Object;
 
 namespace Lotus.RPC;
 
 public static class ReverseEngineeredRPC
 {
-    public static void RpcChangeSkin(PlayerControl player, NetworkedPlayerInfo.PlayerOutfit newOutift, int targetClientId = -1)
+    public static void RpcChangeSkin(PlayerControl player, NetworkedPlayerInfo.PlayerOutfit newOutift, int targetClientId = -1, bool sendToClients = true)
     {
         MassRpc massRpc = RpcV3.Mass();
 
         player.SetName(newOutift.PlayerName);
-        massRpc.Start(player.NetId, RpcCalls.SetName).Write(player.Data.NetId).Write(newOutift.PlayerName).End();
+        if (sendToClients) massRpc.Start(player.NetId, RpcCalls.SetName).Write(player.Data.NetId).Write(newOutift.PlayerName).End();
 
         player.SetColor(newOutift.ColorId);
-        massRpc.Start(player.NetId, RpcCalls.SetColor).Write(player.Data.NetId).Write((byte)newOutift.ColorId).End();
+        if (sendToClients) massRpc.Start(player.NetId, RpcCalls.SetColor).Write(player.Data.NetId).Write((byte)newOutift.ColorId).End();
 
         player.SetHat(newOutift.HatId, newOutift.ColorId);
-        massRpc.Start(player.NetId, RpcCalls.SetHatStr).Write(newOutift.HatId).Write(player.GetNextRpcSequenceId(RpcCalls.SetHatStr)).End();
+        if (sendToClients) massRpc.Start(player.NetId, RpcCalls.SetHatStr).Write(newOutift.HatId).Write(player.GetNextRpcSequenceId(RpcCalls.SetHatStr)).End();
 
         player.SetSkin(newOutift.SkinId, newOutift.ColorId);
-        massRpc.Start(player.NetId, RpcCalls.SetSkinStr).Write(newOutift.SkinId).Write(player.GetNextRpcSequenceId(RpcCalls.SetSkinStr)).End();
+        if (sendToClients) massRpc.Start(player.NetId, RpcCalls.SetSkinStr).Write(newOutift.SkinId).Write(player.GetNextRpcSequenceId(RpcCalls.SetSkinStr)).End();
 
         player.SetVisor(newOutift.VisorId, newOutift.ColorId);
-        massRpc.Start(player.NetId, RpcCalls.SetVisorStr).Write(newOutift.VisorId).Write(player.GetNextRpcSequenceId(RpcCalls.SetVisorStr)).End();
+        if (sendToClients) massRpc.Start(player.NetId, RpcCalls.SetVisorStr).Write(newOutift.VisorId).Write(player.GetNextRpcSequenceId(RpcCalls.SetVisorStr)).End();
 
         player.SetPet(newOutift.PetId);
-        massRpc.Start(player.NetId, RpcCalls.SetPetStr).Write(newOutift.PetId).Write(player.GetNextRpcSequenceId(RpcCalls.SetPetStr)).End();
+        if (sendToClients) massRpc.Start(player.NetId, RpcCalls.SetPetStr).Write(newOutift.PetId).Write(player.GetNextRpcSequenceId(RpcCalls.SetPetStr)).End();
 
         player.SetNamePlate(newOutift.NamePlateId);
-        massRpc.Start(player.NetId, RpcCalls.SetNamePlateStr).Write(newOutift.NamePlateId).Write(player.GetNextRpcSequenceId(RpcCalls.SetNamePlateStr)).End();
+        if (sendToClients) massRpc.Start(player.NetId, RpcCalls.SetNamePlateStr).Write(newOutift.NamePlateId).Write(player.GetNextRpcSequenceId(RpcCalls.SetNamePlateStr)).End();
 
-        massRpc.Send(targetClientId);
+        if (sendToClients) massRpc.Send(targetClientId);
     }
 
     public static IEnumerator UnshfitButtonTrigger(PlayerControl p)

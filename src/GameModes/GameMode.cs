@@ -39,8 +39,8 @@ public abstract class GameMode : IGameMode
 
     public abstract string Name { get; set; }
 
-    public MatchData MatchData { get; set; } = new();
     public CoroutineManager CoroutineManager { get; } = new();
+    public abstract MatchData MatchData { get; set; }
     public abstract RoleOperations RoleOperations { get; }
     public abstract Roles.Managers.RoleManager RoleManager { get; }
     public abstract IEnumerable<GameOptionTab> EnabledTabs();

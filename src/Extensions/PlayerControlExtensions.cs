@@ -130,8 +130,8 @@ public static class PlayerControlExtensions
         }
         else if (player.IsModded())
         {
-            Vents.FindRPC((uint)ModCalls.SetKillCooldown)!.Send([player.GetClientId()], time);
             player.PrimaryRole().SyncOptions();
+            Async.Schedule(() => Vents.FindRPC((uint)ModCalls.SetKillCooldown)!.Send([player.GetClientId()], time), NetUtils.DeriveDelay(0.1f));
         }
         else
         {
@@ -142,13 +142,14 @@ public static class PlayerControlExtensions
             roleDefinition.SyncOptions();
 
             float deriveDelay = NetUtils.DeriveDelay(0.5f);
-            Async.Schedule(() => player.RpcMark(), time <= deriveDelay ? NetUtils.DeriveDelay((float)(time * 0.1)) : deriveDelay);
+            deriveDelay = time < deriveDelay ? NetUtils.DeriveDelay((float)(time * 0.1)) : deriveDelay;
+            Async.Schedule(() => player.RpcMark(), deriveDelay);
 
             Async.Schedule(() =>
             {
                 remote.Delete();
                 roleDefinition.SyncOptions();
-            }, time);
+            }, deriveDelay * 2);
         }
     }
 

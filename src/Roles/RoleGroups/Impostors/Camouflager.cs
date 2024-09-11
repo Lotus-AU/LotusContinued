@@ -43,14 +43,21 @@ public class Camouflager : Shapeshifter
         Players.GetAlivePlayers().Where(p => p.PlayerId != MyPlayer.PlayerId).Do(p => p.CRpcRevertShapeshift(true));
     }
 
-    [RoleAction(LotusActionType.ReportBody, ActionFlag.GlobalDetector | ActionFlag.WorksAfterDeath, priority: API.Priority.VeryLow)]
-    private void HandleMeetingCall(PlayerControl reporter, Optional<NetworkedPlayerInfo> reported, ActionHandle handle)
+    // [RoleAction(LotusActionType.ReportBody, ActionFlag.GlobalDetector | ActionFlag.WorksAfterDeath, priority: API.Priority.VeryLow)]
+    // private void HandleMeetingCall(PlayerControl reporter, Optional<NetworkedPlayerInfo> reported, ActionHandle handle)
+    // {
+    //     if (!camouflaged) return;
+    //     camouflaged = false;
+    //     Players.GetAlivePlayers().Where(p => p.PlayerId != MyPlayer.PlayerId).Do(p => p.CRpcRevertShapeshift(true));
+    //     handle.Cancel();
+    //     Async.Schedule(() => MeetingPrep.PrepMeeting(reporter, reported.OrElse(null!)), NetUtils.DeriveDelay(0.5f));
+    // }
+    [RoleAction(LotusActionType.RoundEnd, ActionFlag.WorksAfterDeath, priority: API.Priority.High)]
+    private void HandleMeetingCall()
     {
         if (!camouflaged) return;
         camouflaged = false;
         Players.GetAlivePlayers().Where(p => p.PlayerId != MyPlayer.PlayerId).Do(p => p.CRpcRevertShapeshift(true));
-        handle.Cancel();
-        Async.Schedule(() => MeetingPrep.PrepMeeting(reporter, reported.OrElse(null!)), NetUtils.DeriveDelay(0.5f));
     }
 
     [RoleAction(LotusActionType.PlayerDeath)]

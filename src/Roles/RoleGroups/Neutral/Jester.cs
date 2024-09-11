@@ -44,9 +44,8 @@ public class Jester : CustomRole
     }
 
     [RoleAction(LotusActionType.ReportBody)]
-    public void CheckCallMeeting(PlayerControl caller, ActionHandle handle, Optional<NetworkedPlayerInfo> deadBody)
+    public void CheckCallMeeting(Optional<NetworkedPlayerInfo> deadBody, ActionHandle handle)
     {
-        if (caller.PlayerId != MyPlayer.PlayerId) return;
         // Cancel if the jester can't call emergency meetings
         if (!deadBody.Exists() && cantCallMeetings) handle.Cancel();
     }

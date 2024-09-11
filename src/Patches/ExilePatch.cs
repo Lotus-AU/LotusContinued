@@ -29,6 +29,10 @@ static class ExileControllerWrapUpPatch
             {
                 WrapUpPostfix(__instance.initData);
             }
+            catch (Exception ex)
+            {
+                log.Exception(ex);
+            }
             finally
             {
                 WrapUpFinalizer();
@@ -77,11 +81,12 @@ static class ExileControllerWrapUpPatch
 
         try
         {
-            MeetingDelegate.Instance.BlackscreenResolver.ClearBlackscreen(BeginRoundStart);
-            log.Debug("Start Task Phase", "Phase");
+            MeetingDelegate.Instance.BlackscreenResolver.FixBlackscreens(BeginRoundStart);
+            log.Debug("Blackscreen Resolver ran without issues!");
         }
         catch (Exception ex)
         {
+            log.Fatal("Error occured during Blackscreen Resolver.");
             log.Exception(ex);
             BeginRoundStart();
         }

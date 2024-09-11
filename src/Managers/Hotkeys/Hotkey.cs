@@ -70,13 +70,13 @@ public class Hotkey
 
     public class PredicateBuilder
     {
-        private bool isHostOnly;
+        private AllowedUsers allowedUsers;
         private HashSet<GameState> gameStates = new();
         private Func<bool>? predicate;
 
-        public PredicateBuilder HostOnly(bool hostOnly = true)
+        public PredicateBuilder HostOnly(AllowedUsers allowedUsers = AllowedUsers.HostOnly)
         {
-            isHostOnly = hostOnly;
+            this.allowedUsers = allowedUsers;
             return this;
         }
 
@@ -96,10 +96,17 @@ public class Hotkey
         {
             return () =>
             {
-                if (isHostOnly && !AmongUsClient.Instance.AmHost || !isHostOnly && AmongUsClient.Instance.AmHost) return false;
+                if (allowedUsers == AllowedUsers.HostOnly && !AmongUsClient.Instance.AmHost || allowedUsers == AllowedUsers.ClientsOnly && AmongUsClient.Instance.AmHost) return false;
                 if (!gameStates.IsEmpty() && !gameStates.Contains(Game.State)) return false;
                 return predicate?.Invoke() ?? true;
             };
         }
     }
+}
+
+public enum AllowedUsers
+{
+    Everyone,
+    HostOnly,
+    ClientsOnly
 }

@@ -10,9 +10,11 @@ public class GameOptionsMenuPatch
     {
         foreach (var ob in __instance.Children)
         {
-            // ReSharper disable once SwitchStatementMissingSomeEnumCasesNoDefault
             switch (ob.Title)
             {
+                case StringNames.GameVotingTime:
+                    ob.Cast<NumberOption>().ValidRange = new(0, 600);
+                    break;
                 case StringNames.GameShortTasks:
                 case StringNames.GameLongTasks:
                 case StringNames.GameCommonTasks:
@@ -20,10 +22,15 @@ public class GameOptionsMenuPatch
                     break;
                 case StringNames.GameKillCooldown:
                     ob.Cast<NumberOption>().ValidRange = new FloatRange(0, 180);
+                    ob.Cast<NumberOption>().Increment = 0.5f;
                     break;
+                case StringNames.GamePlayerSpeed:
                 case StringNames.GameCrewLight:
                 case StringNames.GameImpostorLight:
                     ob.Cast<NumberOption>().Increment = 0.125f;
+                    break;
+                case StringNames.GameNumImpostors when ProjectLotus.DevVersion:
+                    ob.Cast<NumberOption>().ValidRange.min = 0;
                     break;
             }
         }

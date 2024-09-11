@@ -91,6 +91,16 @@ public class RandomSpawn
     private Dictionary<string, Vector2> usedLocations = null!;
     private List<string>? availableLocations;
 
+    public void Refresh(bool forceRefresh = false)
+    {
+        if (availableLocations == null || availableLocations.Count <= 0 || forceRefresh) ResetLocations();
+    }
+    public Vector2 GetRandomLocation()
+    {
+        Refresh();
+        return usedLocations[availableLocations!.PopRandom()];
+    }
+
     private void ResetLocations()
     {
         if (ShipStatus.Instance is AirshipStatus) usedLocations = AirshipLocations;
@@ -108,14 +118,14 @@ public class RandomSpawn
     public void Spawn(PlayerControl player)
     {
         // ReSharper disable once MergeIntoNegatedPattern
-        if (availableLocations == null || availableLocations.Count <= 0) ResetLocations();
-        Utils.Teleport(player.NetTransform, usedLocations[availableLocations!.PopRandom()]);
+        Refresh();
+        Utils.Teleport(player.NetTransform, GetRandomLocation());
     }
 
     public MonoRpc SpawnDeferred(PlayerControl player)
     {
-        if (availableLocations == null || availableLocations.Count <= 0) ResetLocations();
-        return Utils.TeleportDeferred(player.NetTransform, usedLocations[availableLocations!.PopRandom()]);
+        Refresh();
+        return Utils.TeleportDeferred(player.NetTransform, GetRandomLocation());
     }
 
 }

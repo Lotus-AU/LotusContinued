@@ -125,7 +125,7 @@ public class Mystic : Crewmate, ISubrole
     }
 
     [Localized(nameof(Mystic))]
-    private static class Translations
+    public static class Translations
     {
         [Localized(ModConstants.Options)]
         public static class Options

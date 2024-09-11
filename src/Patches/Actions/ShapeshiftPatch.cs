@@ -13,6 +13,7 @@ using VentLib.Utilities;
 using Priority = HarmonyLib.Priority;
 using Lotus.Roles;
 using Lotus.API.Player;
+using VentLib.Utilities.Extensions;
 
 namespace Lotus.Patches.Actions;
 
@@ -103,12 +104,14 @@ public static class ShapeshiftFixPatch
         else _shapeshifted[__instance.PlayerId] = target.PlayerId;
         if (!shouldAnimate) // dont need to wait because no ss anim
         {
-            // if (Game.State is not GameState.InMeeting) __instance.NameModel().Render(force: true);
+            var nameModel = __instance.NameModel();
+            if (Game.State is not GameState.InMeeting) Players.GetAllPlayers().ForEach(p => nameModel.RenderFor(p));
             return;
         }
         Async.Schedule(() =>
         {
-            if (Game.State is not GameState.InMeeting) __instance.NameModel().Render(force: true);
+            var nameModel = __instance.NameModel();
+            if (Game.State is not GameState.InMeeting) Players.GetAllPlayers().ForEach(p => nameModel.RenderFor(p));
         }, 1.2f);
     }
 

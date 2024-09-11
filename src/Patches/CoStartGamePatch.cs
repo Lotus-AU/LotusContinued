@@ -10,6 +10,8 @@ using Lotus.Options;
 using VentLib.Utilities.Extensions;
 using UnityEngine;
 using Lotus.Utilities;
+// using Lotus.RPC.CustomObjects;
+using Lotus.Patches.Systems;
 
 namespace Lotus.Patches;
 
@@ -33,12 +35,14 @@ class CoStartGamePatch
 
         Game.Setup();
         Game.CurrentGameMode.Setup();
+        RpcSetTasksPatch.OnGameStart();
         log.Trace("Setup Game!");
     }
 
     public static void Postfix(AmongUsClient __instance)
     {
         ProjectLotus.ResetCamPlayerList = new List<byte>();
+        // CustomNetObject.Reset();
         FallFromLadder.Reset();
 
         try

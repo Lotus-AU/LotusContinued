@@ -1,5 +1,25 @@
 UpperText:
-  Text: <size=1.5>✿</size> Yellow Sus <size=1.5>✿</size>
-  Gradient: "#7ff3fd, #FFFFFF, #6a79f4, #843fec, #6476ef, #6197f1, #6bc4f6, #6bc4f6, #FFFFFF, #5b53de, #5752dc, #5fabec, #FFFFFF, #7ff3fd"
+ Text: ✿ Project Lotus · Lead Artist ❀
+ Gradient: "#F57BA7,#F9A7B5,#A170FF,#6959F7"
+ Size: 1.8
+  
 Name:
-  Gradient: "#FFD700, #FF0064"
+ Gradient: "#FFDA00,#E33651"
+ Size: 2.3
+
+Prefix: 
+ Spaced: True
+ Text: ♥
+ Color: "#DF3D17"
+ Size: 2
+
+Suffix:
+ Spaced: True
+ Text: ♡
+ Color: "#D94CDF" 
+ Size: 2
+
+LowerText:
+ Text: 
+ Gradient:
+ Size: 2

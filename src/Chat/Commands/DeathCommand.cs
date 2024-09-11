@@ -39,7 +39,7 @@ public class DeathCommand : CommandTranslations, ICommandReceiver
     public static void ShowMyDeath(PlayerControl source, FrozenPlayer frozenPlayer)
     {
         IDeathEvent? deathEvent = frozenPlayer.CauseOfDeath;
-        if (deathEvent == null!)
+        if (deathEvent == null)
         {
             CHandler(Translations.CouldNotDetermineDeathText.Formatted(frozenPlayer.Name)).Send(UnityOptional<PlayerControl>.Of(source));
             return;

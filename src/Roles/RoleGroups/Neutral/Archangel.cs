@@ -81,7 +81,7 @@ public class Archangel : CustomRole
     [RoleAction(LotusActionType.RoundStart)]
     private void Restart(bool gameStart)
     {
-        protectCooldown.Start(gameStart ? 10f : float.MaxValue);
+        protectCooldown.Start(gameStart ? 10f : float.MinValue);
         protectDuration.Finish();
     }
 

@@ -34,12 +34,7 @@ public class PlayerHistory
         Outfit = frozenPlayer.Outfit;
         GameID = frozenPlayer.GameID;
         CauseOfDeath = frozenPlayer.CauseOfDeath;
-        if (frozenPlayer.NullablePlayer != null && frozenPlayer.NullablePlayer.IsAlive()) Status = PlayerStatus.Alive;
-        else if (frozenPlayer.NullablePlayer == null || frozenPlayer.NullablePlayer.Data.Disconnected) Status = PlayerStatus.Disconnected;
-        else Status = Game.MatchData.GameHistory.Events
-                .FirstOrOptional(ev => ev is ExiledEvent exiledEvent && exiledEvent.Player().PlayerId == PlayerId)
-                .Map(_ => PlayerStatus.Exiled)
-                .OrElse(PlayerStatus.Dead);
+        Status = frozenPlayer.RegenerateStatus();
     }
 }
 

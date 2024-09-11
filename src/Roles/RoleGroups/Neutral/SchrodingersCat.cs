@@ -43,7 +43,9 @@ public class SchrodingersCat : CustomRole
 
     private void AssignFaction(PlayerControl actor)
     {
-        CustomRole role = actor.PrimaryRole();
+        CustomRole? role;
+        if (actor.PrimaryRole().GetActions(LotusActionType.Attack).Any()) role = actor.PrimaryRole();
+        else role = actor.GetSubroles().FirstOrDefault(sub => sub.GetActions(LotusActionType.Attack).Any()) ?? actor.PrimaryRole();
         turnedType = role.GetType();
         IFaction faction = role.Faction;
         Faction = faction;

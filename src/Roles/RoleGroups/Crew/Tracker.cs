@@ -22,31 +22,13 @@ using Lotus.API.Vanilla.Meetings;
 
 namespace Lotus.Roles.RoleGroups.Crew;
 
-public class Tracker : Crewmate
+public class Tracker : Vanilla.Tracker
 {
     private TrackBodyValue canTrackBodies;
     private bool canTrackUnreportableBodies;
-    private float arrowUpdateRate;
 
     private Cooldown trackBodyCooldown;
     private Cooldown trackBodyDuration;
-
-    private byte trackedPlayer = byte.MaxValue;
-    [NewOnSetup]
-    private MeetingPlayerSelector meetingPlayerSelector;
-    private FixedUpdateLock fixedUpdateLock;
-
-    private string arrowCache = "";
-
-    [UIComponent(UI.Indicator)]
-    public string DisplayArrow()
-    {
-        PlayerControl? tracker = Players.FindPlayerById(trackedPlayer);
-        if (tracker == null) return "";
-        if (arrowUpdateRate == 0 || fixedUpdateLock.AcquireLock())
-            return arrowCache = $"<size=3>{RoleUtils.CalculateArrow(MyPlayer, tracker, RoleColor)}</size>";
-        return arrowCache;
-    }
 
     [UIComponent(UI.Indicator)]
     public string DisplayDeadBodies()
@@ -59,53 +41,22 @@ public class Tracker : Crewmate
             .Fuse();
     }
 
-    [UIComponent(UI.Text)]
-    public string TrackBodyCooldown() => trackBodyDuration.Duration > 0 ? trackBodyCooldown.Format("{0}", true) : "";
-
-    protected override void PostSetup()
-    {
-        fixedUpdateLock = new FixedUpdateLock(arrowUpdateRate);
-    }
-
-    [RoleAction(LotusActionType.Vote)]
-    public void SelectTrackedPlayer(Optional<PlayerControl> player, MeetingDelegate _, ActionHandle handle)
-    {
-        VoteResult result = meetingPlayerSelector.CastVote(player);
-        if (result.VoteResultType is not VoteResultType.None) handle.Cancel();
-        if (result.VoteResultType is VoteResultType.Confirmed) trackedPlayer = result.Selected;
-        if (result.VoteResultType is not VoteResultType.Skipped)
-            result.Message().Title(RoleColor.Colorize(RoleName)).Send(MyPlayer);
-    }
-
     [RoleAction(LotusActionType.OnPet)]
     public void TrackDeadBodies()
     {
         if (canTrackBodies is not TrackBodyValue.OnPet) return;
         if (trackBodyCooldown.NotReady() || trackBodyDuration.NotReady()) return;
-        trackBodyDuration.Start();
-        Async.Schedule(() => trackBodyCooldown.Start(), trackBodyDuration.Duration);
-    }
-
-    [RoleAction(LotusActionType.RoundEnd)]
-    public void ResetTrackedPlayer()
-    {
-        meetingPlayerSelector.Reset();
-        Async.Schedule(() => ChatHandler.Of(Translations.TrackerMessage, RoleColor.Colorize(RoleName)).Send(MyPlayer), 2f);
+        trackBodyDuration.StartThenRun(() => trackBodyCooldown.Start());
     }
 
     protected override GameOptionBuilder RegisterOptions(GameOptionBuilder optionStream) =>
-        base.RegisterOptions(optionStream)
-            .SubOption(sub => sub.KeyName("Arrow Update Rate", Translations.Options.ArrowUpdateRate)
-                .Value(v => v.Text(Translations.Options.RealtimeText).Value(0f).Build())
-                .AddFloatRange(0.25f, 10, 0.25f, 4, GeneralOptionTranslations.SecondsSuffix)
-                .BindFloat(f => arrowUpdateRate = f)
-                .Build())
+        AddTrackerOptions(base.RegisterOptions(optionStream))
             .SubOption(sub => sub.KeyName("Track Bodies", Translations.Options.CanTrackBodies)
                 .Value(v => v.Text(GeneralOptionTranslations.OffText).Color(Color.red).Value(0).Build())
                 .Value(v => v.Text(Translations.Options.OnPetText).Color(new Color(0.73f, 0.58f, 1f)).Value(1).Build())
                 .Value(v => v.Text(GeneralOptionTranslations.AlwaysText).Color(Color.green).Value(2).Build())
                 .BindInt(i => canTrackBodies = (TrackBodyValue)i)
-                .ShowSubOptionPredicate(i => (int)i == 1)
+                .ShowSubOptionPredicate(i => (int)i != 0)
                 .SubOption(sub2 => sub2.KeyName("Can Track Unreportable Bodies", Translations.Options.CanTrackUnreportableBodies)
                     .BindBool(b => canTrackUnreportableBodies = b)
                     .AddOnOffValues()
@@ -122,21 +73,13 @@ public class Tracker : Crewmate
 
     protected override RoleModifier Modify(RoleModifier roleModifier) =>
         base.Modify(roleModifier)
-            .RoleColor(new Color(0.82f, 0.24f, 0.82f))
+            // .RoleColor(new Color(0.82f, 0.24f, 0.82f))
             .RoleAbilityFlags(RoleAbilityFlag.UsesPet);
 
     private static class Translations
     {
-        [Localized(nameof(TrackerMessage))]
-        public static string TrackerMessage = "You are a Tracker. Select a player each meeting (by voting them twice) to track them. After meeting, you will have an arrow point towards your tracked player.";
-
         public static class Options
         {
-            [Localized(nameof(ArrowUpdateRate))]
-            public static string ArrowUpdateRate = "Arrow Update Rate";
-
-            [Localized(nameof(RealtimeText))]
-            public static string RealtimeText = "Realtime";
 
             [Localized(nameof(CanTrackBodies))]
             public static string CanTrackBodies = "Can Track Bodies";

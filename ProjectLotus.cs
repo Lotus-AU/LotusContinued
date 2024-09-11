@@ -29,6 +29,10 @@ using Lotus.Roles.Internals.Attributes;
 using VentLib.Version.BuiltIn;
 using VentLib.Options.UI.Controllers.Search;
 using Lotus.Utilities;
+using System;
+using Lotus.src.Managers.Blackscreen.Interfaces;
+using Lotus.Managers.Blackscreen;
+using Lotus.API.Vanilla.Meetings;
 #if !DEBUG
 using VentLib.Utilities.Debug.Profiling;
 #endif
@@ -49,7 +53,7 @@ public class ProjectLotus : BasePlugin, IGitVersionEmitter
     public const string MajorVersion = "1";
     public const string MinorVersion = "1"; // Update with each release
     public const string PatchVersion = "0";
-    public const string BuildNumber = "0976";
+    public const string BuildNumber = "1281";
 
     public static string PluginVersion = typeof(ProjectLotus).Assembly.GetName().Version!.ToString();
 
@@ -57,7 +61,7 @@ public class ProjectLotus : BasePlugin, IGitVersionEmitter
 
     public static readonly string ModName = "Project Lotus";
     public static readonly string ModColor = "#4FF918";
-    public static readonly string DevVersionStr = "Dev August 22 2024";
+    public static readonly string DevVersionStr = "Dev September 7 2024";
     public static bool DevVersion = false;
 
     private static Harmony _harmony = null!;
@@ -67,6 +71,8 @@ public class ProjectLotus : BasePlugin, IGitVersionEmitter
 
     public static bool FinishedLoading;
     public static bool AdvancedRoleAssignment = true;
+
+    internal Func<MeetingDelegate, IBlackscreenResolver> GetNewBlackscreenResolver = new(md => new BlackscreenResolver(md));
 
     public ProjectLotus()
     {
@@ -104,6 +110,12 @@ public class ProjectLotus : BasePlugin, IGitVersionEmitter
     public static GameModeManager GameModeManager = null!;
     public static List<byte> ResetCamPlayerList = null!;
     public static ProjectLotus Instance = null!;
+
+    public void SetBlackscreenResolver(Func<MeetingDelegate, IBlackscreenResolver> newResolver)
+    {
+        log.Debug($"{Assembly.GetCallingAssembly().GetName().Name} overrided the default blackscreen resolver.");
+        GetNewBlackscreenResolver = newResolver;
+    }
 
     public override void Load()
     {

@@ -62,13 +62,13 @@ public class SerialKiller : Impostor
     }
 
     [RoleAction(LotusActionType.RoundStart)]
-    private void SetupSuicideTimer()
+    private void SetupSuicideTimer(bool gameStart)
     {
         paused = beginsAfterFirstKill && !hasKilled;
         if (!paused)
         {
             DevLogger.Log("Restarting Timer");
-            DeathTimer.Start();
+            DeathTimer.Start(gameStart ? GeneralOptions.GameplayOptions.GetFirstKillCooldown(MyPlayer) + DeathTimer.Duration : float.MinValue);
         }
     }
 

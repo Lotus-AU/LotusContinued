@@ -49,7 +49,7 @@ public class Chameleon : Engineer
         _timesInvisible.Update(MyPlayer.UniquePlayerId(), i => i + 1);
         initialVent = Optional<Vent>.Of(vent);
         invisibleTimer.Start();
-        Game.MatchData.GameHistory.AddEvent(new GenericAbilityEvent(MyPlayer, $"{MyPlayer.name} began swooping."));
+        Game.MatchData.GameHistory.AddEvent(new GenericAbilityEvent(MyPlayer, $"{MyPlayer.name} began swooping as Chameleon."));
         Async.Schedule(() => RpcV3.Immediate(MyPlayer.MyPhysics.NetId, RpcCalls.BootFromVent).WritePacked(vent.Id).Send(MyPlayer.GetClientId()), 0.4f);
         Async.Schedule(EndInvisibility, invisibleTimer.Duration);
     }

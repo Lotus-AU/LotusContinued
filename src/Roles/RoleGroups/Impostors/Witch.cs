@@ -71,10 +71,19 @@ public class Witch : Vanilla.Impostor
         if (freelySwitchModes) isCursingMode = !isCursingMode;
     }
 
-    [RoleAction(LotusActionType.MeetingEnd)]
+    [RoleAction(LotusActionType.MeetingEnd, ActionFlag.WorksAfterDeath)]
     public void KillCursedPlayers(Optional<NetworkedPlayerInfo> exiledPlayer)
     {
-        if (exiledPlayer.Compare(p => p.PlayerId == MyPlayer.PlayerId)) return;
+        if (exiledPlayer.Compare(p => p.PlayerId == MyPlayer.PlayerId))
+        {
+            Finish();
+            return;
+        }
+        if (!MyPlayer.IsAlive())
+        {
+            Finish();
+            return;
+        }
 
         cursedPlayers.Keys.Filter(Players.PlayerById).ForEach(p =>
         {
@@ -82,9 +91,14 @@ public class Witch : Vanilla.Impostor
             MyPlayer.InteractWith(p, new UnblockedInteraction(new FatalIntent(false, () => cod), this));
             cursedPlayers[p.PlayerId]?.Delete();
         });
-        cursedPlayers.Clear();
-        indicators.ForEach(i => i.Value.Delete());
-        indicators.Clear();
+        Finish();
+
+        void Finish()
+        {
+            cursedPlayers.Clear();
+            indicators.ForEach(i => i.Value.Delete());
+            indicators.Clear();
+        }
     }
 
 

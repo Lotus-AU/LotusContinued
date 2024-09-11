@@ -1,5 +1,4 @@
 using HarmonyLib;
-using Lotus.API.Odyssey;
 using Lotus.API.Reactive;
 using Lotus.API.Reactive.HookEvents;
 using Lotus.API.Vanilla.Sabotages;
@@ -14,7 +13,6 @@ public class DoorsPatch
 {
     public static bool Prefix(ShipStatus __instance, [HarmonyArgument(0)] SystemTypes room)
     {
-
         ISabotage sabotage = new DoorSabotage(room);
 
         ActionHandle handle = RoleOperations.Current.Trigger(LotusActionType.SabotageStarted, null, sabotage, PlayerControl.LocalPlayer);

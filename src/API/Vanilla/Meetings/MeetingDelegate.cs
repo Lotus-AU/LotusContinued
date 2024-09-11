@@ -11,6 +11,7 @@ using VentLib.Utilities;
 using VentLib.Utilities.Extensions;
 using VentLib.Utilities.Optionals;
 using static MeetingHud;
+using Lotus.src.Managers.Blackscreen.Interfaces;
 
 namespace Lotus.API.Vanilla.Meetings;
 
@@ -33,7 +34,7 @@ public class MeetingDelegate
     public HashSet<byte> TiedPlayers = new();
 
     public bool IsTie { get; set; }
-    internal BlackscreenResolver BlackscreenResolver { get; }
+    internal IBlackscreenResolver BlackscreenResolver { get; }
 
 
     private MeetingHud MeetingHud => MeetingHud.Instance;
@@ -43,7 +44,7 @@ public class MeetingDelegate
     public MeetingDelegate()
     {
         Instance = this;
-        BlackscreenResolver = new BlackscreenResolver(this);
+        BlackscreenResolver = ProjectLotus.Instance.GetNewBlackscreenResolver(this);
     }
 
     public void CastVote(PlayerControl player, Optional<PlayerControl> target)

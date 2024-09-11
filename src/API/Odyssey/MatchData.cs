@@ -34,8 +34,8 @@ public class MatchData
     public VanillaRoleTracker VanillaRoleTracker = new();
 
     public HashSet<byte> UnreportableBodies = new();
-    public int MeetingsCalled;
-    public int EmergencyButtonsUsed;
+    public int EmergencyButtonsUsed = 0;
+    public int MeetingsCalled = 0;
 
     private static readonly Func<RemoteList<GameOptionOverride>> OptionOverrideListSupplier = GetGlobalOptions;
 
@@ -46,11 +46,27 @@ public class MatchData
         return player == null || !FrozenPlayers.ContainsKey(player.GetGameID()) ? null : FrozenPlayers[player.GetGameID()];
     }
 
+    public void RegenerateFrozenPlayers(PlayerControl? specificPlayer = null)
+    {
+        if (specificPlayer != null)
+        {
+            FrozenPlayer frozenPlayer = new(specificPlayer);
+            Game.MatchData.FrozenPlayers[frozenPlayer.GameID] = frozenPlayer;
+            return;
+        }
+        Players.GetAllPlayers().Where(p => p.Data != null && !p.Data.Disconnected).ForEach(p =>
+        {
+            FrozenPlayer frozenPlayer = new(p);
+            Game.MatchData.FrozenPlayers[frozenPlayer.GameID] = frozenPlayer;
+        });
+    }
+
     public void Cleanup()
     {
         UnreportableBodies.Clear();
         Roles = new RoleData();
         GameHistory = new GameHistory();
+        VanillaRoleTracker = new VanillaRoleTracker();
     }
 
     public class RoleData

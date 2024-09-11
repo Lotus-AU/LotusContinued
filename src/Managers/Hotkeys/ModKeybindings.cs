@@ -1,16 +1,13 @@
 using Lotus.API.Odyssey;
 using Lotus.API.Vanilla;
 using Lotus.API.Vanilla.Meetings;
-using Lotus.Chat.Commands;
 using Lotus.Roles.Interactions;
 using Lotus.Extensions;
 using Lotus.GUI.Menus.OptionsMenu.Patches;
 using Lotus.Logging;
-using Lotus.Patches.Client;
 using Lotus.Roles;
 using Lotus.Options;
 using UnityEngine;
-using VentLib.Localization;
 using VentLib.Options;
 using VentLib.Utilities.Attributes;
 using VentLib.Utilities.Debug.Profiling;
@@ -18,6 +15,8 @@ using static Lotus.Managers.Hotkeys.HotkeyManager;
 using Lotus.API.Player;
 using VentLib.Utilities.Extensions;
 using System.Linq;
+using Lotus.GUI.Menus.HistoryMenu2;
+using VentLib.Localization;
 
 namespace Lotus.Managers.Hotkeys;
 
@@ -89,7 +88,7 @@ public class ModKeybindings
         // Reload T
         Bind(KeyCode.LeftControl, KeyCode.T)
             .If(p => p.State(GameState.InLobby))
-            .Do(ReloadTranslations);
+            .Do(ReloadAllFiles);
 
         // Change Hud Active
         Bind(KeyCode.F7)
@@ -106,6 +105,11 @@ public class ModKeybindings
             .If(p => p.HostOnly().State(GameState.Roaming))
             .If(() => ProjectLotus.AdvancedRoleAssignment)
             .Do(() => Players.GetPlayers().Where(player => !player.IsModded() && !player.IsHost()).ForEach(player => player.ResetPlayerCam()));
+
+        // Toggle History Menu
+        Bind(KeyCode.H)
+            .If(p => p.State(GameState.InLobby))
+            .Do(ToggleHistoryButton);
     }
 
     private static void DumpLog()
@@ -148,10 +152,30 @@ public class ModKeybindings
         PlayerControl.LocalPlayer.SetKillCooldown(0f);
     }
 
-    private static void ReloadTranslations()
+    private static void ReloadAllFiles()
     {
-        log.Trace("Reload Custom Translation File", "KeyCommand");
-        Localizer.Reload();
-        LogManager.SendInGame("Reloaded Custom Translation File");
+        log.Trace("Reloading every file into memory...");
+        PluginDataManager.ReloadAll(errorInfo =>
+        {
+            log.Exception(errorInfo.ex);
+            LogManager.SendInGame($"Error occured while reloading {errorInfo.erorrStuff}. Check log for more details.");
+        });
+        try
+        {
+            Localizer.Reload();
+        }
+        catch (System.Exception ex)
+        {
+            log.Exception(ex);
+            LogManager.SendInGame("Error occured while reloading Translations. Check log for more details.");
+        }
+        LogManager.SendInGame("Reloaded Every file in LOTUS_DATA!");
+    }
+
+    private static void ToggleHistoryButton()
+    {
+        if (DestroyableSingleton<HudManager>.Instance.Chat.IsOpenOrOpening) return;
+        HM2 historyMenu = DestroyableSingleton<HudManager>.Instance.GetComponent<HM2>();
+        if (historyMenu != null) historyMenu.ToggleMenu();
     }
 }

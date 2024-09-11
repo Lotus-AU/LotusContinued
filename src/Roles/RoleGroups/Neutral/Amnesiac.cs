@@ -107,7 +107,7 @@ public class Amnesiac : CustomRole, IVariableRole
             .RoleFlags(RoleFlag.CannotWinAlone)
             .RoleAbilityFlags(RoleAbilityFlag.CannotSabotage | RoleAbilityFlag.CannotVent)
             .SpecialType(SpecialType.Neutral)
-            .DesyncRole(ProjectLotus.AdvancedRoleAssignment ? RoleTypes.Crewmate : RoleTypes.Impostor)
+            .VanillaRole(ProjectLotus.AdvancedRoleAssignment ? RoleTypes.Crewmate : RoleTypes.Impostor)
             .Faction(FactionInstances.Neutral);
 
     [Localized(nameof(Amnesiac))]

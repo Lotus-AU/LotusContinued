@@ -3,7 +3,6 @@ using Lotus.API.Odyssey;
 using Lotus.GUI.Name;
 using Lotus.GUI.Name.Components;
 using Lotus.GUI.Name.Holders;
-using Lotus.GUI.Name.Impl;
 using Lotus.Roles.Events;
 using Lotus.Roles.Interactions;
 using Lotus.Roles.Internals;
@@ -13,12 +12,10 @@ using Lotus.Roles.RoleGroups.Vanilla;
 using Lotus.Extensions;
 using Lotus.Options;
 using VentLib.Localization.Attributes;
-using VentLib.Logging;
 using VentLib.Options.UI;
 using VentLib.Options.IO;
 using VentLib.Utilities.Collections;
 using static Lotus.Roles.RoleGroups.Crew.Bastion.BastionTranslations.BastionOptionTranslations;
-using Lotus.Logging;
 
 namespace Lotus.Roles.RoleGroups.Crew;
 

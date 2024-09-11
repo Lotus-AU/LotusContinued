@@ -123,7 +123,6 @@ public class LastResultCommand : CommandTranslations
         float DeathTimeOrder(PlayerHistory ph) => ph.CauseOfDeath == null ? 0f : (7200f - (float)ph.CauseOfDeath.Timestamp().TimeSpan().TotalSeconds) / 7200f;
         float StatusOrder(PlayerHistory ph) => winners.Contains(ph.PlayerId) ? (float)ph.Status + DeathTimeOrder(ph) : (float)ph.Status + 99 + DeathTimeOrder(ph);
     }
-
     private static string CreateSmallPlayerResult(PlayerHistory history, bool isWinner)
     {
         const string indent = "<indent=5.5%>{0}</indent>";

@@ -12,6 +12,7 @@ using Lotus.GameModes.Standard.Conditions;
 using Lotus.GameModes.Standard.Distributions;
 using Lotus.Options;
 using Lotus.Roles;
+using Lotus.Roles.RoleGroups.Crew;
 using Lotus.Roles.RoleGroups.Undead;
 using Lotus.Victory;
 using Lotus.Victory.Conditions;
@@ -30,7 +31,7 @@ public class StandardGameMode : GameMode
     public override string Name { get; set; } = "Standard";
     public override StandardRoleOperations RoleOperations { get; }
     public override StandardRoleManager RoleManager { get; }
-    public new MatchData MatchData { get; private set; }
+    public override MatchData MatchData { get; set; }
 
     public StandardRoleAssignment RoleAssignment { get; }
 
@@ -95,6 +96,12 @@ public class StandardGameMode : GameMode
     public static void ShowInformationToGhost(PlayerControl player)
     {
         if (player == null) return;
+
+        if (Players.GetAlivePlayers().Any(p => p.PrimaryRole() is Altruist))
+        {
+            log.Trace($"Not showing all name components to ghost {player.name} because there is an alive altruist.");
+            return;
+        }
 
         log.Trace($"Showing all name components to ghost {player.name}");
         if (GeneralOptions.MiscellaneousOptions.AutoDisplayCOD)

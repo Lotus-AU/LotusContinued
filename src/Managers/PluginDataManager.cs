@@ -56,7 +56,30 @@ public static class PluginDataManager
         ChatManager = TryLoad(() => new ChatManager(ModifiableDataDirectory.GetFile(WordListFile)), "Chat Manager")!;
     }
 
-    private static T? TryLoad<T>(Func<T> loadFunction, string name)
+    public static void ReloadAll(Action<(Exception ex, string erorrStuff)> onError)
+    {
+        try
+        {
+            MigrateOldDirectory();
+            MigrateOldHiddenDirectory();
+
+            if (!ModifiableDataDirectory.Exists) ModifiableDataDirectory.Create();
+            if (!HiddenDataDirectory.Exists) HiddenDataDirectory.Create();
+        }
+        catch (Exception ex)
+        {
+            onError((ex, "Moving the Old Directory"));
+        }
+
+        TemplateManager = TryLoad(() => new TemplateManager(ModifiableDataDirectory.GetFile(TemplateFile)), "Template Manager", onError)!;
+        TitleManager = TryLoad(() => new TitleManager(ModifiableDataDirectory.GetDirectory(TitleDirectory)), "Title Manager", onError)!;
+        FriendManager = TryLoad(() => new FriendManager(ModifiableDataDirectory.GetFile(FriendListFile)), "Friend Manager", onError)!;
+        BanManager = TryLoad(() => new BanManager(ModifiableDataDirectory.GetFile(BannedPlayerFile)), "Ban Manager", onError)!;
+        ModManager = TryLoad(() => new ModManager(ModifiableDataDirectory.GetFile(ModdedPlayerFile)), "Mod Manager", onError)!;
+        ChatManager = TryLoad(() => new ChatManager(ModifiableDataDirectory.GetFile(WordListFile)), "Chat Manager", onError)!;
+    }
+
+    private static T? TryLoad<T>(Func<T> loadFunction, string name, Action<(Exception ex, string erorrStuff)>? onError = null)
     {
         try
         {
@@ -65,12 +88,13 @@ public static class PluginDataManager
         }
         catch (Exception exception)
         {
-            log.Exception($"Failed to load {name}", exception);
+            if (onError != null) onError((exception, name));
+            else log.Exception($"Failed to load {name}", exception);
             return default;
         }
     }
 
-    private static void MigrateOldDirectory()
+    internal static void MigrateOldDirectory()
     {
         DirectoryInfo oldDirectory = new(ModifiableDataDirectoryPathOld);
         if (!oldDirectory.Exists) return;
@@ -84,7 +108,7 @@ public static class PluginDataManager
         }
     }
 
-    private static void MigrateOldHiddenDirectory()
+    internal static void MigrateOldHiddenDirectory()
     {
         DirectoryInfo oldDirectory = new(LegacyHiddenDataDirectoryPath);
         if (!oldDirectory.Exists) return;

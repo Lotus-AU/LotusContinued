@@ -10,12 +10,22 @@ using VentLib.Options.UI;
 using VentLib.Utilities;
 using VentLib.Utilities.Extensions;
 using VentLib.Utilities.Optionals;
+using System.Collections.Generic;
+using System;
+using Lotus.Roles.RoleGroups.Crew;
 
 namespace Lotus.Roles.Subroles;
 
 [Localized("Roles.Subroles.Sleuth")]
 public class Sleuth : Subrole
 {
+    /// <summary>
+    /// A list of roles that Sleuth is not compatiable with. Add your role to this list to make it not be assigned with your role.
+    /// </summary>
+    public static readonly List<Type> IncompatibleRoles = new()
+    {
+        typeof(Altruist)
+    };
     [Localized("SleuthMessage")]
     private static string _sleuthMessage = "You've determined that {0} was a {1}! Great work, Detective!";
 
@@ -39,6 +49,15 @@ public class Sleuth : Subrole
 
         Async.Schedule(() => handler.Send(MyPlayer), NetUtils.DeriveDelay(1.5f));
     }
+
+    public override HashSet<Type>? RestrictedRoles()
+    {
+        HashSet<Type>? restrictedRoles = base.RestrictedRoles();
+        IncompatibleRoles.ForEach(r => restrictedRoles?.Add(r));
+        return restrictedRoles;
+    }
+
+    public override CompatabilityMode RoleCompatabilityMode => CompatabilityMode.Blacklisted;
 
     protected override GameOptionBuilder RegisterOptions(GameOptionBuilder optionStream) => AddRestrictToCrew(base.RegisterOptions(optionStream));
 

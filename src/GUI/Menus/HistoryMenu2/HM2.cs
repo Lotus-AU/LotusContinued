@@ -30,8 +30,8 @@ public class HM2 : MonoBehaviour
 
     public HM2(IntPtr intPtr) : base(intPtr)
     {
-        anchorObject = gameObject.CreateChild("Anchor", new Vector3(0.3f, -0.1f, -1.5f));
-        buttonObject = gameObject.CreateChild("HistoryButton", new Vector3(-8.1f, -0.1f));
+        anchorObject = gameObject.CreateChild("Anchor", new Vector3(-1.44f, -0.1f, -1.5f));
+        buttonObject = gameObject.CreateChild("HistoryButton", new Vector3(.15f, -0.175f), new Vector3(0.95f, 0.95f));
         Hooks.GameStateHooks.GameStartHook.Bind(nameof(HM2), _ =>
         {
             if (anchorObject != null) anchorObject.SetActive(false);
@@ -82,15 +82,10 @@ public class HM2 : MonoBehaviour
     public void Open()
     {
         HudManager.Instance.SetHudActive(false);
-        if (AmongUsClient.Instance.AmHost)
-        {
-            GameStartManager.Instance.StartButton.gameObject.SetActive(false);
-        }
-        else
-        {
-            GameStartManager.Instance.StartButtonClient.gameObject.SetActive(false);
-        }
-        HudManager.Instance.gameObject.transform.Find("LobbyInfoPane/AspectSize").gameObject.SetActive(false);
+        if (AmongUsClient.Instance.AmHost) GameStartManager.Instance.StartButton.gameObject.SetActive(false);
+        else GameStartManager.Instance.StartButtonClient.gameObject.SetActive(false);
+
+        // HudManager.Instance.gameObject.transform.Find("LobbyInfoPane/AspectSize").gameObject.SetActive(false);
         historyButton.SetDisabled();
 
         HudManager.Instance.IsIntroDisplayed = true;
@@ -102,14 +97,9 @@ public class HM2 : MonoBehaviour
     public void Close()
     {
         HudManager.Instance.SetHudActive(true);
-        if (AmongUsClient.Instance.AmHost)
-        {
-            GameStartManager.Instance.StartButton.gameObject.SetActive(true);
-        }
-        else
-        {
-            GameStartManager.Instance.StartButtonClient.gameObject.SetActive(true);
-        }
+        if (AmongUsClient.Instance.AmHost) GameStartManager.Instance.StartButton.gameObject.SetActive(true);
+        else GameStartManager.Instance.StartButtonClient.gameObject.SetActive(true);
+
         HudManager.Instance.gameObject.transform.Find("LobbyInfoPane/AspectSize").gameObject.SetActive(true);
         historyButton.SetEnabled();
 
