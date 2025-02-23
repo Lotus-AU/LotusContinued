@@ -2,3 +2,9 @@ bin/
 obj/
 bin/
 FodyWeavers.xsd
+/.vs/
+/.idea/
+/.vscode/
+/.vscode
+.vscode/settings.json
+Lotus.sln.DotSettings.user
