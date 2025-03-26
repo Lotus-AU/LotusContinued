@@ -1,9 +1,9 @@
 <p align="center">
-  <img width="400" height="400" src="https://avatars.githubusercontent.com/u/173427715">
+  <img width="400" height="400" src="https://avatars.githubusercontent.com/u/173427715" alt="The Lotus-AU Organization Picture">
 </p>
 <h1 align="center">Project: Lotus</h1>
 
-<h2 align="center"> <a href="https://discord.gg/projectlotus">Discord Server</a> | <a href="https://lotusau.top/rd/install">Install Guide</a> | <a href="https://lotusau.top/">Website</a> | <a href="https://github.com/Lotus-AU/LotusContinued/releases/latest">Download The Latest Release!</a>
+<h2 align="center"> <a href="https://discord.gg/projectlotus">Discord Server</a> | <a href="https://lotusau.top/rd/install">Install Guide</a> | <a href="https://lotusau.top/">Website</a> | <a href="https://github.com/Lotus-AU/LotusContinued/releases/latest">Download The Latest Release!</a></h2>
 
 <h3 align="center">This is a continuation of the <a href="https://github.com/ImaMapleTree/Lotus">original Project Lotus mod</a> due to the original creator passing the project. </h3>
 <i align="center">This mod is not affiliated with Among Us or Innersloth LLC, and the content contained therein is not endorsed or otherwise sponsored by Innersloth LLC. Portions of the materials contained herein are the property of Innersloth LLC.</i>
@@ -51,12 +51,12 @@ This Mod only needs to be installed on the **Host**, which needs to be on a PC. 
 ↗
 
 | [Welcome to Project: Lotus!](https://lotusau.top/rd/start)                  | [Features of This Mod.](https://lotusau.top/rd/options) | [Frequently Asked Questions](#frequently-asked-questions)      |
-| :-------------------------------------------------------------------------: | :-------------------------------------------------------: | :------------------------------------------------------------: |
+|:----------------------------------------------------------------------------|-----------------------------------------------------------| :------------------------------------------------------------: |
 | [**Converting from other mods** ↗](https://lotusau.top/rd/convert)         | [Commands ↗](https://lotusau.top/rd/commands)           | [Can I get this mod on Mobile?](#can-i-get-this-mod-on-mobile) |
 | [Installing the mod! ↗](https://lotusau.top/rd/install)                    | [Templates ↗](https://lotusau.top/rd/templates)         | [How do I update the mod?](#what-do-the-different-things-in-the-releases-mean--how-do-i-update-the-mod) |
 | [Setting up your First Templates. ↗](https://lotusau.top/rd/ftemplates)    | [Custom Cosmetics ↗](https://lotusau.top/rd/cosmetics)  | [Why aren't people joining my lobby when I make it public?](#how-can-i-make-my-lobby-public--why-arent-people-joining-my-lobby) |
-| [Making your first Title! ↗](https://lotusau.top/rd/ftitle)                | [User Titles ↗](https://lotusau.top/rd/titles)          | [Why do I get randomly kicked?](#why-do-i-get-randomly-kicked)
-| [Setting up your Settings. ↗](https://lotusau.top/rd/settings)             | [Custom Friend System ↗](https://lotusau.top/rd/friends)| [Why do I get blackscreened?](#why-do-i-keep-getting-black-screened)
+| [Making your first Title! ↗](https://lotusau.top/rd/ftitle)                | [User Titles ↗](https://lotusau.top/rd/titles)          | [Why do I get randomly kicked?](#why-do-i-get-randomly-kicked) |
+| [Setting up your Settings. ↗](https://lotusau.top/rd/settings)             | [Custom Friend System ↗](https://lotusau.top/rd/friends)| [Why do I get blackscreened?](#why-do-i-keep-getting-black-screened) |
 
 ---
 
@@ -72,18 +72,18 @@ As of right now, **no.**<br>
 > The people at **All Of Us: AU Mods** are working on an Android Mod launcher, Project: Lotus will be compatible with it at launch, and this will be updated when more information is available.
 
 ## What do the different things in the releases mean? / How do I update the mod?
-Here's a Quick Explaination -
+Here's a Quick Explanation -
 - **HatUpdate.zip** means there was new Custom Hats added to the mod, these go in your `AmongUs/BepInEx/plugins` folder and will replace the `lotushats.bundle` and `lotushats.catalog` files.
 
 - **Lotus.dll & VentFrameworkContinued.dll** mean there was an update to the mod itself, these go into your `AmongUs/BepInEx/plugins` folder and will replace the previous ones.
   - Note, **VentFrameworkContinued** is required, but a new release may not include it, this means that the previous version can still be used.
-  - If either of these are not included in the release, that means there was a mod-breaking update and you need to install the `Lotus[Version]-[Platform].zip` update. Please make sure to install the correct platform that you are on.
+  - If either of these are not included in the release, that means there was a mod-breaking update, and you need to install the `Lotus[Version]-[Platform].zip` update. Please make sure to install the correct platform that you are on.
 
 
 - **lang_[Language].yaml** or **TranslationUpdate.zip** means that there was an update to the mod's translations, these files will go into `AmongUs/Languages/Lotus`
 
 - **Lotus-[Version]-MicrosoftStoreOnly.zip & Lotus-[Version]-Steam+Epic.zip** are included in every release, these are the files to install the mod if you haven't already. 
-  - Occassionally a release may not have a .dll file, which means you'll need to download one of these & [reinstall](#how-do-i-install-the-mod) the mod.
+  - Occasionally a release may not have a .dll file, which means you'll need to download one of these & [reinstall](#how-do-i-install-the-mod) the mod.
 
 ### Updating when there's no .dll file.
 - Back up your `AmongUs/BepInEx/config` folder, as that's where your settings are stored. Also back up your `LOTUS_DATA` folder if you've made any changes to your Templates, or have given people titles.
@@ -93,7 +93,7 @@ Here's a Quick Explaination -
 
 ## How can I make my lobby public / Why aren't people joining my lobby?
 Vanilla (Non-Modded) players are unable to see your lobby in the in-game matchmaker as of June 2023.
-- This was due to a change Innersloth did to their anticheat, but Host-Only mods got caught in the crossfire.
+- This was due to a change Innersloth did to their anti cheat, but Host-Only mods got caught in the crossfire.
 
 #### What can I do then?
 We have a bot in our Discord, [**Lilypad**](https://lotusau.top/en/lilypad), which will automatically post your lobby in a channel once it is made Public.
@@ -102,7 +102,7 @@ You can also view Active Public Lobbies in [**our lobby viewer.**](https://lotus
 Nothing else can be done, as Innersloth needs to make the change.
 
 ## Why do I get randomly kicked?
-As of April 4th, 2025: Innersloth, the developers of Among Us, have made changes to their server-side anticheat which may cause players to be kicked. 
+As of April 4th, 2025: Innersloth, the developers of Among Us, have made changes to their server-side anti-cheat which may cause players to be kicked. 
 - Please try to report any instances of this happening in our [Discord Server](https://discord.gg/projectlotus)
 - If you're constantly being kicked, then try using [Modded Regions](https://lotusau.top/regions), as these regions are not subjected to the same changes.
 
