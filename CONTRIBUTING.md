@@ -21,7 +21,7 @@ Stop when you get to the __Mod Template__.
 In order to compile the mod, you need to first compile or download [Vent Framework](https://github.com/Lotus-AU/VentFramework-Continued) if you are building Debug.
 If you are building release, the version on Nuget should be fine, but if it's not, you'll have to go through [Github](https://github.com/Lotus-AU/VentFramework-Continued).
 
-You'll also need to edit the `AmongUs` varible in the csproji file.
+You'll also need to edit the `AmongUs` varible in the csproj file.
 ```
 <AmongUs>E:\SteamLibrary\steamapps\common\Among Us</AmongUs>
 ```
