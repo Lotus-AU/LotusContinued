@@ -48,8 +48,6 @@ This Mod only needs to be installed on the **Host**, which needs to be on a PC. 
 > - [**Online YAML Editor**](https://lotusau.top/yaml-editor)
 > - [**Modded Lobby Viewer**](https://lotusau.top/lobbies)
 
-↗
-
 | [Welcome to Project: Lotus!](https://lotusau.top/rd/start)                  | [Features of This Mod.](https://lotusau.top/rd/options) | [Frequently Asked Questions](#frequently-asked-questions)      |
 |:----------------------------------------------------------------------------|-----------------------------------------------------------| :------------------------------------------------------------: |
 | [**Converting from other mods** ↗](https://lotusau.top/rd/convert)         | [Commands ↗](https://lotusau.top/rd/commands)           | [Can I get this mod on Mobile?](#can-i-get-this-mod-on-mobile) |
@@ -63,7 +61,7 @@ This Mod only needs to be installed on the **Host**, which needs to be on a PC. 
 # Frequently Asked Questions
 
 ## How do I install the mod?
-**Please view our installation video below, or click [here for a text guide.](https://lotusau.top/rd/install)**
+**Please view our installation video below, or [click here for a text guide.](https://lotusau.top/rd/install)**
 
 [![How to install the Project: Lotus Mod! (2025)](https://img.youtube.com/vi/3HXW4ceKaac/0.jpg)](https://www.youtube.com/watch?v=3HXW4ceKaac)
 
@@ -93,10 +91,10 @@ Here's a Quick Explanation -
 
 ## How can I make my lobby public / Why aren't people joining my lobby?
 Vanilla (Non-Modded) players are unable to see your lobby in the in-game matchmaker as of June 2023.
-- This was due to a change Innersloth did to their anti cheat, but Host-Only mods got caught in the crossfire.
+- This was due to a change Innersloth did to their anti-cheat, but Host-Only mods got caught in the crossfire.
 
 #### What can I do then?
-We have a bot in our Discord, [**Lilypad**](https://lotusau.top/en/lilypad), which will automatically post your lobby in a channel once it is made Public.
+We have a bot in our Discord, [**Lilypad**](https://lotusau.top/en/lilypad), which will automatically post your lobby in a channel once it is made public.
 You can also view Active Public Lobbies in [**our lobby viewer.**](https://lotusau.top/lobbies/)
 
 Nothing else can be done, as Innersloth needs to make the change.
