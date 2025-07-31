@@ -16,6 +16,7 @@ using UnityEngine;
 using VentLib.Logging;
 using VentLib.Options.UI;
 using VentLib.Localization.Attributes;
+using Lotus.Factions.Undead;
 
 namespace Lotus.Roles.RoleGroups.Undead.Roles;
 
@@ -49,8 +50,8 @@ public class Deathknight : UndeadRole
         inRangePlayers.Clear();
         if (influenceCooldown.NotReady()) return;
         inRangePlayers = (influenceRange < 0
-            ? MyPlayer.GetPlayersInAbilityRangeSorted().Where(IsUnconvertedUndead)
-            : RoleUtils.GetPlayersWithinDistance(MyPlayer, influenceRange).Where(IsUnconvertedUndead))
+            ? MyPlayer.GetPlayersInAbilityRangeSorted().Where(p => !IsConvertedUndead(p) && !IsUnconvertedUndead(p))
+            : RoleUtils.GetPlayersWithinDistance(MyPlayer, influenceRange).Where(p => !IsConvertedUndead(p) && !IsUnconvertedUndead(p)))
             .ToList();
     }
     [RoleAction(LotusActionType.OnPet, priority: Priority.First)]
