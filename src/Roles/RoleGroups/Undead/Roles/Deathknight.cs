@@ -38,7 +38,7 @@ public class Deathknight : UndeadRole
     protected override void Setup(PlayerControl player)
     {
         base.Setup(player);
-        LiveString liveString = new(() => inRangePlayers.Count > 0 ? "★" : "", Color.white);
+        LiveString liveString = new(() => inRangePlayers.Count > 0 ? "★" : "", UndeadColor);
         player.NameModel().GetComponentHolder<IndicatorHolder>().Add(new IndicatorComponent(liveString, GameState.Roaming, viewers: player));
     }
 
