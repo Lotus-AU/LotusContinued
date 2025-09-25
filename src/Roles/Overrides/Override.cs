@@ -115,7 +115,7 @@ public static class OverrideExtensions
             Override.ConfirmEjects => SetBoolOption(BoolOptionNames.ConfirmImpostor),
             Override.DiscussionTime => SetIntOption(Int32OptionNames.DiscussionTime),
             Override.VotingTime => SetIntOption(Int32OptionNames.VotingTime),
-            Override.PlayerSpeedMod => SetFloatOption(FloatOptionNames.PlayerSpeedMod, int.MinValue, 3),
+            Override.PlayerSpeedMod => SetFloatOption(FloatOptionNames.PlayerSpeedMod, int.MinValue),
             Override.CrewLightMod => SetFloatOption(FloatOptionNames.CrewLightMod),
             Override.ImpostorLightMod => SetFloatOption(FloatOptionNames.ImpostorLightMod),
             Override.KillCooldown => SetFloatOption(FloatOptionNames.KillCooldown, 0.1f),
