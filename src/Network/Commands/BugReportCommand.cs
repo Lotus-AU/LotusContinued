@@ -205,7 +205,7 @@ public class BugReportCommand : ICommandReceiver
 
     public static FileInfo? GetLatestLogFile()
     {
-        DirectoryInfo logsDirectory = new("logs");
+        DirectoryInfo logsDirectory = new(LogDirectory.Directory);
         if (!logsDirectory.Exists) return null;
         FileInfo[] logs = logsDirectory.GetFiles();
         if (logs.Length == 0) return null;

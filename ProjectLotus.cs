@@ -69,7 +69,7 @@ public class ProjectLotus : BasePlugin, IGitVersionEmitter
 
     public static readonly string ModName = "Project Lotus";
     public static readonly string ModColor = "#4FF918";
-    public static readonly string DevVersionStr = "Dev September 14 2025";
+    public static readonly string DevVersionStr = "Dev September 25 2025";
 
     public static bool DevVersion;
 

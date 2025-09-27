@@ -29,11 +29,19 @@ public static class ReportManager
         OptionManager reportingOptionManager = OptionManager.GetManager(file: "file_options.txt", managerFlags: OptionManagerFlags.IgnorePreset);
         var reportingDirectoryOption = new OptionBuilder().Name("Reporting Directory")
             .Description("The directory for storing various reports.\nDefault = reports")
+            #if ANDROID
+            .Value("lotus_reports")
+            #else
             .Value("reports")
+            #endif
             .IOSettings(settings => settings.UnknownValueAction = ADEAnswer.Allow)
             .BuildAndRegister(reportingOptionManager);
 
+        #if ANDROID
+        ReportingDirectory = new DirectoryInfo(Path.Combine(Application.persistentDataPath, reportingDirectoryOption.GetValue<string>()));
+        #else
         ReportingDirectory = new DirectoryInfo(reportingDirectoryOption.GetValue<string>());
+        #endif
         if (!ReportingDirectory.Exists) ReportingDirectory.Create();
 
         Enum.GetValues<ReportTag>().ForEach(t => ReportProducers.Add(t, new OrderedSet<IReportProducer>()));

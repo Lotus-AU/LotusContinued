@@ -13,7 +13,6 @@ using VentLib.Options.UI.Tabs;
 using VentLib.Utilities.Collections;
 using VentLib.Utilities.Extensions;
 using VentLib.Options.UI.Controllers;
-using Rewired.Utils.Platforms.Windows;
 
 namespace Lotus.GameModes;
 

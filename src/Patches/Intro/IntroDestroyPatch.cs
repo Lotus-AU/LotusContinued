@@ -30,12 +30,23 @@ using Lotus.GameModes;
 namespace Lotus.Patches.Intro;
 
 
+#if ANDROID
+[HarmonyPatch(typeof(IntroCutscene._CoBegin_d__34), nameof(IntroCutscene._CoBegin_d__34.MoveNext))]
+#else
 [HarmonyPatch(typeof(IntroCutscene), nameof(IntroCutscene.OnDestroy))]
+#endif
 class IntroDestroyPatch
 {
     private static readonly StandardLogger log = LoggerFactory.GetLogger<StandardLogger>(typeof(IntroDestroyPatch));
+
+    #if ANDROID
+    public static void Postfix(IntroCutscene._CoBegin_d__34 __instance)
+    {
+        if (__instance.__1__state != -1) return;
+    #else
     public static void Postfix(IntroCutscene __instance)
     {
+    #endif
         Profiler.Sample destroySample = Global.Sampler.Sampled();
         if (!AmongUsClient.Instance.AmHost)
         {

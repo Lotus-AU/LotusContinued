@@ -107,7 +107,7 @@ public class LogManager
         }
         if (!logName.Contains('.')) logName += ".log";
 
-        DirectoryInfo logsDirectory = new("logs");
+        DirectoryInfo logsDirectory = new(LogDirectory.Directory);
         if (!logsDirectory.Exists)
         {
             LogManager.SendInGame($"Could not find logs folder. Please make sure the folder is created.", LogLevel.High);
@@ -143,7 +143,7 @@ public class LogManager
     private static string CreateSessionDirectory()
     {
         string dateString = DateTime.Now.ToString("yyyy-MM-dd");
-        string dir = "logs/sessions/" + dateString;
+        string dir = LogDirectory.Directory + "/sessions/" + dateString;
         _dailyDirectory = new DirectoryInfo(dir);
         if (!_dailyDirectory.Exists) _dailyDirectory.Create();
         return dir;

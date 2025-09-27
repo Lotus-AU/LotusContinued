@@ -4,6 +4,7 @@ using System.Data;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using BepInEx;
 using HarmonyLib;
 using Lotus.RPC;
 using Lotus.Extensions;
@@ -15,6 +16,7 @@ using VentLib.Utilities.Extensions;
 using Lotus.API.Player;
 using VentLib.Networking.RPC;
 using Rewired;
+using UnityEngine;
 
 namespace Lotus.Addons;
 
@@ -28,7 +30,11 @@ public class AddonManager
 
     internal static void ImportAddons()
     {
+        #if ANDROID
+        DirectoryInfo addonDirectory = new(Path.Combine(Application.persistentDataPath, "addons"));
+        #else
         DirectoryInfo addonDirectory = new("./addons/");
+        #endif
         if (!addonDirectory.Exists)
             addonDirectory.Create();
         addonDirectory.EnumerateFiles().Do(LoadAddon);
