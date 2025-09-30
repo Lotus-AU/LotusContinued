@@ -29,9 +29,10 @@ This Mod only needs to be installed on the **Host**, which needs to be on a PC. 
 - Custom start screen displaying your Role's name and what to do.
 - Custom victory screen reflecting the Role's unique win condition.
 - Custom GUIs.
+- Custom Ability Buttons for your role.
 - Usable Hotkeys.
 - Custom Cosmetics with the [**LotusCosmetics**](https://lotusau.top/en/features/cosmetics) addon!
-- Better compatability.
+- Better compatibility.
 
 ---
 
@@ -50,11 +51,11 @@ This Mod only needs to be installed on the **Host**, which needs to be on a PC. 
 
 | [Welcome to Project: Lotus!](https://lotusau.top/rd/start)                  | [Features of This Mod.](https://lotusau.top/rd/options) | [Frequently Asked Questions](#frequently-asked-questions)      |
 |:----------------------------------------------------------------------------|-----------------------------------------------------------| :------------------------------------------------------------: |
-| [**Converting from other mods** ↗](https://lotusau.top/rd/convert)         | [Commands ↗](https://lotusau.top/rd/commands)           | [Can I get this mod on Mobile?](#can-i-get-this-mod-on-mobile) |
+| [**Converting from other mods** ↗](https://lotusau.top/rd/convert)         | [Commands ↗](https://lotusau.top/rd/commands)           | [Can I get this mod on Mobile?](#can-i-download-this-mod-on-mobile) |
 | [Installing the mod! ↗](https://lotusau.top/rd/install)                    | [Templates ↗](https://lotusau.top/rd/templates)         | [How do I update the mod?](#what-do-the-different-things-in-the-releases-mean--how-do-i-update-the-mod) |
 | [Setting up your First Templates. ↗](https://lotusau.top/rd/ftemplates)    | [Custom Cosmetics ↗](https://lotusau.top/rd/cosmetics)  | [Why aren't people joining my lobby when I make it public?](#how-can-i-make-my-lobby-public--why-arent-people-joining-my-lobby) |
 | [Making your first Title! ↗](https://lotusau.top/rd/ftitle)                | [User Titles ↗](https://lotusau.top/rd/titles)          | [Why do I get randomly kicked?](#why-do-i-get-randomly-kicked) |
-| [Setting up your Settings. ↗](https://lotusau.top/rd/settings)             | [Custom Friend System ↗](https://lotusau.top/rd/friends)| [Why do I get blackscreened?](#why-do-i-keep-getting-black-screened) |
+| [Setting up your Settings. ↗](https://lotusau.top/rd/settings)             | [Combos ↗](https://lotusau.top/rd/combos)               | [Why do I get blackscreened?](#why-do-i-keep-getting-black-screened) |
 
 ---
 
@@ -67,11 +68,11 @@ This Mod only needs to be installed on the **Host**, which needs to be on a PC. 
 
 ### Can I <u>download</u> this mod on Mobile?
 As of right now, **no.**<br>
-> The people at **All Of Us: AU Mods** are working on an Android Mod launcher, Project: Lotus will be compatible with it at launch, and this will be updated when more information is available.
+> The people at **All Of Us: AU Mods** have made a mod launcher for Android known as **[Starlight](https://allofus.dev/starlight.html) ([Google Play Link](https://play.google.com/store/apps/details?id=dev.allofus.starlight))**, Project: Lotus is currently not compatible with it but compatibility is being worked on.
 
 ## What do the different things in the releases mean? / How do I update the mod?
 Here's a Quick Explanation -
-- **HatUpdate.zip** means there was new Custom Hats added to the mod, these go in your `AmongUs/BepInEx/plugins` folder and will replace the `lotushats.bundle` and `lotushats.catalog` files.
+- **HatUpdate.zip** means that new Custom Hats were added in that update, these go in your `AmongUs/BepInEx/plugins` folder and will replace the `lotushats.bundle` and `lotushats.catalog` files.
 
 - **Lotus.dll & VentFrameworkContinued.dll** mean there was an update to the mod itself, these go into your `AmongUs/BepInEx/plugins` folder and will replace the previous ones.
   - Note, **VentFrameworkContinued** is required, but a new release may not include it, this means that the previous version can still be used.
@@ -80,7 +81,7 @@ Here's a Quick Explanation -
 
 - **lang_[Language].yaml** or **TranslationUpdate.zip** means that there was an update to the mod's translations, these files will go into `AmongUs/Languages/Lotus`
 
-- **Lotus-[Version]-MicrosoftStoreOnly.zip & Lotus-[Version]-Steam+Epic.zip** are included in every release, these are the files to install the mod if you haven't already. 
+- **Lotus-[Version]-Epic+MicrosoftStore.zip & Lotus-[Version]-Steam.zip** are included in every release, these are the files to install the mod if you haven't already. 
   - Occasionally a release may not have a .dll file, which means you'll need to download one of these & [reinstall](#how-do-i-install-the-mod) the mod.
 
 ### Updating when there's no .dll file.
@@ -121,3 +122,4 @@ Project Lotus has a few optional features that require sharing data with our API
 <br><br><br><br><br><br><br>
 
 thank you for using this mod, & lotus forever 🪷
+
