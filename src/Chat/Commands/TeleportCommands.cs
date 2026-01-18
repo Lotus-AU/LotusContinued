@@ -25,16 +25,13 @@ public class TeleportCommands
             _ => throw new ArgumentOutOfRangeException($"{allowedUsers} is not a valid integer for MiscellaneousOptions.AllowTeleportInLobby.")
         };
 
-        if (!permitted)
-        {
-            ChatHandlers.NotPermitted().Send(source);
-        }
+        if (!permitted) ChatHandlers.NotPermitted().Send(source);
+
         return permitted;
     }
     [Command(CommandFlag.None, "tpout")]
     public static void TeleportOutOfLobby(PlayerControl source)
     {
-        if (!IsAllowedToTeleport(source)) return;
 
         switch (Game.State)
         {
@@ -49,6 +46,7 @@ public class TeleportCommands
                 Utils.Teleport(source.NetTransform, position);
                 break;
             case GameState.InLobby:
+                if (!IsAllowedToTeleport(source)) return;
                 Utils.Teleport(source.NetTransform, new Vector2(0.1f, 3.8f));
                 break;
             default:
@@ -60,7 +58,6 @@ public class TeleportCommands
     [Command(CommandFlag.None, "tpin")]
     public static void TeleportIntoLobby(PlayerControl source)
     {
-        if (!IsAllowedToTeleport(source)) return;
 
         switch (Game.State)
         {
@@ -87,6 +84,7 @@ public class TeleportCommands
 
                 break;
             case GameState.InLobby:
+                if (!IsAllowedToTeleport(source)) return;
                 Utils.Teleport(source.NetTransform, new Vector2(-0.2f, 1.3f));
                 break;
             default:
