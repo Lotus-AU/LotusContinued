@@ -43,6 +43,7 @@ using Object = UnityEngine.Object;
 using Lotus.Roles.Outfit;
 using Lotus.Options.Patches;
 using Lotus.Roles.GUI;
+using VentLib.Options.Interfaces;
 
 namespace Lotus.Roles;
 
@@ -51,6 +52,9 @@ namespace Lotus.Roles;
 public abstract class AbstractBaseRole
 {
     private static readonly StandardLogger log = LoggerFactory.GetLogger<StandardLogger>(typeof(AbstractBaseRole));
+
+    private static Dictionary<IGameOptionTab, LotusAddon?> LastAddonAdded = new();
+
     public PlayerControl MyPlayer { get; protected set; } = null!;
     // public string Description => Localizer.Translate($"Roles.{EnglishRoleName.RemoveHtmlTags()}.Description", assembly: DeclaringAssembly);
     public string Blurb => RoleFlags.HasFlag(RoleFlag.DoNotTranslate) ? "" : Localizer.Translate($"Roles.{EnglishRoleName.RemoveHtmlTags()}.Blurb", assembly: DeclaringAssembly);
@@ -197,30 +201,45 @@ public abstract class AbstractBaseRole
 
         if (!RoleFlags.HasFlag(RoleFlag.Hidden) && RoleOptions.Tab == null)
         {
-            if (GetType() == typeof(Impostor)) RoleOptions.Tab = DefaultTabs.HiddenTab;
-            else if (GetType() == typeof(Crewmate)) RoleOptions.Tab = DefaultTabs.HiddenTab;
-            else if (GetType() == typeof(GuardianAngel)) RoleOptions.Tab = DefaultTabs.HiddenTab;
-            // else if (GetType() == typeof(Engineer)) RoleOptions.Tab = DefaultTabs.HiddenTab;
-            // else if (GetType() == typeof(Scientist)) RoleOptions.Tab = DefaultTabs.HiddenTab;
-            // else if (GetType() == typeof(Phantom)) RoleOptions.Tab = DefaultTabs.HiddenTab;
-            // else if (GetType() == typeof(Tracker)) RoleOptions.Tab = DefaultTabs.HiddenTab;
-            // else if (GetType() == typeof(Noisemaker)) RoleOptions.Tab = DefaultTabs.HiddenTab;
-            // else if (GetType() == typeof(Shapeshifter)) RoleOptions.Tab = DefaultTabs.HiddenTab;
+            IGameOptionTab? outputTab = null;
+            if (GetType() == typeof(Impostor)) outputTab = DefaultTabs.HiddenTab;
+            else if (GetType() == typeof(Crewmate)) outputTab = DefaultTabs.HiddenTab;
+            else if (GetType() == typeof(GuardianAngel)) outputTab = DefaultTabs.HiddenTab;
+            // else if (GetType() == typeof(Engineer)) outputTab = DefaultTabs.HiddenTab;
+            // else if (GetType() == typeof(Scientist)) outputTab = DefaultTabs.HiddenTab;
+            // else if (GetType() == typeof(Phantom)) outputTab = DefaultTabs.HiddenTab;
+            // else if (GetType() == typeof(Tracker)) outputTab = DefaultTabs.HiddenTab;
+            // else if (GetType() == typeof(Noisemaker)) outputTab = DefaultTabs.HiddenTab;
+            // else if (GetType() == typeof(Shapeshifter)) outputTab = DefaultTabs.HiddenTab;
+            // else if (GetType() == typeof(Detective)) outputTab = DefaultTabs.HiddenTab;
+            // else if (GetType() == typeof(Viper)) outputTab = DefaultTabs.HiddenTab;
             else
             {
                 if (this is GameMaster) { /*ignored*/ }
                 else if (this is Subrole)
-                    RoleOptions.Tab = DefaultTabs.MiscTab;
+                    outputTab = DefaultTabs.MiscTab;
                 else if (this.Faction is ImpostorFaction)
-                    RoleOptions.Tab = DefaultTabs.ImpostorsTab;
+                    outputTab = DefaultTabs.ImpostorsTab;
                 else if (this.Faction is Crewmates)
-                    RoleOptions.Tab = DefaultTabs.CrewmateTab;
-                else if (this.Faction is TheUndead)
-                    RoleOptions.Tab = DefaultTabs.NeutralTab;
-                else if (this.SpecialType is SpecialType.NeutralKilling or SpecialType.Neutral)
-                    RoleOptions.Tab = DefaultTabs.NeutralTab;
+                    outputTab = DefaultTabs.CrewmateTab;
+                else if (this.Faction is TheUndead || this.SpecialType is SpecialType.NeutralKilling or SpecialType.Neutral)
+                    outputTab = DefaultTabs.NeutralTab;
                 else
-                    RoleOptions.Tab = DefaultTabs.MiscTab;
+                    outputTab = DefaultTabs.MiscTab;
+            }
+
+            if (outputTab != null)
+            {
+                if (LastAddonAdded.GetValueOrDefault(outputTab) != Addon)
+                    outputTab.AddOption(new GameOptionTitleBuilder()
+                        .Title(Addon != null ? Addon.GetDisplayName() : ProjectLotus.ModName)
+                        .IsHeader(true)
+                        .Build()
+                    );
+
+
+                LastAddonAdded[outputTab] = Addon;
+                RoleOptions.Tab = outputTab;
             }
         }
         RoleOptions.Register(GlobalRoleManager.RoleOptionManager, OptionLoadMode.LoadOrCreate);
