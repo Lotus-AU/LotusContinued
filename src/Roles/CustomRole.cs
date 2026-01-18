@@ -72,7 +72,7 @@ public abstract class CustomRole : AbstractBaseRole, IRpcSendable<CustomRole>
             return Options.RoleOptions.NeutralOptions.NeutralTeamingMode switch
             {
                 NeutralTeaming.All => Relation.FullAllies,
-                NeutralTeaming.KillersNeutrals => RealRole.IsImpostor() && role.RealRole.IsImpostor() ? Relation.FullAllies : Relation.None,
+                NeutralTeaming.KillersNeutrals => SpecialType == role.SpecialType ? Relation.FullAllies : Relation.None,
                 NeutralTeaming.SameRole => RelatedRoles.Contains(role.GetType()) ? Relation.FullAllies : Relation.None,
                 _ => Relation.None
             };
