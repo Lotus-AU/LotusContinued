@@ -149,6 +149,8 @@ public class ChatHandler
     // ReSharper disable once InconsistentNaming
     private static void InternalSendLM(PlayerControl sender, PlayerControl recipient, string message, string title, string originalName)
     {
+        if (!recipient.AmOwner && ConnectionManager.IsVanillaServer) message = NumberUnicodeConverter.ConvertNumbersToUnicodes(message);
+
         int leftIndex = 0;
         int rightIndex = Math.Min(message.Length, _maxMessagePacketSize);
 
@@ -161,8 +163,6 @@ public class ChatHandler
             rightIndex = Mathf.Min(message.Length, leftIndex + _maxMessagePacketSize);
 
             subMessage = subMessage.Trim('\n').Replace("@n", "\n");
-
-
 
             MassRpc subMassRpc = RpcV3.Mass()
                 .Start(sender.NetId, RpcCalls.SetName)
