@@ -27,7 +27,7 @@ public class StandardRoleManager : Roles.Managers.RoleManager
 
     public StandardRoleManager()
     {
-        RoleHolder = new();
+        RoleHolder = new StandardRoles();
         RoleHolder.AllRoles.ForEach(RegisterRole);
         Async.Schedule(() =>
         {
