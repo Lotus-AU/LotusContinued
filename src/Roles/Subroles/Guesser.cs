@@ -158,7 +158,11 @@ public class Guesser : Subrole, IInfoResender
     {
         if (skippedVote || guessesThisMeeting <= 0 || meetingEnded) return;
         handle.Cancel();
-        if (currentlyGuessing) return;
+        if (currentlyGuessing)
+        {
+            CancelGuessingTimerDelay();
+            return;
+        }
         VoteResult result = voteSelector.CastVote(player);
         switch (result.VoteResultType)
         {
@@ -283,7 +287,7 @@ public class Guesser : Subrole, IInfoResender
             shiftTimer.IsCoroutine = true;
             CooldownManager.SubmitCooldown(shiftTimer);
         }
-        shiftTimer.StartThenRun(CancelGuessingTimerDelay, ShiftTimer);
+        // shiftTimer.StartThenRun(CancelGuessingTimerDelay, ShiftTimer);
         SendCnoRows();
     }
 
@@ -654,7 +658,7 @@ public class Guesser : Subrole, IInfoResender
 
             if (guesser.AmOwner) nameModel.RenderFor(guesser);
             // send at a DELAY so that guesser message doesn't clear the name.
-            else Async.Schedule(() => nameModel.RenderFor(guesser, force: true), NetUtils.DeriveDelay(1f));
+            else Async.Schedule(() => nameModel.RenderFor(guesser, force: true), NetUtils.DeriveDelay(0.3f));
 
         }
 
