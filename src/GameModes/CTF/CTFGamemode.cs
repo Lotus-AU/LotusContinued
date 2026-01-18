@@ -29,6 +29,7 @@ public class CTFGamemode : GameMode
     public static CTFGamemode Instance = null!;
 
     public override string Name { get; set; } = GamemodeTranslations.CaptureTheFlag.Name;
+    public override string Description { get; set; } = GamemodeTranslations.CaptureTheFlag.GamemodeDescription;
     public override CTFRoleOperations RoleOperations { get; }
     public override CTFRoleManager RoleManager { get; }
     public override MatchData MatchData { get; set; }

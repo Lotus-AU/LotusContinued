@@ -19,6 +19,7 @@ namespace Lotus.GameModes;
 public interface IGameMode
 {
     public string Name { get; protected internal set; }
+    public string Description { get; protected internal set; }
     public CoroutineManager CoroutineManager { get; }
     public MatchData MatchData { get; protected internal set; }
     public RoleOperations RoleOperations { get; }

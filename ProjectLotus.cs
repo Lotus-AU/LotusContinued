@@ -60,8 +60,8 @@ public class ProjectLotus : BasePlugin, IGitVersionEmitter
 
     public const string MajorVersion = "1";
     public const string MinorVersion = "5"; // Update with each release
-    public const string PatchVersion = "0";
-    public const string BuildNumber = "0048";
+    public const string PatchVersion = "1";
+    public const string BuildNumber = "0034";
 
     public static readonly string PluginVersion = typeof(ProjectLotus).Assembly.GetName().Version!.ToString();
 
@@ -69,7 +69,7 @@ public class ProjectLotus : BasePlugin, IGitVersionEmitter
 
     public static readonly string ModName = "Project Lotus";
     public static readonly string ModColor = "#4FF918";
-    public static readonly string DevVersionStr = "Dev September 25 2025";
+    public static readonly string DevVersionStr = "Dev Janurary 18 2025";
 
     public static bool DevVersion;
 
@@ -191,7 +191,7 @@ public class ProjectLotus : BasePlugin, IGitVersionEmitter
         {
             ModVersion.AddVersionShowerToPlayer(player, version);
             Players.GetAllPlayers()
-                .Where(p => p.PlayerId != player.PlayerId && (p.IsModded() | p.IsHost()))
+                .Where(p => p.PlayerId != player.PlayerId && (p.IsModded() || p.IsHost()))
                 .ForEach(p => Vents.FindRPC((uint)ModCalls.ShowPlayerVersion)
                     ?.Send([player.OwnerId], p, ModVersion.VersionControl.GetPlayerVersion(p.PlayerId)));
         }
@@ -201,6 +201,8 @@ public class ProjectLotus : BasePlugin, IGitVersionEmitter
             if (player == null) return;
             t.SendMessage(PlayerControl.LocalPlayer, player);
         });
+
+        GameModeManager.AnnounceCurrentGameModeToPlayer(player, GameModeManager.CurrentGameMode);
 
         Hooks.NetworkHooks.ReceiveVersionHook.Propagate(new ReceiveVersionHookEvent(player, version));
     }
