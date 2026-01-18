@@ -18,7 +18,6 @@ using VentLib.Utilities.Attributes;
 
 namespace Lotus.Roles.Debugger;
 
-[LoadStatic]
 public class Debugger : CustomRole
 {
     private static readonly StandardLogger log = LoggerFactory.GetLogger<StandardLogger>(typeof(Debugger));
@@ -33,13 +32,6 @@ public class Debugger : CustomRole
     private float killCooldown = 40f;
 
     private Component progressTracker;
-
-#if DEBUG
-    static Debugger()
-    {
-        //ProjectLotus.RoleManager.AddRole(new Debugger(), LotusRoleType.Impostors);
-    }
-#endif
 
 
     [UIComponent(UI.Name)]

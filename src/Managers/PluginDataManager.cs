@@ -59,6 +59,10 @@ public static class PluginDataManager
         MigrateOldDirectory();
         MigrateOldHiddenDirectory();
 
+        #if ANDROID  // i don't want 2 folders for the same mod. just put it in lotus_data
+        ModifiableHiddenDataDirectoryPath = ModifiableDataDirectoryPath;
+        #endif
+
         ModifiableDataDirectory = new DirectoryInfo(ModifiableDataDirectoryPath);
         HiddenDataDirectory = new DirectoryInfo(ModifiableHiddenDataDirectoryPath);
         if (!ModifiableDataDirectory.Exists) ModifiableDataDirectory.Create();
