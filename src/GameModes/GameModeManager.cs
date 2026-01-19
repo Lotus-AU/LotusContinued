@@ -91,7 +91,7 @@ public class GameModeManager
     }
 
     public void AnnounceCurrentGameModeToPlayer(PlayerControl player, IGameMode mode) =>
-        ChatHandler.Of(mode.Description, GamemodeTranslations.GamemodeText + ": " + mode.Name);
+        ChatHandler.Of(mode.Description, GamemodeTranslations.GamemodeText + ": " + mode.Name).Send(player);
 
     internal void AddGamemodeSettingToOptions(List<GameOption> options)
     {
