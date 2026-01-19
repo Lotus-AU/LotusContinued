@@ -50,7 +50,7 @@ public class Striker : NeutralKillingBase, IRoleUI
     public string ReviveCooldownText() => reviveTimer.IsReady() ? "" : Color.yellow.Colorize(Translations.ReviveCooldown.Formatted(reviveTimer));
 
     [UIComponent(UI.Text)]
-    public string GracePeriodText() => gracePeriod.IsReady() ? "" : Color.yellow.Colorize(Translations.ReviveCooldown.Formatted(gracePeriod));
+    public string GracePeriodText() => gracePeriod.IsReady() ? "" : Color.yellow.Colorize(Translations.GracePeriodTime.Formatted(gracePeriod));
 
     [UIComponent(UI.Text)]
     public string CurrentScore() => $"{Color.red.Colorize(CTFGamemode.Team0Score.ToString())} {Color.white.Colorize("|")} {Color.blue.Colorize(CTFGamemode.Team1Score.ToString())}";
