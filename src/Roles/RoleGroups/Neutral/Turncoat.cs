@@ -95,7 +95,7 @@ public class Turncoat: CustomRole, IInfoResender, IRoleUI
     {
         if (hasRevealed)
         {
-            if (learnsAllies && learnsAlliesImmediately != true)
+            if (learnsAllies && !learnsAlliesImmediately)
             {
                 learnsAlliesImmediately = true;
                 DisplayAllies();
@@ -133,6 +133,7 @@ public class Turncoat: CustomRole, IInfoResender, IRoleUI
     [RoleAction(LotusActionType.Vote, priority: Priority.High)]
     private void SelfVote(Optional<PlayerControl> voted, ActionHandle handle)
     {
+        if (hasRevealed) return;
         if (!voted.Exists()) return;
         if (voted.Get().PlayerId != MyPlayer.PlayerId) return;
         if (targetPlayer == byte.MaxValue)
