@@ -124,7 +124,7 @@ public class StandardGameMode : GameMode
         player.NameModel().Render(force: true);
     }
 
-    private static void FixNeutralTeamingWinners(WinDelegate winDelegate)
+    public static void FixNeutralTeamingWinners(WinDelegate winDelegate)
     {
         if (RoleOptions.NeutralOptions.NeutralTeamingMode is Options.Roles.NeutralTeaming.Disabled) return;
         if (winDelegate.GetWinners().Count != 1) return;
