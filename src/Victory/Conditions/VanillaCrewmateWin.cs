@@ -34,7 +34,6 @@ public class VanillaCrewmateWin : IFactionWinCondition
 
         winReason = new WinReason(ReasonType.TasksComplete, TaskWin);
 
-
         bool hasAliveEnemy = false;
         bool hasOneTaskDoer = false;
         foreach (CustomRole role in Players.GetAllPlayers().Select(p => p.PrimaryRole()))
