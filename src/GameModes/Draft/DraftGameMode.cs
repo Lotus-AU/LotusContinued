@@ -83,7 +83,7 @@ public class DraftGameMode : GameMode
         DefaultTabs.DraftTab.AddOption(new GameOptionBuilder()
             .KeyName("Decision Time", GamemodeTranslations.Draft.DecisionTime)
             .AddIntRange(10, 60, 5, 3)
-            .BindInt(i => RoleChoiceCount = i)
+            .BindInt(i => DecisionTime = i)
             .Build());
 
 

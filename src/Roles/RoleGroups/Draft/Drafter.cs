@@ -54,7 +54,7 @@ public class Drafter: CustomRole
 
     public void SetMyTurn()
     {
-        CHandler(GamemodeTranslations.Draft.PlayerStartsTurn.Formatted(myPlayerId, GamemodeTranslations.Draft.DecisionTime)).Send();
+        CHandler(GamemodeTranslations.Draft.PlayerStartsTurn.Formatted(myPlayerId, DraftGameMode.Instance.DecisionTime)).Send();
 
         myRoleOptions = [];
         for (int i = 0; i < DraftGameMode.Instance.RoleChoiceCount; i++)
@@ -122,7 +122,10 @@ public class Drafter: CustomRole
         if (curSelected == myRoleOptions.Count)
             CHandler(GamemodeTranslations.Draft.PlayerSwapChoice.Formatted(GamemodeTranslations.Draft.RandomOption)).Send(MyPlayer);
         else
-            CHandler(GamemodeTranslations.Draft.PlayerSwapChoice.Formatted(myRoleOptions[curSelected].ColoredRoleName())).Send(MyPlayer);
+        {
+            var curSelectedRole = myRoleOptions[curSelected];
+            CHandler(GamemodeTranslations.Draft.PlayerSwapChoice.Formatted(curSelectedRole.ColoredRoleName(), "\n" + curSelectedRole.Description)).Send(MyPlayer);
+        }
     }
 
     public ChatHandler CHandler(string message) => ChatHandler.Of(message, GamemodeTranslations.Draft.DraftTitle);

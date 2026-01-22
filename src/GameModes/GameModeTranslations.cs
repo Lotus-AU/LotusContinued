@@ -61,10 +61,10 @@ public class GamemodeTranslations
         [Localized(nameof(DraftTitle))] public static string DraftTitle = "Draft GameMode";
 
         [Localized(nameof(RandomOption))] public static string RandomOption = "Random";
-        [Localized(nameof(DraftTitle))] public static string StartingInText = "Starting In {0}...";
+        [Localized(nameof(StartingInText))] public static string StartingInText = "Starting In {0}...";
         [Localized(nameof(PlayerEndTurn))] public static string PlayerEndTurn = "Player {0} has chose {1}.";
-        [Localized(nameof(DraftTitle))] public static string PlayerIdText = "Your ID is {1}. Wait for your turn.";
-        [Localized(nameof(PlayerSwapChoice))] public static string PlayerSwapChoice = "Your decision is now: {0}. Skip to confirm.";
+        [Localized(nameof(PlayerIdText))] public static string PlayerIdText = "Your ID is {1}. Wait for your turn.";
+        [Localized(nameof(PlayerSwapChoice))] public static string PlayerSwapChoice = "Your decision is now: {0}. Skip to confirm.{1}";
         [Localized(nameof(PlayerChoiceOptions))] public static string PlayerChoiceOptions = "Your options to choose between from are: {0}\nVote any player to change your selection.{1}";
         [Localized(nameof(PlayerStartsTurn))] public static string PlayerStartsTurn = "Player {0} is now choosing their role. They have {1} seconds to make a decision before random is picked automatically.";
 

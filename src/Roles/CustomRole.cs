@@ -186,7 +186,6 @@ public abstract class CustomRole : AbstractBaseRole, IRpcSendable<CustomRole>
         PlayerControl? lastPlayer = null;
         if (!sendAllPlayers)
         {
-
             if (!players.Any())
             {
                 lastPlayer = MyPlayer;
@@ -299,6 +298,8 @@ public abstract class CustomRole : AbstractBaseRole, IRpcSendable<CustomRole>
             MyPlayer.RpcSetRoleDesync(impRole, player);
         });
         ShowRoleToTeammates(newAllies.Select(Utils.PlayerById).Where(op => op.Exists()).Select(op => op.Get()));
+
+        Game.MatchData.RegenerateFrozenPlayers(MyPlayer);
         return newRole;
     }
 
@@ -316,6 +317,8 @@ public abstract class CustomRole : AbstractBaseRole, IRpcSendable<CustomRole>
             RoleTypes outputRole = GetMyRoleForTarget(player);
             MyPlayer.RpcSetRoleDesync(outputRole, player);
         }
+
+        Game.MatchData.RegenerateFrozenPlayers(MyPlayer);
 
         return;
         RoleTypes GetMyRoleForTarget(PlayerControl target)

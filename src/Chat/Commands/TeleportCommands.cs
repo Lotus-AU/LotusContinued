@@ -32,7 +32,6 @@ public class TeleportCommands
     [Command(CommandFlag.None, "tpout")]
     public static void TeleportOutOfLobby(PlayerControl source)
     {
-
         switch (Game.State)
         {
             case GameState.Roaming:

@@ -123,7 +123,6 @@ public class PrivacyPolicyPatch
                 .Formatted(AddonManager.FailedAddons.Count, AddonManager.FailedAddons.StrJoin(string.Empty).Trim());
             customScreen.button1Text.text = DestroyableSingleton<TranslationController>.Instance.GetString(StringNames.Okay, new Il2CppReferenceArray<Il2CppSystem.Object>(0));
             customScreen.gameObject.SetActive(true);
-            customScreen.Destroy();
             yield break;
         }
         __instance.hasRunLoginFlow = true;
@@ -159,7 +158,6 @@ public class PrivacyPolicyPatch
             .Formatted(AddonManager.FailedAddons.Count, AddonManager.FailedAddons.StrJoin(string.Empty).Trim());
         customScreen.button1Text.text = DestroyableSingleton<TranslationController>.Instance.GetString(StringNames.Okay, new Il2CppReferenceArray<Il2CppSystem.Object>(0));
         customScreen.gameObject.SetActive(true);
-        customScreen.Destroy();
         yield break;
     }
 
