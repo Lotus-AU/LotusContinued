@@ -92,6 +92,8 @@ public class MeetingDelegate
         return counts;
     }
 
+    public int GetPlayersRemainingToVote() => Players.GetPlayers(PlayerFilter.Alive).Count(p => !currentVotes.GetOrCompute(p.PlayerId, () => []).Any());
+
     public Dictionary<byte, List<Optional<byte>>> CurrentVotes() => currentVotes;
 
     public void EndVoting() => isForceEnd = true;
