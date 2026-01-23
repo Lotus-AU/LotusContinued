@@ -40,11 +40,12 @@ public static class Utils
         return c;
     }
 
-    public static bool HasTasks(NetworkedPlayerInfo p)
+    public static bool HasTasks(NetworkedPlayerInfo p) => HasTasks(p.GetPrimaryRole());
+
+    public static bool HasTasks(CustomRole? primaryDefinition)
     {
-        CustomRole? primaryDefinition = p.GetPrimaryRole();
         if (primaryDefinition == null) return false;
-        if (primaryDefinition.RealRole.IsImpostor() || primaryDefinition.GetType() != IRoleManager.Current.FallbackRole().GetType()) return false;
+        if (primaryDefinition.RealRole.IsImpostor() || primaryDefinition.GetType() == IRoleManager.Current.FallbackRole().GetType()) return false;
         if (primaryDefinition is not ITaskHolderRole taskHolder) return false;
         return taskHolder.TasksApplyToTotal() && taskHolder.HasTasks();
     }

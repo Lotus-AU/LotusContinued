@@ -8,6 +8,7 @@ using Lotus.Roles;
 using Lotus.Roles.Interfaces;
 using Lotus.Extensions;
 using Lotus.Options;
+using Lotus.Utilities;
 using VentLib.Localization.Attributes;
 
 namespace Lotus.Victory.Conditions;
@@ -38,7 +39,7 @@ public class VanillaCrewmateWin : IFactionWinCondition
         bool hasOneTaskDoer = false;
         foreach (CustomRole role in Players.GetAllPlayers().Select(p => p.PrimaryRole()))
         {
-            if (role is ITaskHolderRole taskHolder && taskHolder.TasksApplyToTotal() && taskHolder.HasTasks()) hasOneTaskDoer = true;
+            if (Utils.HasTasks(role)) hasOneTaskDoer = true;
             if (IsEligibleEnemy(role)) hasAliveEnemy = true;
             if (hasOneTaskDoer && hasAliveEnemy) break;
         }
