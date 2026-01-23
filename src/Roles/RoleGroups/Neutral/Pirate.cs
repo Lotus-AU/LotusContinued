@@ -38,7 +38,8 @@ public class Pirate : GuesserRole
     {
         if (!pirateDiesOnMissguess)
         {
-            // base.GuesserHandler(Guesser.Translations.GuessAnnouncementMessage.Formatted("No one")).Send(MyPlayer);
+            guessesThisMeeting = 0;
+            GuesserMessage(Guesser.Translations.NoGuessesLeft).Send(MyPlayer);
             return;
         }
         base.HandleBadGuess();
