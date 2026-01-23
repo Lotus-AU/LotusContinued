@@ -31,7 +31,7 @@ using VentLib.Networking.RPC.Attributes;
 using Random = UnityEngine.Random;
 using Object = UnityEngine.Object;
 
-namespace Lotus.Roles.RoleGroups.CTF;
+namespace Lotus.Roles.RoleGroups.Extra.CTF;
 
 public class Striker : NeutralKillingBase, IRoleUI
 {

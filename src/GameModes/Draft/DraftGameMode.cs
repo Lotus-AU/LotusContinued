@@ -19,7 +19,7 @@ using Lotus.Roles;
 using Lotus.Roles.Internals.Enums;
 using Lotus.Roles.Overrides;
 using Lotus.Roles.RoleGroups.Crew;
-using Lotus.Roles.RoleGroups.Draft;
+using Lotus.Roles.RoleGroups.Extra.Draft;
 using Lotus.Roles.RoleGroups.Undead;
 using Lotus.Victory;
 using Lotus.Victory.Conditions;

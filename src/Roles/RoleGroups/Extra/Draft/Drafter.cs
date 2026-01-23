@@ -16,7 +16,7 @@ using VentLib.Utilities;
 using VentLib.Utilities.Extensions;
 using VentLib.Utilities.Optionals;
 
-namespace Lotus.Roles.RoleGroups.Draft;
+namespace Lotus.Roles.RoleGroups.Extra.Draft;
 
 public class Drafter: CustomRole
 {

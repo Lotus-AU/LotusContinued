@@ -22,7 +22,7 @@ using Lotus.Options.Gamemodes;
 using Lotus.Roles.Events;
 using VentLib.Utilities.Collections;
 
-namespace Lotus.Roles.RoleGroups.Colorwars;
+namespace Lotus.Roles.RoleGroups.Extra.Colorwars;
 
 public class Painter : NeutralKillingBase
 {

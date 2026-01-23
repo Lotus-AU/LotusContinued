@@ -11,7 +11,7 @@ using Lotus.GameModes.CTF.Conditions;
 using Lotus.GameModes.CTF.Distributions;
 using Lotus.Options;
 using Lotus.Roles;
-using Lotus.Roles.RoleGroups.CTF;
+using Lotus.Roles.RoleGroups.Extra.CTF;
 using Lotus.RPC.CustomObjects.Builtin;
 using Lotus.Utilities;
 using Lotus.Victory;

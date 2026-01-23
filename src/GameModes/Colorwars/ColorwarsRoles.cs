@@ -5,7 +5,7 @@ using System.Linq;
 using JBAnnotations::JetBrains.Annotations;
 using Lotus.Logging;
 using Lotus.Roles;
-using Lotus.Roles.RoleGroups.Colorwars;
+using Lotus.Roles.RoleGroups.Extra.Colorwars;
 
 namespace Lotus.GameModes.Colorwars;
 

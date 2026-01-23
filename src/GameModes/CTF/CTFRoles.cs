@@ -5,7 +5,7 @@ using System.Linq;
 using JBAnnotations::JetBrains.Annotations;
 using Lotus.Logging;
 using Lotus.Roles;
-using Lotus.Roles.RoleGroups.CTF;
+using Lotus.Roles.RoleGroups.Extra.CTF;
 
 namespace Lotus.GameModes.CTF;
 
