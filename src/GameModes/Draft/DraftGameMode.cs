@@ -6,6 +6,7 @@ using Lotus.API.Player;
 using Lotus.API.Reactive;
 using Lotus.API.Reactive.HookEvents;
 using Lotus.API.Vanilla.Meetings;
+using Lotus.Chat;
 using Lotus.Chat.Commands;
 using Lotus.Extensions;
 using Lotus.Factions;
@@ -183,7 +184,7 @@ public class DraftGameMode : GameMode
         CurrentPlayersTurn += 1;
         if (CurrentPlayersTurn == TotalPlayers + 1)
         {
-            EndDrafterMeeting();
+            BeginCountdown();
             return;
         }
 
@@ -192,6 +193,20 @@ public class DraftGameMode : GameMode
             currentPlayer.SetMyTurn();
         else
             SetNextPlayersTurn();
+    }
+
+    private void BeginCountdown()
+    {
+        int countdownLength = 3;
+        int timeLeft = countdownLength;
+        ChatHandler.Of(GamemodeTranslations.Draft.StartingInText.Formatted(countdownLength)).Send();
+        for (int i = 0; i < countdownLength; i++)
+            Async.Schedule(() =>
+            {
+                timeLeft--;
+                if (timeLeft == 0) EndDrafterMeeting();
+                else ChatHandler.Of(GamemodeTranslations.Draft.StartingInText.Formatted(timeLeft)).Send();
+            }, countdownLength - i);
     }
 
     private void EndDrafterMeeting()

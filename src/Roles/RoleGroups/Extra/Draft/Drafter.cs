@@ -39,6 +39,9 @@ public class Drafter: CustomRole
         else EndMyTurn();
     }
 
+    [RoleAction(LotusActionType.ReportBody)]
+    private void TryReport(ActionHandle handle) => handle.Cancel();
+
     public override void HandleDisconnect()
     {
         if (isMyTurn)
