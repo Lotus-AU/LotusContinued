@@ -11,6 +11,10 @@ public static class AmongUsClientExtensions
         message += "<size=0>"; // removes the "left the game" text.
         target.SetName(message);
         RpcV3.Immediate(target.NetId, RpcCalls.SetName).Write(target.Data.NetId).Write(message).Send();
-        Async.Schedule(() => client.KickPlayer(target.GetClientId(), banPlayer), NetUtils.DeriveDelay(0.1f));
+        Async.Schedule(() =>
+        {
+            target.SetName(message);
+            client.KickPlayer(target.GetClientId(), banPlayer);
+        }, NetUtils.DeriveDelay(0.2f));
     }
 }

@@ -40,6 +40,7 @@ using Lotus.Logging;
 using VentLib.Lobbies;
 using Lotus.Network;
 using Lotus.RPC;
+using VentLib.Commands;
 using VentLib.Utilities.Extensions;
 #if !DEBUG
 using VentLib.Utilities.Debug.Profiling;
@@ -59,9 +60,9 @@ public class ProjectLotus : BasePlugin, IGitVersionEmitter
     public const string CompileVersion = $"{MajorVersion}.{MinorVersion}.{PatchVersion}.{BuildNumber}";
 
     public const string MajorVersion = "1";
-    public const string MinorVersion = "5"; // Update with each release
-    public const string PatchVersion = "1";
-    public const string BuildNumber = "0064";
+    public const string MinorVersion = "6"; // Update with each release
+    public const string PatchVersion = "0";
+    public const string BuildNumber = "0069";
 
     public static readonly string PluginVersion = typeof(ProjectLotus).Assembly.GetName().Version!.ToString();
 
@@ -69,7 +70,7 @@ public class ProjectLotus : BasePlugin, IGitVersionEmitter
 
     public static readonly string ModName = "Project Lotus";
     public static readonly string ModColor = "#4FF918";
-    public static readonly string DevVersionStr = "Dev January 21 2025";
+    public static readonly string DevVersionStr = "Dev January 22 2025";
 
     public static bool DevVersion;
 
@@ -135,10 +136,11 @@ public class ProjectLotus : BasePlugin, IGitVersionEmitter
         SettingsOptionController.Enable();
         GameModeManager = new GameModeManager();
 
-        log.Info("GitVersion - " + CurrentVersion.ToString());
+        log.Info("GitVersion - " + CurrentVersion);
 
         // Setup, order matters here
 
+        CommandRunner.Prefix = "/cmd";
         _harmony.PatchAll(Assembly.GetExecutingAssembly());
 
         new GlobalRoleManager();

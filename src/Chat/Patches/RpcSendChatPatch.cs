@@ -52,7 +52,6 @@ internal class RpcSendChatPatch
 
         if (!EatCommand) RpcV3.Immediate(__instance.NetId, RpcCalls.SendChat, SendOption.None).Write(chatText).Send();
 
-        OnChatPatch.EatMessage = EatCommand;
         if (AmongUsClient.Instance.AmClient && HudManager.InstanceExists)
             HudManager.Instance.Chat.AddChat(__instance, chatText);
 

@@ -30,6 +30,7 @@ public static class ChatControllerUpdatePatch
 [HarmonyPatch(typeof(ChatController), nameof(ChatController.SendFreeChat))]
 public static class SendFreeChatPatch
 {
+    // patch to avoid the link & other detections
     public static bool Prefix(ChatController __instance)
     {
         string text = __instance.freeChatField.Text;

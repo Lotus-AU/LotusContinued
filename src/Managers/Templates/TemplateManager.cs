@@ -68,9 +68,8 @@ public class TemplateManager
 
     internal bool CheckAndRunCommand(PlayerControl source, string input)
     {
-        input = input.Trim();
-        if (input.Length < 2 || !input.StartsWith("/")) return false;
-        input = input[1..];
+        if (input.Length < 4 || !input.StartsWith("/cmd")) return false;
+        input = input[4..].Trim();
 
         string[] splitCommand = input.Split(" ");
         List<Template>? templates = Commands.GetValueOrDefault(splitCommand[0]);

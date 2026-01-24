@@ -44,7 +44,6 @@ public class TemplateCommands: CommandTranslations, ICommandReceiver
     [Command(CommandFlag.HostOnly, "reload")]
     public static void Reload(PlayerControl source)
     {
-        OnChatPatch.EatMessage = true;
         string? exception = PluginDataManager.TemplateManager.LoadTemplates();
         if (exception != null) ErrorMsg(exception).Send(source);
         else SuccessMsg(TemplateCommandTranslations.ReloadTemplatesText).Send(source);
