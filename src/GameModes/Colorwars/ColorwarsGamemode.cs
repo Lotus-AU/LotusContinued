@@ -33,6 +33,7 @@ public class ColorwarsGamemode : GameMode
     public static ColorwarsGamemode Instance = null!;
 
     public override string Name { get; set; } = GamemodeTranslations.Colorwars.Name;
+    public override string Description { get; set; } = GamemodeTranslations.Colorwars.Description;
     public override ColorwarsRoleOperations RoleOperations { get; }
     public override ColorwarsRoleManager RoleManager { get; }
     public override MatchData MatchData { get; set; }

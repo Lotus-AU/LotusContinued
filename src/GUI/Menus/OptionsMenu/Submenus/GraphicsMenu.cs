@@ -99,6 +99,10 @@ public class GraphicsMenu : MonoBehaviour, IBaseOptionMenuComponent
             if (!opening) applyGameObject.SetActive(true);
         }));
         graphicsContent.slider.gameObject.SetActive(false);
+        #if ANDROID
+        resolutionSlider.gameObject.SetActive(false);
+        resolutionText.gameObject.SetActive(false);
+        #endif
 
 
         fpsSlider = Instantiate(resolutionSlider, anchor.transform);

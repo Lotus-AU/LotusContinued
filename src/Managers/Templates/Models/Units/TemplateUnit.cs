@@ -11,6 +11,7 @@ using Lotus.Chat;
 using Lotus.Chat.Commands;
 using Lotus.Extensions;
 using Lotus.Factions.Interfaces;
+using Lotus.GUI.Name;
 using Lotus.Managers.Templates.Models.Backing;
 using Lotus.Managers.Templates.Models.Units.Actions;
 using Lotus.Roles;
@@ -35,6 +36,7 @@ public class TemplateUnit
 
     private static readonly Regex Regex = new(@"\${(?>[^{}]+|(?<Open>{)|(?<Close-Open>}))*}");
     public string? Text { get; set; }
+    public string? Color { get; set; }
     public List<TCondition> Conditions { get; set; } = new();
     public List<TCondition> ConditionsAny { get; set; } = new();
 
@@ -42,7 +44,7 @@ public class TemplateUnit
 
     public string Format(object? obj = null) => Text == null ? "" : Format(Text, obj);
 
-    public string Format(string text, object? obj = null) => Evaluate(obj) ? FormatStatic(text, obj) : (Conditions.FirstOrDefault(c => c.Fallback != null)?.Fallback ?? "");
+    public string Format(string text, object? obj = null) => Evaluate(obj) ? Colorize(FormatStatic(text, obj), Color) : (Conditions.FirstOrDefault(c => c.Fallback != null)?.Fallback ?? "");
 
     public static string FormatStatic(string text, object? obj = null)
     {
@@ -58,6 +60,24 @@ public class TemplateUnit
                 ? funcSupplier(obj!)
                 : PluginDataManager.TemplateManager.FormatVariable(value, obj) ?? match.Value;
         });
+    }
+
+    public static string Colorize(string text, string? color)
+    {
+        if (string.IsNullOrEmpty(color)) return text;
+        color = color.ToUpper();
+
+        if (!color.Contains(','))
+        {
+            UnityEngine.Color textColor = color.ToColor() ?? UnityEngine.Color.white;
+            return textColor.Colorize(text);
+        }
+
+        return TextUtils.ApplyGradient(text, color
+            .Split(',')
+            .Select(c => c.ToUpper())
+            .Select(c => c.StartsWith('#') ? c : "#" + c)
+            .Select(c => c.ToColor() ?? UnityEngine.Color.white).ToArray());
     }
 
     public static readonly Dictionary<string, Func<object, String>> TemplateValues = new()

@@ -43,6 +43,13 @@ public abstract class LotusAddon
         : $"{BundledAssembly.FullName}::{Name}-{Version.ToSimpleName()}";
 
     /// <summary>
+    /// Returns the display name of this addon. <br/>
+    /// This is only shown in the options right now. Defaults to the Name parameter.
+    /// </summary>
+    /// <returns></returns>
+    public virtual string GetDisplayName() => Name;
+
+    /// <summary>
     /// First function called after loading the plugin. Your plugin code should go here.
     /// </summary>
     public abstract void Initialize();
@@ -78,7 +85,11 @@ public abstract class LotusAddon
         {
             r.Addon = this;
             HashSet<IGameMode> iGameMode = ExportedDefinitions.GetOrCompute(r, () => new HashSet<IGameMode>());
-            targetGameModes.All(x => iGameMode.Add(x));
+            targetGameModes.ForEach(x =>
+            {
+                iGameMode.Add(x);
+                x.RoleManager.RoleHolder.AddAddonRole(r);
+            });
             log.Trace($"Exporting Role ({r.EnglishRoleName}) for {Name}");
         });
     }

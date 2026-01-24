@@ -14,10 +14,13 @@ using Il2CppInterop.Runtime.InteropTypes.Arrays;
 using Object = UnityEngine.Object;
 using UnityEngine.Networking;
 using System.IO;
+using System.Linq;
 using Lotus.Managers;
 using YamlDotNet.Serialization;
 using YamlDotNet.Serialization.NamingConventions;
 using System.Text;
+using Lotus.Addons;
+using VentLib.Localization;
 
 namespace Lotus.Network.PrivacyPolicy.Patches;
 public class PrivacyPolicyPatch
@@ -39,6 +42,7 @@ public class PrivacyPolicyPatch
 
 
     private static bool wait = true;
+    private static bool failedAddons;
 
     [QuickPrefix(typeof(EOSManager), nameof(EOSManager.RunLogin))]
     public static void PreLogin()
@@ -106,13 +110,26 @@ public class PrivacyPolicyPatch
             {
                 __instance.IsAllowedOnline(true);
             }
+            if (AddonManager.FailedAddons.IsEmpty() || failedAddons)
+            {
+                if (customScreen) customScreen.Destroy();
+                yield break;
+            }
+            failedAddons = true;
+            customScreen.SetOneButton();
+            customScreen.titleTexxt.text = "⚠⚠⚠";
+            customScreen.bodyText.text = Localizer
+                .Translate("PingDisplay.AddonsFailed", "{0} Addon(s) Failed to Load: {1}")
+                .Formatted(AddonManager.FailedAddons.Count, AddonManager.FailedAddons.StrJoin(string.Empty).Trim());
+            customScreen.button1Text.text = DestroyableSingleton<TranslationController>.Instance.GetString(StringNames.Okay, new Il2CppReferenceArray<Il2CppSystem.Object>(0));
+            customScreen.gameObject.SetActive(true);
             yield break;
         }
         __instance.hasRunLoginFlow = true;
         __instance.loginFlowFinished = false;
         yield return DestroyableSingleton<AccountManager>.Instance.PrivacyPolicy.Show();
-        yield return CustomPrivacyPolicy();
         DestroyableSingleton<AccountManager>.Instance.privacyPolicyBg.gameObject.SetActive(false);
+        yield return CustomPrivacyPolicy();
         if (__instance.platformInitialized)
         {
             __instance.StartInitialLoginFlow();
@@ -126,6 +143,21 @@ public class PrivacyPolicyPatch
         {
             yield return null;
         }
+
+        if (AddonManager.FailedAddons.IsEmpty() || failedAddons)
+        {
+            if (customScreen) customScreen.Destroy();
+            yield break;
+        }
+        failedAddons = true;
+
+        customScreen.SetOneButton();
+        customScreen.titleTexxt.text = "⚠⚠⚠";
+        customScreen.bodyText.text = Localizer
+            .Translate("PingDisplay.AddonsFailed", "{0} Addon(s) Failed to Load: {1}")
+            .Formatted(AddonManager.FailedAddons.Count, AddonManager.FailedAddons.StrJoin(string.Empty).Trim());
+        customScreen.button1Text.text = DestroyableSingleton<TranslationController>.Instance.GetString(StringNames.Okay, new Il2CppReferenceArray<Il2CppSystem.Object>(0));
+        customScreen.gameObject.SetActive(true);
         yield break;
     }
 
@@ -177,7 +209,6 @@ public class PrivacyPolicyPatch
             hasUpdatedPrivacyPolicy = lastAcceptedVersionTime < LatestPrivacyPolicy;
             if (!hasUpdatedPrivacyPolicy)
             {
-                customScreen.Destroy();
 
                 yield break;
             }
@@ -283,7 +314,6 @@ public class PrivacyPolicyPatch
             // yield until closed
             yield return null;
         }
-        customScreen.Destroy();
 
         EditablePrivacyPolicyInfo policyInfo;
 

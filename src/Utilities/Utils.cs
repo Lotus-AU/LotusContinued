@@ -40,11 +40,14 @@ public static class Utils
         return c;
     }
 
-    public static bool HasTasks(NetworkedPlayerInfo p)
+    public static bool HasTasks(NetworkedPlayerInfo p) => HasTasks(p.GetPrimaryRole());
+
+    public static bool HasTasks(CustomRole? primaryDefinition)
     {
-        if (p.GetPrimaryRole()?.RealRole.IsImpostor() ?? true) return false;
-        CustomRole? primaryDefinition = p.GetPrimaryRole();
-        return primaryDefinition.GetType() != IRoleManager.Current.FallbackRole().GetType() && primaryDefinition is Crewmate;
+        if (primaryDefinition == null) return false;
+        if (primaryDefinition.RealRole.IsImpostor() || primaryDefinition.GetType() == IRoleManager.Current.FallbackRole().GetType()) return false;
+        if (primaryDefinition is not ITaskHolderRole taskHolder) return false;
+        return taskHolder.TasksApplyToTotal() && taskHolder.HasTasks();
     }
 
     public static void Teleport(CustomNetworkTransform nt, Vector2 location)

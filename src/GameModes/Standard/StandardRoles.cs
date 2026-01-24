@@ -24,8 +24,6 @@ public class StandardRoles : RoleHolder
 {
     public override List<Action> FinishedCallbacks() => Callbacks;
 
-    private static List<CustomRole> AddonRoles = new();
-
     public static List<Action> Callbacks { get; set; } = new List<Action>();
 
     public StaticRoles Static;
@@ -63,7 +61,7 @@ public class StandardRoles : RoleHolder
         AllRoles.AddRange(SpecialRoles);
         AllRoles.AddRange(AddonRoles);
 
-        // avioid `Collection was modified` error
+        // avoid `Collection was modified` error
         var newRoles = new List<CustomRole>();
         AllRoles.ForEach(r => newRoles.AddRange(r.LinkedRoles()));
         AllRoles.AddRange(newRoles);
@@ -76,13 +74,26 @@ public class StandardRoles : RoleHolder
         });
     }
 
+    [UsedImplicitly]
+    [Obsolete("This function no longer needs to be called by mods. PL will now auto add your roles to the gamemode you export them with.")]
     public static void AddRole(CustomRole role)
     {
+        if (role.Addon == null || AddonRoles.Contains(role)) return;
         DevLogger.Log($"adding {role.EnglishRoleName} to Standard.");
         AddonRoles.Add(role);
         Instance.AllRoles.Add(role);
         role.Solidify();
         StandardGameMode.Instance.RoleManager.RegisterRole(role);
+    }
+
+    public override void AddAddonRole(CustomRole addonRole)
+    {
+        if (addonRole.Addon == null || AddonRoles.Contains(addonRole)) return;
+        DevLogger.Log($"adding {addonRole.EnglishRoleName} to Standard.");
+        AddonRoles.Add(addonRole);
+        AllRoles.Add(addonRole);
+        addonRole.Solidify();
+        StandardGameMode.Instance.RoleManager.RegisterRole(addonRole);
     }
 
     [UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]

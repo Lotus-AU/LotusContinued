@@ -42,7 +42,9 @@ class BeginImpostorPatch
         }
 
         __instance.BeginCrewmate(yourTeam);
+        #if PC
         __instance.overlayHandle.color = Palette.CrewmateBlue;
+        #endif
         return false;
     }
 

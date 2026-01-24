@@ -67,6 +67,8 @@ public class UndeadRole : Impostor
         return faction is not TheUndead.Unconverted;
     }
 
+    protected static bool IsUndeadOrigin(PlayerControl player) => player.PrimaryRole().Faction is TheUndead.Origin;
+
     protected override RoleModifier Modify(RoleModifier roleModifier) =>
         base.Modify(roleModifier)
             .SpecialType(SpecialType.Undead)

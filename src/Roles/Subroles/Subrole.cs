@@ -55,12 +55,23 @@ public abstract class Subrole : CustomRole, ISubrole
             if (anyMatchFactions && FactionCompatabilityMode is CompatabilityMode.Blacklisted) return false;
             if (!anyMatchFactions && FactionCompatabilityMode is CompatabilityMode.Whitelisted) return false;
         }
-
-        if (RestrictedRoles() == null || RestrictedRoles()!.Count == 0) return true;
         List<CustomRole> subroles = player.GetSubroles();
+        if (subroles.Any(cr =>
+            {
+                if (cr is not Subrole sub) return false;
+                var restrictedRoles = sub.RestrictedRoles();
+                if (restrictedRoles == null || restrictedRoles.Count == 0) return true;
 
-        bool anyMatchRoles = RestrictedRoles()!.Any(r => r == role.GetType()) |
-                             subroles.Any(r => RestrictedRoles()!.Contains(r.GetType()));
+                bool anyMatchRoles = restrictedRoles.Contains(this.GetType());
+                if (anyMatchRoles && sub.RoleCompatabilityMode is CompatabilityMode.Blacklisted) return false;
+                return anyMatchRoles || sub.FactionCompatabilityMode is not CompatabilityMode.Whitelisted;
+            })) return false;
+
+        var restrictedRoles = RestrictedRoles();
+        if (restrictedRoles == null || restrictedRoles.Count == 0) return true;
+
+        bool anyMatchRoles = restrictedRoles.Any(r => r == role.GetType()) |
+                             subroles.Any(r => restrictedRoles.Contains(r.GetType()));
         if (anyMatchRoles && RoleCompatabilityMode is CompatabilityMode.Blacklisted) return false;
         return anyMatchRoles || FactionCompatabilityMode is not CompatabilityMode.Whitelisted;
     }

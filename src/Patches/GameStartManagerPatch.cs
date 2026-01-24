@@ -39,9 +39,7 @@ public static class GameStartManagerPatch
             __instance.GameRoomNameCode.text = GameCode.IntToGameName(AmongUsClient.Instance.GameId);
 
             HideName = Object.Instantiate(__instance.GameRoomNameCode, __instance.GameRoomNameCode.transform);
-            /*HideName.text = ColorUtility.TryParseHtmlString(TOHPlugin.HideColor.Value, out _)
-                ? $"<color={TOHPlugin.HideColor.Value}>{TOHPlugin.HideName.Value}</color>"
-                : $"<color={TOHPlugin.ModColor}>{TOHPlugin.HideName.Value}</color>";*/
+            HideName.text = Color.white.Colorize($"******");
 
             // Make Public Button
             /*if ((ModUpdater.isBroken || ModUpdater.hasUpdate || !TOHPlugin.AllowPublicRoom) && !ModUpdater.ForceAccept)
@@ -57,7 +55,7 @@ public static class GameStartManagerPatch
         public static void Prefix(GameStartManager __instance)
         {
             // Lobby code
-            if (DataManager.Settings.Gameplay.StreamerMode)
+            if (DataManager.Settings.Gameplay.StreamerMode && AmongUsClient.Instance.NetworkMode is NetworkModes.OnlineGame)
             {
                 __instance.GameRoomNameCode.color = new(255, 255, 255, 0);
                 GameStartManagerStartPatch.HideName.enabled = true;

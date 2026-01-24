@@ -100,11 +100,6 @@ public class Guesser : Subrole, IInfoResender
     ];
     public static readonly List<int> RoleTypeSettings = [0, 0, 0, 0, 0, 0];
 
-    public const string LeftArrow = "<----";
-    public const string RightArrow = "--->";
-    public const string NoRoleHere = "----------";
-    public const float ShiftTimer = 15f;
-
     private bool restrictToNonVotingRoles;
     private bool canGuessTeammates;
     private int guessesPerMeeting;
@@ -114,19 +109,14 @@ public class Guesser : Subrole, IInfoResender
     private CustomRole? guessedRole;
     private int guessesThisMeeting;
 
-    private bool currentlyGuessing;
-    private bool isShapeshifterRole;
-    private bool wasShiftingRole;
     private bool meetingEnded;
-    private int currentPageNum;
-
-    private RoleTypes? originalRoleType;
+    private bool debounce;
 
     private IFaction lastFaction;
-    private Cooldown shiftTimer;
+
+    private FixedUpdateLock fixedUpdateLock = new(5f);
 
     [NewOnSetup(true)] private MeetingPlayerSelector voteSelector = new();
-    [NewOnSetup] private List<GuesserShapeshifterObject> shapeshifterObjects = [];
     [NewOnSetup] private List<CustomRole> guessableRoles = [];
 
     public Guesser()
@@ -146,8 +136,8 @@ public class Guesser : Subrole, IInfoResender
         guessingPlayer = byte.MaxValue;
         skippedVote = false;
         meetingEnded = false;
-        currentlyGuessing = false;
         guessedRole = null;
+        debounce = false;
         guessesThisMeeting = guessesPerMeeting;
         if (lastFaction != Faction) ResetGuessableRoles();
         ResendMessages();
@@ -158,7 +148,6 @@ public class Guesser : Subrole, IInfoResender
     {
         if (skippedVote || guessesThisMeeting <= 0 || meetingEnded) return;
         handle.Cancel();
-        if (currentlyGuessing) return;
         VoteResult result = voteSelector.CastVote(player);
         switch (result.VoteResultType)
         {
@@ -170,25 +159,27 @@ public class Guesser : Subrole, IInfoResender
                 break;
             case VoteResultType.Selected:
                 PlayerControl? targetPlayer = Players.FindPlayerById(result.Selected);
-                if (targetPlayer != null)
+                if (targetPlayer == null) break;
+                CancelGuessReason reason = CanGuessPlayer(targetPlayer);
+                if (reason is CancelGuessReason.None)
                 {
-                    CancelGuessReason reason = CanGuessPlayer(targetPlayer);
-                    if (reason is CancelGuessReason.None) StartGuessingPlayer(targetPlayer);
-                    else
-                        GuesserMessage(reason switch
-                        {
-                            CancelGuessReason.RoleSpecificReason => Translations.CantGuessBecauseOfRole.Formatted(targetPlayer.name),
-                            CancelGuessReason.Teammate => Translations.CantGuessTeammate.Formatted(targetPlayer.name),
-                            CancelGuessReason.CanSeeRole => Translations.CantGuessKnownRole.Formatted(targetPlayer.name),
-                            _ => throw new ArgumentOutOfRangeException()
-                        }).Send(MyPlayer);
-
+                    guessingPlayer = result.Selected;
+                    GuesserMessage(Translations.PickedPlayerText.Formatted(targetPlayer.name)).Send(MyPlayer);
                 }
+                else
+                    GuesserMessage(reason switch
+                    {
+                        CancelGuessReason.RoleSpecificReason => Translations.CantGuessBecauseOfRole.Formatted(targetPlayer.name),
+                        CancelGuessReason.Teammate => Translations.CantGuessTeammate.Formatted(targetPlayer.name),
+                        CancelGuessReason.CanSeeRole => Translations.CantGuessKnownRole.Formatted(targetPlayer.name),
+                        _ => throw new ArgumentOutOfRangeException()
+                    }).Send(MyPlayer);
                 break;
             case VoteResultType.Confirmed:
                 if (guessedRole == null)
                 {
                     voteSelector.Reset();
+                    voteSelector.CastVote(player);
                     SelectPlayerToGuess(player, _, handle);
                     return;
                 }
@@ -198,105 +189,66 @@ public class Guesser : Subrole, IInfoResender
 
                 guessesThisMeeting -= 1;
                 if (guessesThisMeeting <= 0) GuesserMessage(Translations.NoGuessesLeft).Send(MyPlayer);
+                else ResendMessages();
 
                 guessingPlayer = byte.MaxValue;
                 voteSelector.Reset();
 
                 bool successfulGuess = guessed.PrimaryRole().GetType() == guessedRole.GetType() ||
                                        guessed.GetSubroles().Any(s => s.GetType() == guessedRole.GetType());
-                guessedRole = null;
 
-                if (successfulGuess) HandleCorrectGuess(guessed, guessedRole!);
+                if (successfulGuess) HandleCorrectGuess(guessed, guessedRole);
                 else HandleBadGuess();
+                guessedRole = null;
                 break;
             default:
                 throw new ArgumentOutOfRangeException();
         }
     }
 
-    [RoleAction(LotusActionType.Shapeshift, priority:Priority.VeryHigh)]
-    public void SelectRoleToGuess(PlayerControl target, ActionHandle handle)
+    [RoleAction(LotusActionType.Chat)]
+    public void DoGuesserVoting(string message, GameState state, bool isAlive)
     {
-        if (MeetingHud.Instance) handle.Cancel(ActionHandle.CancelType.Soft);
-        if (!currentlyGuessing || !isShapeshifterRole) return;
-
-        var firstObject = shapeshifterObjects.FirstOrDefault(o => o.RealPlayer?.NetId == target.NetId || o.NetObject?.playerControl.NetId == target.NetId);
-        if (firstObject == null) return;
-        HandleShapeshifterChoice(firstObject);
-    }
-
-    [RoleAction(LotusActionType.Disconnect, ActionFlag.GlobalDetector)]
-    public void FillDisconnects(PlayerControl target)
-    {
-        if (target.PlayerId == MyPlayer.PlayerId)
+        if (!isAlive) return;
+        if (state is not GameState.InMeeting) return;
+        if (guessingPlayer == byte.MaxValue) return;
+        if (!message.StartsWith("/cmd")) return;
+        string roleName = message.Substring("/cmd".Length).Trim().ToLower();
+        if (string.IsNullOrEmpty(roleName))
         {
-            shiftTimer.Finish(true);
-            DeleteAllShapeshifterObjects();
+            ChatHandlers.InvalidCmdUsage().Send(MyPlayer);
             return;
         }
 
-        var firstObject = shapeshifterObjects.FirstOrDefault(o => o.RealPlayer?.NetId == target.NetId || o.NetObject?.playerControl.NetId == target.NetId);
-        if (firstObject == null) return;
-        shiftTimer.Finish();
+        if (debounce) return;
+        debounce = true;
+
+        if (roleName == "available")
+        {
+            if (fixedUpdateLock.AcquireLock()) GuesserMessage(string.Join(", ", guessableRoles.Select(r => r.RoleName))).Send(MyPlayer);
+            else ChatHandlers.InvalidCmdUsage().Send(MyPlayer);
+            debounce = false;
+            return;
+        }
+
+        Optional<CustomRole> role = guessableRoles.FirstOrOptional(r => r.RoleName.ToLower().Contains(roleName))
+            .CoalesceEmpty(() => guessableRoles.FirstOrOptional(r => r.EnglishRoleName.Contains(roleName)))
+            .CoalesceEmpty(() => guessableRoles.FirstOrOptional(r => r.Aliases.Contains(roleName)));
+
+        if (role.Exists())
+        {
+            guessedRole = role.Get();
+            GuesserMessage(Translations.PickedRoleText.Formatted(Players.FindPlayerById(guessingPlayer)?.name, guessedRole.RoleName)).Send(MyPlayer);
+        }
+        else GuesserMessage(Translations.UnknownRole.Formatted(roleName)).Send(MyPlayer);
+
+        debounce = false;
     }
 
     [RoleAction(LotusActionType.MeetingEnd, ActionFlag.WorksAfterDeath)]
     public void CheckRevive()
     {
-        shiftTimer.Finish(true);
         meetingEnded = true;
-        if (wasShiftingRole)
-        {
-            wasShiftingRole = false;
-            isShapeshifterRole = false;
-            MyPlayer.PrimaryRole().DesyncRole = originalRoleType;
-            RoleTypes targetRole = MyPlayer.PrimaryRole().RealRole;
-            if (!MyPlayer.IsAlive()) targetRole = targetRole.GhostEquivalent();
-            MyPlayer.RpcSetRoleDesync(targetRole, MyPlayer);
-            originalRoleType = null;
-        }
-        DeleteAllShapeshifterObjects();
-    }
-
-    private void StartGuessingPlayer(PlayerControl targetPlayer)
-    {
-        GuesserMessage(Translations.PickedPlayerText.Formatted(targetPlayer.name)).Send(MyPlayer);
-        guessingPlayer = targetPlayer.PlayerId;
-        currentlyGuessing = true;
-        isShapeshifterRole = true;
-        currentPageNum = 1;
-
-        if (!wasShiftingRole)
-        {
-            wasShiftingRole = true;
-            var mainRole = MyPlayer.PrimaryRole();
-            if (mainRole.DesyncRole.HasValue) originalRoleType = mainRole.DesyncRole.Value;
-            else originalRoleType = null;
-
-            mainRole.DesyncRole = RoleTypes.Shapeshifter;
-        }
-
-        ResetShapeshfiterObjects();
-        MyPlayer.RpcSetRoleDesync(RoleTypes.Shapeshifter, MyPlayer);
-        if (!shiftTimer.IsCoroutine)
-        {
-            shiftTimer.IsCoroutine = true;
-            CooldownManager.SubmitCooldown(shiftTimer);
-        }
-        shiftTimer.StartThenRun(CancelGuessingTimerDelay, ShiftTimer);
-        SendCnoRows();
-    }
-
-    private void CancelGuessingTimerDelay()
-    {
-        isShapeshifterRole = false;
-        guessedRole = null;
-        voteSelector.Reset();
-        currentlyGuessing = false;
-        guessingPlayer = byte.MaxValue;
-        MyPlayer.RpcSetRoleDesync(RoleTypes.Crewmate, MyPlayer);
-        GuesserMessage(Translations.KickedFromGuessing).Send(MyPlayer);
-        DeleteAllShapeshifterObjects();
     }
 
     private void ResetGuessableRoles()
@@ -322,122 +274,6 @@ public class Guesser : Subrole, IInfoResender
                                                (r.Chance > 0 || r.RoleFlags.HasFlag(RoleFlag.RemoveRolePercent));
     }
 
-    private void ResetShapeshfiterObjects()
-    {
-        DeleteAllShapeshifterObjects();
-
-        int playerIndex = 0;
-        foreach (PlayerControl player in Players.GetAlivePlayers())
-        {
-            if (player.PlayerId == MyPlayer.PlayerId) continue;
-            shapeshifterObjects.Add(new GuesserShapeshifterObject(MyPlayer, playerIndex, GetNameFromIndex(playerIndex), player));
-            playerIndex += 1;
-        }
-
-        int leftOverPlayers = 15 - playerIndex;
-        for (int i = 0; i < leftOverPlayers; i++)
-        {
-            // Create a NET OBJECT instead of using a player.
-            shapeshifterObjects.Add(new GuesserShapeshifterObject(MyPlayer, playerIndex, GetNameFromIndex(playerIndex), null));
-            playerIndex += 1;
-        }
-
-        return;
-
-        string GetNameFromIndex(int thisIndex)
-        {
-            switch (thisIndex)
-            {
-                case 0:
-                    return Color.white.Colorize(LeftArrow);
-                case 1:
-                    return Color.white.Colorize(Translations.PageIndex.Formatted(currentPageNum, Mathf.CeilToInt(guessableRoles.Count / 12f)));
-                case 2:
-                    return Color.white.Colorize(RightArrow);
-                default:
-                    int listIndex = thisIndex - 3;
-                    listIndex = (currentPageNum - 1) * 12 + listIndex;
-                    if (listIndex >= guessableRoles.Count) return NoRoleHere;
-                    return guessableRoles[listIndex].ColoredRoleName();
-            }
-        }
-    }
-
-    private void DeleteAllShapeshifterObjects()
-    {
-        shapeshifterObjects.ForEach(o => o.Delete());
-        shapeshifterObjects = [];
-    }
-
-    private void HandleShapeshifterChoice(GuesserShapeshifterObject shiftableObject)
-    {
-        switch (shiftableObject.PlayerIndex)
-        {
-            case 0: // left
-                int startPageNum = currentPageNum;
-                currentPageNum -= 1;
-                if (currentPageNum < 1) currentPageNum = Mathf.CeilToInt(guessableRoles.Count / 12f);
-                shiftTimer.StartThenRun(CancelGuessingTimerDelay, ShiftTimer);
-                GuesserMessage(Translations.MoreTimeGiven).Send(MyPlayer);
-                if (startPageNum != currentPageNum) ResetShapeshfiterObjects();
-                SendCnoRows();
-                break;
-            case 1: // pressing page icon.
-                break;
-            case 2: // right
-                int startPageNumRight = currentPageNum;
-                currentPageNum += 1;
-                int maxPages  = Mathf.CeilToInt(guessableRoles.Count / 12f);
-                if (currentPageNum > maxPages) currentPageNum = 1;
-                shiftTimer.StartThenRun(CancelGuessingTimerDelay, ShiftTimer);
-                GuesserMessage(Translations.MoreTimeGiven).Send(MyPlayer);
-                if (startPageNumRight != currentPageNum) ResetShapeshfiterObjects();
-                SendCnoRows();
-                break;
-            default:
-                int playerIndex = shiftableObject.PlayerIndex;
-                if (playerIndex > 14) return; // crowded detection.
-                int listIndex = playerIndex - 3;
-                listIndex = (currentPageNum - 1) * 12 + listIndex;
-                if (listIndex >= guessableRoles.Count) return;
-                shiftTimer.Finish(true);
-                DeleteAllShapeshifterObjects();
-                guessedRole = guessableRoles[listIndex];
-                isShapeshifterRole = false;
-                currentlyGuessing = false;
-                MyPlayer.RpcSetRoleDesync(RoleTypes.Crewmate, MyPlayer);
-                GuesserMessage(Translations.PickedRoleText.Formatted(Players.FindPlayerById(guessingPlayer)?.name ?? "???", guessedRole.ColoredRoleName())).Send(MyPlayer);
-                break;
-        }
-    }
-
-    private void SendCnoRows()
-    {
-        if (MyPlayer.AmOwner) return;
-        StringBuilder stringBuilder = new();
-        stringBuilder.Append(Translations.ShifterMenuHelpText);
-        stringBuilder.AppendLine();
-
-        int lastRow = -1;
-        bool firstRole = true;
-        shapeshifterObjects.ForEach(obj =>
-        {
-            if (!obj.IsCno()) return;
-            int curRow = Mathf.CeilToInt((float)(obj.PlayerIndex + 1) / 3f);
-            if (curRow != lastRow)
-            {
-                stringBuilder.AppendLine();
-                stringBuilder.Append(Translations.RowText.Formatted(curRow));
-                firstRole = true;
-            }
-            lastRow = curRow;
-            if (!firstRole) stringBuilder.Append(", ");
-            stringBuilder.Append(curRow == 1 ? obj.GetText().RemoveHtmlTags() : obj.GetText());
-            firstRole = false;
-        });
-        if (lastRow == -1) return;
-        GuesserMessage(stringBuilder.ToString()).Send(MyPlayer);
-    }
 
     protected virtual void HandleBadGuess()
     {
@@ -576,20 +412,15 @@ public class Guesser : Subrole, IInfoResender
         [Localized(nameof(NoGuessesLeft))] public static string NoGuessesLeft = "You have ran out of guesses. Your next vote now acts as normal.";
         [Localized(nameof(SkippedGuessing))] public static string SkippedGuessing = "You have exited guessing mode. Your next vote now acts as normal.";
 
-        [Localized(nameof(KickedFromGuessing))] public static string KickedFromGuessing = "You took too long to make a choice. You have been kicked from guessing.";
-        [Localized(nameof(MoreTimeGiven))] public static string MoreTimeGiven = "You made a choice. The timer has been reset.";
-        [Localized(nameof(PageIndex))] public static string PageIndex = "Page {0}/{1}";
-        [Localized(nameof(RowText))] public static string RowText = "Row {0}: ";
-        [Localized(nameof(ShifterMenuHelpText))] public static string ShifterMenuHelpText = "The extra options on the Shapeshifter menu appear as another player.\nBelow is the correct text that should be displayed:";
-
         [Localized(nameof(GuessDeathAnnouncement))] public static string GuessDeathAnnouncement = "A guesser has made a guess.\n{0} has died.";
 
         [Localized(nameof(CantGuessBecauseOfRole))] public static string CantGuessBecauseOfRole = "Your role prevented you from guessing {0}! Try a different player.";
         [Localized(nameof(CantGuessKnownRole))] public static string CantGuessKnownRole = "You can see {0}'s role! You can't guess that player.";
         [Localized(nameof(CantGuessTeammate))] public static string CantGuessTeammate = "{0} is your teammate! You can't guess that player.";
+        [Localized(nameof(UnknownRole))] public static string UnknownRole = "Unknown role {0}. You can type '/cmd available' to view all roles your are able to guess.";
 
         [Localized(nameof(PickedRoleText))] public static string PickedRoleText = "You are attempting to guess {0} as {1}. To confirm this guess, vote that player again.\nOtherwise, vote another player to reset the process.";
-        [Localized(nameof(PickedPlayerText))] public static string PickedPlayerText = "You have selected to guess {0}. You have now been given the shapeshift menu. The roles in the menu are alphabetical order and roles you cannot guess have already been filtered out.\nIf you cannot find a role, the host has disabled it or your role is preventing you from guessing it.\nIf you take too long to click a button in the menu, the shapeshifter menu will be taken away and you'll have to vote the player again.";
+        [Localized(nameof(PickedPlayerText))] public static string PickedPlayerText = "You have selected to guess {0}. To select a role, type `/cmd [rolename]`. This command will be hidden from other players.";
 
         [Localized(ModConstants.Options)]
         public static class Options
@@ -616,88 +447,7 @@ public class Guesser : Subrole, IInfoResender
             .RoleFlags(RoleFlag.RemoveRoleMaximum)
             .RoleColor(new Color(.84f, .74f, 0f));
 
-    private class GuesserShapeshifterObject
-    {
-        public GuesserShiftableObject? NetObject;
-        public PlayerControl? RealPlayer;
-        public int PlayerIndex;
 
-        private PlayerControl guesser;
-        private string currentName;
-        private bool isCno;
-
-        private Remote<NameComponent>? overridenName;
-        private Remote<IndicatorComponent>? overridenIndicator;
-        private Remote<RoleComponent>? overridenRole;
-        private Remote<CounterComponent>? overridenCounter;
-        private Remote<TextComponent>? overridenText;
-
-        public GuesserShapeshifterObject(PlayerControl guesser, int index, string currentName, PlayerControl? vanillaPlayer)
-        {
-            PlayerIndex = index;
-            this.guesser  = guesser;
-            this.currentName = currentName;
-            if (vanillaPlayer == null)
-            {
-                isCno = true;
-                NetObject = new GuesserShiftableObject(currentName, new Vector2(100000, 10000), guesser.PlayerId);
-                return;
-            }
-            RealPlayer = vanillaPlayer;
-
-            var nameModel = vanillaPlayer.NameModel();
-            overridenName = nameModel.GetComponentHolder<NameHolder>().Add(new NameComponent(new LiveString(() => currentName), GameState.InMeeting, ViewMode.Absolute, viewers:guesser));
-            overridenIndicator = nameModel.GetComponentHolder<IndicatorHolder>().Add(new IndicatorComponent(new LiveString(string.Empty), GameState.InMeeting, ViewMode.Absolute, viewers: guesser));
-            overridenRole = nameModel.GetComponentHolder<RoleHolder>().Add(new RoleComponent(new LiveString(string.Empty), [GameState.InMeeting], ViewMode.Absolute, viewers:guesser));
-            overridenCounter = nameModel.GetComponentHolder<CounterHolder>().Add(new CounterComponent(new LiveString(string.Empty), [GameState.InMeeting], ViewMode.Absolute, viewers: guesser));
-            overridenText = nameModel.GetComponentHolder<TextHolder>().Add(new TextComponent(new LiveString(string.Empty), GameState.InMeeting, ViewMode.Absolute, viewers: guesser));
-
-            if (guesser.AmOwner) nameModel.RenderFor(guesser);
-            // send at a DELAY so that guesser message doesn't clear the name.
-            else Async.Schedule(() => nameModel.RenderFor(guesser, force: true), NetUtils.DeriveDelay(1f));
-
-        }
-
-        public void ChangeName(string newName)
-        {
-            currentName = newName;
-            NetObject?.RpcChangeSprite(newName);
-            RealPlayer?.NameModel().RenderFor(guesser);
-        }
-
-        public bool IsCno() => isCno;
-        public string GetText() => currentName;
-
-        public void Delete()
-        {
-            NetObject?.Despawn();
-            overridenName?.Delete();
-            overridenIndicator?.Delete();
-            overridenCounter?.Delete();
-            overridenText?.Delete();
-            overridenRole?.Delete();
-            if (RealPlayer != null) RealPlayer.SetChatName(RealPlayer.name);
-        }
-    }
-
-    private class GuesserShiftableObject : ShiftableNetObject
-    {
-        public GuesserShiftableObject(string objectName, Vector2 position, byte visibleTo = byte.MaxValue) : base(
-            objectName, position, visibleTo)
-        {
-
-        }
-
-        public override void SetupOutfit()
-        {
-            PlayerControl.LocalPlayer.Data.Outfits[PlayerOutfitType.Default].PlayerName = Sprite;
-            PlayerControl.LocalPlayer.Data.Outfits[PlayerOutfitType.Default].ColorId = 0;
-            PlayerControl.LocalPlayer.Data.Outfits[PlayerOutfitType.Default].HatId = "";
-            PlayerControl.LocalPlayer.Data.Outfits[PlayerOutfitType.Default].SkinId = "";
-            PlayerControl.LocalPlayer.Data.Outfits[PlayerOutfitType.Default].PetId = "";
-            PlayerControl.LocalPlayer.Data.Outfits[PlayerOutfitType.Default].VisorId = "";
-        }
-    }
 }
 
 public enum CancelGuessReason

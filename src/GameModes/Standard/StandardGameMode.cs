@@ -29,6 +29,7 @@ public class StandardGameMode : GameMode
     public static StandardGameMode Instance = null!;
 
     public override string Name { get; set; } = GamemodeTranslations.Standard.Name;
+    public override string Description { get; set; } = GamemodeTranslations.Standard.GamemodeDescription;
     public override StandardRoleOperations RoleOperations { get; }
     public override StandardRoleManager RoleManager { get; }
     public override MatchData MatchData { get; set; }
@@ -123,7 +124,7 @@ public class StandardGameMode : GameMode
         player.NameModel().Render(force: true);
     }
 
-    private static void FixNeutralTeamingWinners(WinDelegate winDelegate)
+    public static void FixNeutralTeamingWinners(WinDelegate winDelegate)
     {
         if (RoleOptions.NeutralOptions.NeutralTeamingMode is Options.Roles.NeutralTeaming.Disabled) return;
         if (winDelegate.GetWinners().Count != 1) return;

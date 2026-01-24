@@ -24,6 +24,7 @@ using JBAnnotations::JetBrains.Annotations;
 using Lotus.RPC.CustomObjects;
 using Lotus.Roles.Operations;
 using Lotus.API;
+using Lotus.Factions;
 using Lotus.Roles.GUI;
 using Lotus.Roles.GUI.Interfaces;
 using Lotus.RPC;
@@ -48,6 +49,7 @@ public class Duplicator : Crewmate, IRoleUI
     private FixedUpdateLock fixedUpdateLock = new();
 
     private bool spawnsRandomly;
+    private bool onlyKillUnalliedPlayers;
 
     public RoleButton PetButton(IRoleButtonEditor petButton) => petButton
         .SetText(Translations.ButtonText)
@@ -127,6 +129,7 @@ public class Duplicator : Crewmate, IRoleUI
             {
                 if (PhysicsHelpers.AnythingBetween(fp.Position, p.NetTransform.body.position,
                         Constants.ShipOnlyMask, false)) return;
+                if (onlyKillUnalliedPlayers && MyPlayer.Relationship(p) is not Relation.None) return;
                 var cod = new CustomDeathEvent(p, MyPlayer, Translations.TrickedCauseOfDeath);
                 MyPlayer.InteractWith(p, new IndirectInteraction(new FatalIntent(true, () => cod), this));
             });
@@ -167,6 +170,9 @@ public class Duplicator : Crewmate, IRoleUI
                 .Value(v => v.Value(2f).Text(MediumDistance).Build())
                 .Value(v => v.Value(3f).Text(LargeDistance).Build())
                 .BindFloat(f => killRadius = f)
+                .Build())
+            .SubOption(sub => sub.KeyName("OnlyKillUnalliedPlayers", Translations.Options.OnlyKillUnalliedPlayers)
+                .AddBoolean()
                 .Build());
 
     protected override RoleModifier Modify(RoleModifier roleModifier) =>
@@ -183,7 +189,7 @@ public class Duplicator : Crewmate, IRoleUI
         [Localized(ModConstants.Options)]
         public static class Options
         {
-
+            [Localized(nameof(OnlyKillUnalliedPlayers))] public static string OnlyKillUnalliedPlayers = "Only Kill Unallied Players";
             [Localized(nameof(DuplicateCooldown))] public static string DuplicateCooldown = "Duplicate Cooldown";
             [Localized(nameof(DuplicateDuration))] public static string DuplicateDuration = "Duplicate Duration";
             [Localized(nameof(SpawnLocation))] public static string SpawnLocation = "Spawn Location";

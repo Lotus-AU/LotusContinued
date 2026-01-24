@@ -147,6 +147,7 @@ public class Jailor: Crewmate, IRoleUI
                         MyPlayer.InteractWith(MyPlayer,
                             new UnblockedInteraction(new FatalIntent(true, () => new MisfiredEvent(MyPlayer)), this));
                 }
+                handle.Cancel();
 
                 if (jailedShownToAll) ChatHandler.Of(Translations.PublicExecuteMessage.Formatted(jailed.name), RoleColor.Colorize(RoleName)).Send();
                 return;

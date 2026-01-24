@@ -1,9 +1,11 @@
 using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using AmongUs.GameOptions;
 using Lotus.API.Odyssey;
 using Lotus.API.Player;
 using Lotus.Chat.Patches;
+using Lotus.Extensions;
 using Lotus.Managers;
 using Lotus.Network;
 using Lotus.Utilities;
@@ -102,7 +104,10 @@ public class ChatHandler
         PlayerControl? sender;
         Async.Schedule(() =>
         {
-            sender = Players.GetPlayers(PlayerFilter.Alive).FirstOrDefault();
+            if (ConnectionManager.IsVanillaServer) sender = PlayerControl.LocalPlayer;
+            else
+                sender = Players.GetPlayers(PlayerFilter.Alive).FirstOrDefault() ??
+                         Players.GetPlayers().FirstOrDefault();
             if (sender == null) return;
 
             string name = sender.name;
@@ -141,11 +146,15 @@ public class ChatHandler
         });
     }
 
+    // ReSharper disable once InconsistentNaming
     private static void InternalSendLM(PlayerControl sender, PlayerControl recipient, string message, string title, string originalName)
     {
+        if (!recipient.AmOwner && ConnectionManager.IsVanillaServer) message = NumberUnicodeConverter.ConvertNumbersToUnicodes(message);
+
         int leftIndex = 0;
         int rightIndex = Math.Min(message.Length, _maxMessagePacketSize);
 
+        RoleTypes startRoleType = sender.Data.RoleType;
         MassRpc massRpc;
         while (rightIndex < message.Length)
         {
@@ -155,17 +164,29 @@ public class ChatHandler
 
             subMessage = subMessage.Trim('\n').Replace("@n", "\n");
 
-
-            RpcV3.Mass()
+            MassRpc subMassRpc = RpcV3.Mass()
                 .Start(sender.NetId, RpcCalls.SetName)
                 .Write(sender.Data.NetId)
                 .Write(title.Replace("@n", "\n"))
-                .End()
-                .Start(sender.NetId, RpcCalls.SendChat)
-                // .Write((recipient.IsModded() | !ConnectionManager.IsVanillaServer) ? subMessage : subMessage.RemoveHtmlTags())
+                .End();
+
+            if (ConnectionManager.IsVanillaServer && sender.AmOwner && sender.Data.IsDead)
+                subMassRpc.Start(sender.NetId, RpcCalls.SetRole)
+                    .Write((ushort)RoleTypes.Crewmate)
+                    .Write(true)
+                    .End();
+
+            subMassRpc.Start(sender.NetId, RpcCalls.SendChat)
                 .Write(subMessage)
-                .End()
-                .Send(recipient.GetClientId());
+                .End();
+
+            if (ConnectionManager.IsVanillaServer && sender.AmOwner && sender.Data.IsDead)
+                subMassRpc.Start(sender.NetId, RpcCalls.SetRole)
+                    .Write((ushort)startRoleType)
+                    .Write(true)
+                    .End();
+
+            subMassRpc.Send(recipient.GetClientId());
         }
 
         message = message[leftIndex..rightIndex].Trim('\n').Replace("@n", "\n");
@@ -175,11 +196,25 @@ public class ChatHandler
             .Start(sender.NetId, RpcCalls.SetName)
             .Write(sender.Data.NetId)
             .Write(title.Replace("@n", "\n"))
-            .End()
-            .Start(sender.NetId, RpcCalls.SendChat)
-            // .Write((recipient.IsModded() | !ConnectionManager.IsVanillaServer) ? message : message.RemoveHtmlTags())
+            .End();
+
+        if (ConnectionManager.IsVanillaServer && sender.AmOwner && sender.Data.IsDead)
+            massRpc.Start(sender.NetId, RpcCalls.SetRole)
+                .Write((ushort)RoleTypes.Crewmate)
+                .Write(true)
+                .End();
+
+
+        massRpc.Start(sender.NetId, RpcCalls.SendChat)
             .Write(message)
             .End();
+
+        if (ConnectionManager.IsVanillaServer && sender.AmOwner && sender.Data.IsDead)
+            massRpc.Start(sender.NetId, RpcCalls.SetRole)
+                .Write((ushort)startRoleType)
+                .Write(true)
+                .End();
+
         if (Game.State is not GameState.Roaming)
             massRpc.Start(sender.NetId, RpcCalls.SetName)
                 .Write(sender.Data.NetId)
@@ -199,6 +234,7 @@ public class ChatHandler
         int leftIndex = 0;
         int rightIndex = Math.Min(title.Length, _maxMessagePacketSize);
 
+        RoleTypes startRoleType = sender.Data.RoleType;
         while (rightIndex < title.Length)
         {
             string subTitle = title[leftIndex..rightIndex];
@@ -207,16 +243,29 @@ public class ChatHandler
 
             subTitle = subTitle.Trim('\n').Replace("@n", "\n");
 
-            RpcV3.Mass()
+            MassRpc subMassRpc = RpcV3.Mass()
                 .Start(sender.NetId, RpcCalls.SetName)
                 .Write(sender.Data.NetId)
                 .Write(subTitle)
-                .End()
-                .Start(sender.NetId, RpcCalls.SendChat)
-                // .Write((recipient.IsModded() | !ConnectionManager.IsVanillaServer) ? message.Replace("@n", "\n") : message.RemoveHtmlTags().Replace("@n", "\n"))
+                .End();
+
+            if (ConnectionManager.IsVanillaServer && sender.AmOwner && sender.Data.IsDead)
+                subMassRpc.Start(sender.NetId, RpcCalls.SetRole)
+                    .Write((ushort)RoleTypes.Crewmate)
+                    .Write(true)
+                    .End();
+
+            subMassRpc.Start(sender.NetId, RpcCalls.SendChat)
                 .Write(message.Replace("@n", "\n"))
-                .End()
-                .Send(recipient.GetClientId());
+                .End();
+
+            if (ConnectionManager.IsVanillaServer && sender.AmOwner && sender.Data.IsDead)
+                subMassRpc.Start(sender.NetId, RpcCalls.SetRole)
+                    .Write((ushort)startRoleType)
+                    .Write(true)
+                    .End();
+
+            subMassRpc.Send(recipient.GetClientId());
         }
 
         title = title[leftIndex..rightIndex].Trim('\n').Replace("@n", "\n");
@@ -225,11 +274,23 @@ public class ChatHandler
             .Start(sender.NetId, RpcCalls.SetName)
             .Write(sender.Data.NetId)
             .Write(title)
-            .End()
-            .Start(sender.NetId, RpcCalls.SendChat)
-            // .Write((recipient.IsModded() | !ConnectionManager.IsVanillaServer) ? message.Replace("@n", "\n") : message.RemoveHtmlTags().Replace("@n", "\n"))
+            .End();
+
+        if (ConnectionManager.IsVanillaServer && sender.AmOwner && sender.Data.IsDead)
+            massRpc.Start(sender.NetId, RpcCalls.SetRole)
+                .Write((ushort)RoleTypes.Crewmate)
+                .Write(true)
+                .End();
+
+        massRpc.Start(sender.NetId, RpcCalls.SendChat)
             .Write(message.Replace("@n", "\n"))
             .End();
+
+        if (ConnectionManager.IsVanillaServer && sender.AmOwner && sender.Data.IsDead)
+            massRpc.Start(sender.NetId, RpcCalls.SetRole)
+                .Write((ushort)startRoleType)
+                .Write(true)
+                .End();
 
         if (Game.State is not GameState.Roaming)
             massRpc.Start(sender.NetId, RpcCalls.SetName)

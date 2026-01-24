@@ -11,7 +11,7 @@ using Lotus.GameModes.CTF.Conditions;
 using Lotus.GameModes.CTF.Distributions;
 using Lotus.Options;
 using Lotus.Roles;
-using Lotus.Roles.RoleGroups.CTF;
+using Lotus.Roles.RoleGroups.Extra.CTF;
 using Lotus.RPC.CustomObjects.Builtin;
 using Lotus.Utilities;
 using Lotus.Victory;
@@ -29,12 +29,14 @@ public class CTFGamemode : GameMode
     public static CTFGamemode Instance = null!;
 
     public override string Name { get; set; } = GamemodeTranslations.CaptureTheFlag.Name;
+    public override string Description { get; set; } = GamemodeTranslations.CaptureTheFlag.GamemodeDescription;
     public override CTFRoleOperations RoleOperations { get; }
     public override CTFRoleManager RoleManager { get; }
     public override MatchData MatchData { get; set; }
     public CTFRoleAssignment RoleAssignment { get; }
 
-    public override BlockableGameAction BlockedActions() => BlockableGameAction.CallSabotage | BlockableGameAction.CallMeeting | BlockableGameAction.CloseDoors;
+    public override BlockableGameAction BlockedActions() => BlockableGameAction.CallSabotage | BlockableGameAction.CallMeeting
+        | BlockableGameAction.CloseDoors | BlockableGameAction.ReportBody;
     public override GameModeFlags GameFlags() => GameModeFlags.AllowChatDuringGame;
 
     // Red Team // Blue Team

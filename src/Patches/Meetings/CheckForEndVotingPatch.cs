@@ -34,7 +34,8 @@ public class CheckForEndVotingPatch
     {
         if (!AmongUsClient.Instance.AmHost) return true;
         MeetingDelegate meetingDelegate = MeetingDelegate.Instance;
-        if (!meetingDelegate.IsForceEnd() && __instance.playerStates.Any(ps => !ps.AmDead && !ps.DidVote)) return false;
+        log.Debug($"{meetingDelegate.IsForceEnd()} - {meetingDelegate.GetPlayersRemainingToVote()}");
+        if (!meetingDelegate.IsForceEnd() && meetingDelegate.GetPlayersRemainingToVote() > 0) return false;
         if (meetingDelegate.AlreadyCompleted)
         {
             log.Exception($"{Mirror.GetCaller()?.FullDescription() ?? "No description."}");

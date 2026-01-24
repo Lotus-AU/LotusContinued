@@ -16,16 +16,22 @@ public abstract class RoleHolder : IRoleHolder
 
     public List<CustomRole> AllRoles { get; set; }
 
+    protected static List<CustomRole> AddonRoles = new();
+
     public bool Intialized
     {
         get { return _initialized; }
         set
         {
-            if (value == true)
-                FinishedCallbacks().ForEach(finc => finc());
+            if (value)
+                FinishedCallbacks().ForEach(func => func());
 
             _initialized = value;
         }
     }
+    // ReSharper disable once InconsistentNaming
     private bool _initialized;
+
+    public virtual void AddAddonRole(CustomRole addonRole)
+    {}
 }

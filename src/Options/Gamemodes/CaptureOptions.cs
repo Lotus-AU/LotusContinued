@@ -25,6 +25,8 @@ public class CaptureOptions
     public int OvertimeLength;
     public bool SuddenDeath;
 
+    public float InvincibilityDuration;
+
     public List<GameOption> AllOptions = new();
 
     public CaptureOptions()
@@ -65,6 +67,12 @@ public class CaptureOptions
             .Build());
 
         AllOptions.Add(new GameOptionBuilder()
+            .KeyName("Invincibility Time", Translations.InvincibilityDuration)
+            .AddFloatRange(0f, 10, 0.25f, 4, GeneralOptionTranslations.SecondsSuffix)
+            .BindFloat(f => InvincibilityDuration = f)
+            .Build());
+
+        AllOptions.Add(new GameOptionBuilder()
             .KeyName("Kill Cooldown", RoleTranslations.KillCooldown)
             .AddFloatRange(2.5f, 60f, 2.5f, 5, GeneralOptionTranslations.SecondsSuffix)
             .BindFloat(f => KillCooldown = f)
@@ -102,5 +110,6 @@ public class CaptureOptions
         [Localized(nameof(OvertimeOnTies))] public static string OvertimeOnTies = "Overtime on Ties";
         [Localized(nameof(OvertimeLength))] public static string OvertimeLength = "Overtime Duration";
         [Localized(nameof(SuddenDeath))] public static string SuddenDeath = "Sudden Death";
+        [Localized(nameof(InvincibilityDuration))] public static string InvincibilityDuration = "Invincibility Duration After Death";
     }
 }

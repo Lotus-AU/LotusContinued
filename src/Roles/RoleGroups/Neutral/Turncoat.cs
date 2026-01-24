@@ -95,7 +95,7 @@ public class Turncoat: CustomRole, IInfoResender, IRoleUI
     {
         if (hasRevealed)
         {
-            if (learnsAllies && learnsAlliesImmediately != true)
+            if (learnsAllies && !learnsAlliesImmediately)
             {
                 learnsAlliesImmediately = true;
                 DisplayAllies();
@@ -133,6 +133,7 @@ public class Turncoat: CustomRole, IInfoResender, IRoleUI
     [RoleAction(LotusActionType.Vote, priority: Priority.High)]
     private void SelfVote(Optional<PlayerControl> voted, ActionHandle handle)
     {
+        if (hasRevealed) return;
         if (!voted.Exists()) return;
         if (voted.Get().PlayerId != MyPlayer.PlayerId) return;
         if (targetPlayer == byte.MaxValue)
@@ -156,13 +157,15 @@ public class Turncoat: CustomRole, IInfoResender, IRoleUI
     private void MyDeath()
     {
         if (mustBeAliveToWin) canWin = false;
-        Utils.PlayerById(targetPlayer).IfPresent(p => MyPlayer.InteractWith(
-            p, new IndirectInteraction(
-                new FatalIntent(true,
-                    () => new CustomDeathEvent(p, MyPlayer, ModConstants.DeathNames.Cursed))
+        if (hasRevealed)
+            Utils.PlayerById(targetPlayer).IfPresent(p => MyPlayer.InteractWith(
+                    p, new IndirectInteraction(
+                        new FatalIntent(true,
+                            () => new CustomDeathEvent(p, MyPlayer, ModConstants.DeathNames.Cursed))
+                    )
                 )
-            )
-        );
+            );
+
         targetPlayer = byte.MaxValue;
         targetComponent?.Delete();
     }

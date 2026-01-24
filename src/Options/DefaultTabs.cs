@@ -15,6 +15,7 @@ public class DefaultTabs
     public static MainSettingTab StandardTab = new(GamemodeTranslations.Standard.ButtonText, GamemodeTranslations.Standard.Description);
     public static MainSettingTab CaptureTab = new(GamemodeTranslations.CaptureTheFlag.ButtonText, GamemodeTranslations.CaptureTheFlag.Description);
     public static MainSettingTab ColorwarsTab = new(GamemodeTranslations.Colorwars.ButtonText, GamemodeTranslations.Colorwars.Description);
+    public static MainSettingTab DraftTab = new(GamemodeTranslations.Draft.ButtonText, GamemodeTranslations.Draft.Description);
 
     public static GameOptionTab ImpostorsTab = new(GamemodeTranslations.Standard.ImpostorTab, () => LotusAssets.LoadSprite("TabIcons/ImpostorsIconNew.png", 270));
 

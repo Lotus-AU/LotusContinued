@@ -2,7 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Lotus.API.Odyssey;
+using Lotus.API.Player;
 using Lotus.API.Reactive;
+using Lotus.Chat;
 using Lotus.Victory;
 using VentLib.Options;
 using VentLib.Options.UI;
@@ -12,6 +14,8 @@ using Lotus.Extensions;
 using Lotus.GameModes.Standard;
 using Lotus.GameModes.Colorwars;
 using Lotus.GameModes.CTF;
+using Lotus.GameModes.Draft;
+using VentLib.Utilities.Extensions;
 
 namespace Lotus.GameModes;
 
@@ -27,11 +31,13 @@ public class GameModeManager
     public IGameMode CurrentGameMode
     {
         get => currentGameMode!;
-        set
+        private set
         {
             currentGameMode?.InternalDeactivate();
             currentGameMode = value;
             currentGameMode?.InternalActivate();
+
+            if (Game.State is GameState.InLobby) Players.GetAllPlayers().ForEach(p => AnnounceCurrentGameModeToPlayer(p, value));
         }
     }
 
@@ -57,7 +63,8 @@ public class GameModeManager
     internal void AddGamemodes() => GameModes.AddRange([
             new StandardGameMode(),
             new ColorwarsGamemode(),
-            new CTFGamemode()
+            new CTFGamemode(),
+            new DraftGameMode()
         ]);
 
     public void Setup()
@@ -82,6 +89,9 @@ public class GameModeManager
         CurrentGameMode.CoroutineManager.Start();
         CurrentGameMode.SetupWinConditions(winDelegate);
     }
+
+    public void AnnounceCurrentGameModeToPlayer(PlayerControl player, IGameMode mode) =>
+        ChatHandler.Of(mode.Description, GamemodeTranslations.GamemodeText + ": " + mode.Name).Send(player);
 
     internal void AddGamemodeSettingToOptions(List<GameOption> options)
     {
