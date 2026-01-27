@@ -132,7 +132,7 @@ public class Necromancer : UndeadRole, IRoleUI
                 .BindBool(b => immuneToPartialConverted = b)
                 .Build());
 
-    public override List<CustomRole> LinkedRoles() => base.LinkedRoles().Concat(new List<CustomRole>() { _deathknight }).ToList();
+    public override List<CustomRole> LinkedRoles() => base.LinkedRoles().Concat([_deathknight]).ToList();
 
     protected override RoleModifier Modify(RoleModifier roleModifier) =>
         base.Modify(roleModifier)

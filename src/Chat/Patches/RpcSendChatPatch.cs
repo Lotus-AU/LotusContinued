@@ -1,18 +1,32 @@
+using System;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
+using Assets.CoreScripts;
 using HarmonyLib;
 using Hazel;
+using Lotus.API.Odyssey;
+using Lotus.Extensions;
 using Lotus.Logging;
+using Lotus.Managers;
 using Lotus.Managers.Hotkeys;
+using Lotus.Network;
+using Lotus.Roles.Internals;
+using Lotus.Roles.Internals.Enums;
+using Lotus.Roles.Operations;
 using UnityEngine;
+using VentLib.Commands;
 using VentLib.Networking.RPC;
 
 namespace Lotus.Chat.Patches;
 
+[HarmonyPriority(Priority.Last)]
 [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.RpcSendChat))]
 internal class RpcSendChatPatch
 {
     private static readonly List<string> ChatHistory = new();
     private static int _index = -1;
+
+    private const bool RemoveHtmlTags = false;
 
     static RpcSendChatPatch()
     {
@@ -44,22 +58,36 @@ internal class RpcSendChatPatch
         HudManager.Instance.Chat.freeChatField.textArea.SetText(text);
     }
 
-    internal static bool EatCommand;
-    public static bool Prefix(PlayerControl __instance, string chatText)
+    public static bool Prefix(PlayerControl __instance, string chatText, ref bool __result)
     {
-        if (string.IsNullOrWhiteSpace(chatText)) return false;
+        if (RemoveHtmlTags) chatText = Regex.Replace(chatText, "<.*?>", string.Empty);
+        if (string.IsNullOrWhiteSpace(chatText) || (!__instance.AmOwner && ConnectionManager.IsVanillaServer))
+        {
+            __result = false;
+            return false;
+        }
+        if (chatText.StartsWith(CommandRunner.Prefix))
+        {
+            if (!AmongUsClient.Instance.AmHost) return true;
+            __result = false;
+            if (PluginDataManager.TemplateManager.CheckAndRunCommand(__instance, chatText)) return false;
+            if (Game.State is GameState.InLobby) return false;
+            ActionHandle handle = ActionHandle.NoInit();
+            RoleOperations.Current.TriggerForAll(LotusActionType.Chat, __instance, handle, chatText, Game.State, __instance.IsAlive());
+            return false;
+        }
         _index = -1;
-
-        if (!EatCommand) RpcV3.Immediate(__instance.NetId, RpcCalls.SendChat, SendOption.None).Write(chatText).Send();
 
         if (AmongUsClient.Instance.AmClient && HudManager.InstanceExists)
             HudManager.Instance.Chat.AddChat(__instance, chatText);
-
-        EatCommand = false;
+        if (chatText.IndexOf("who", StringComparison.OrdinalIgnoreCase) >= 0)
+            DestroyableSingleton<UnityTelemetry>.Instance.SendWho();
 
         if (ChatHistory.Count == 0 || ChatHistory[0] != chatText) ChatHistory.Insert(0, chatText.Trim());
         if (ChatHistory.Count >= 100) ChatHistory.RemoveAt(99);
 
+        RpcV3.Immediate(__instance.NetId, RpcCalls.SendChat).Write(chatText).Send();
+        __result = true;
         return false;
     }
 }

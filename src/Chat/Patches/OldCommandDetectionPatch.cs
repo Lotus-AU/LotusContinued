@@ -26,6 +26,7 @@ public class OldCommandDetectionPatch: CommandTranslations
 
     internal static void Postfix(ChatController __instance, PlayerControl sourcePlayer, string chatText, bool censor)
     {
+        if (!AmongUsClient.Instance.AmHost) return;
         if (DateTime.Now > SunsetDate) return; // past due date.
         if (!chatText.StartsWith("/") || chatText.StartsWith("/cmd")) return;
 

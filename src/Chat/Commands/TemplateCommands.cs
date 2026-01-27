@@ -115,7 +115,6 @@ public class TemplateCommands: CommandTranslations, ICommandReceiver
     public void Receive(PlayerControl source, CommandContext context)
     {
         if (context.Args.Length == 0) return;
-        if (source.IsHost()) RpcSendChatPatch.EatCommand = true;
 
         string tag = context.Join();
         if (source.IsHost() && HotkeyManager.HoldingRightShift) Templates.ShowAll(tag, source, Players.GetPlayers(PlayerFilter.Dead));

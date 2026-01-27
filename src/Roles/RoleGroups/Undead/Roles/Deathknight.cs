@@ -80,7 +80,7 @@ public class Deathknight : UndeadRole, IRoleUI
         base.RegisterOptions(optionStream)
             .SubOption(sub => sub
                 .KeyName("Can Become Necromancer", Translations.Options.CanBecomeNecromancer)
-                .AddOnOffValues()
+                .AddBoolean()
                 .BindBool(b => CanBecomeNecromancer = b)
                 .Build())
             .SubOption(sub => sub
@@ -97,7 +97,7 @@ public class Deathknight : UndeadRole, IRoleUI
             .SubOption(sub => sub
                 .KeyName("Influences Many", Translations.Options.InfluenceMany)
                 .BindBool(b => multiInfluence = b)
-                .AddOnOffValues()
+                .AddBoolean()
                 .Build());
 
     public override RoleType GetRoleType() => RoleType.Transformation;

@@ -173,6 +173,7 @@ public class Duplicator : Crewmate, IRoleUI
                 .Build())
             .SubOption(sub => sub.KeyName("OnlyKillUnalliedPlayers", Translations.Options.OnlyKillUnalliedPlayers)
                 .AddBoolean()
+                .BindBool(b => onlyKillUnalliedPlayers = b)
                 .Build());
 
     protected override RoleModifier Modify(RoleModifier roleModifier) =>
