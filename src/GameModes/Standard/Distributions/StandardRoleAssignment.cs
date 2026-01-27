@@ -349,7 +349,7 @@ public class StandardRoleAssignment
     private void AssignForcedSubroles(PlayerControl player, CustomRole mainRole)
     {
         PluginDataManager.ComboListManager.ListCombos
-            .Where(c => c.ComboType is 0)
+            .Where(c => c.ComboType == 0)
             .Where(c => (c.Role1EnglishName == mainRole.EnglishRoleName) ^ (c.Role2EnglishName == mainRole.EnglishRoleName))
             .ForEach(rci =>
             {

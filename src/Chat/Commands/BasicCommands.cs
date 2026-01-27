@@ -167,7 +167,6 @@ public class BasicCommands : CommandTranslations
     [Command(CommandFlag.HostOnly, "dump")]
     public static void Dump(PlayerControl _, CommandContext context)
     {
-        RpcSendChatPatch.EatCommand = true;
         LogManager.WriteSessionLog(context.Join());
     }
 

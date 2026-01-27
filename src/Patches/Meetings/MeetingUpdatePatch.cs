@@ -1,3 +1,4 @@
+using AmongUs.GameOptions;
 using HarmonyLib;
 using Lotus.API;
 using Lotus.Utilities;
@@ -22,5 +23,13 @@ class MeetingUpdatePatch
 
                 log.High($"Execute: {player.GetNameWithRole()}", "Execution");
             });
+
+        // ForceSkipAll has been inlined im pretty sure.
+        if (__instance.state is not MeetingHud.VoteStates.NotVoted and MeetingHud.VoteStates.Voted) return;
+        int votingTime = ProjectLotus.NormalOptions.GetInt(Int32OptionNames.VotingTime);
+        if (votingTime < 0) return;
+        int discussionTime = ProjectLotus.NormalOptions.GetInt(Int32OptionNames.DiscussionTime);
+        if ((__instance.discussionTimer - discussionTime) < votingTime) return;
+        __instance.ForceSkipAll();
     }
 }

@@ -113,7 +113,14 @@ public class Drafter: CustomRole
     public void AnnounceID()
     {
         if (myPlayerId == 1) return;
-        CHandler(GamemodeTranslations.Draft.PlayerIdText.Formatted(myPlayerId)).Send(MyPlayer);
+        try
+        {
+            CHandler(GamemodeTranslations.Draft.PlayerIdText.Formatted(myPlayerId)).Send(MyPlayer);
+        }
+        catch
+        {
+            CHandler("Your ID is {0}. Wait for your turn.".Formatted(myPlayerId)).Send(MyPlayer);
+        }
     }
 
     private void ChangeSelection(int change)
