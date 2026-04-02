@@ -10,9 +10,9 @@ using UnityEngine;
 using VentLib.Localization.Attributes;
 using VentLib.Options.UI;
 using VentLib.Utilities.Optionals;
-using Lotus.GameModes.Standard;
 using System.Collections.Generic;
 using System;
+using Lotus.GameModes.Normal.Standard;
 using Lotus.Roles.RoleGroups.Crew;
 
 namespace Lotus.Roles.Subroles;
@@ -35,7 +35,7 @@ public class Oblivious : Subrole
     {
         if (!passOnDeath) return;
         killer = realKiller.FlatMap(k => new UnityOptional<PlayerControl>(k.MyPlayer)).OrElse(killer);
-        Game.AssignSubRole(killer, StandardGameMode.Instance.RoleManager.RoleHolder.Mods.Oblivious);
+        Game.AssignSubRole(killer, NormalStandardGameMode.Instance.RoleManager.RoleHolder.Mods.Oblivious);
     }
 
     [RoleAction(LotusActionType.ReportBody, priority: Priority.VeryLow)]

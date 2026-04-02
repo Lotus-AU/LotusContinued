@@ -44,7 +44,7 @@ internal class RpcSendChatPatch
             })).Do(ForwardInChatHistory);
     }
 
-     private static void BackInChatHistory()
+    private static void BackInChatHistory()
     {
         string text = ChatHistory[_index = Mathf.Clamp(_index + 1, 0, ChatHistory.Count - 1)];
         DevLogger.Log($"current index: {_index} | {ChatHistory.Count - 1} | {text}");

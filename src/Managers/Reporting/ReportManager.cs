@@ -3,11 +3,14 @@ using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
+using System.Reflection;
 using HarmonyLib;
 using Lotus.Managers.Hotkeys;
 using UnityEngine;
+using VentLib;
 using VentLib.Options;
 using VentLib.Options.IO;
+using VentLib.Utilities;
 using VentLib.Utilities.Attributes;
 using VentLib.Utilities.Collections;
 using VentLib.Utilities.Extensions;
@@ -29,19 +32,12 @@ public static class ReportManager
         OptionManager reportingOptionManager = OptionManager.GetManager(file: "file_options.txt", managerFlags: OptionManagerFlags.IgnorePreset);
         var reportingDirectoryOption = new OptionBuilder().Name("Reporting Directory")
             .Description("The directory for storing various reports.\nDefault = reports")
-            #if ANDROID
-            .Value("lotus_reports")
-            #else
             .Value("reports")
-            #endif
             .IOSettings(settings => settings.UnknownValueAction = ADEAnswer.Allow)
             .BuildAndRegister(reportingOptionManager);
 
-        #if ANDROID
-        ReportingDirectory = new DirectoryInfo(Path.Combine(Application.persistentDataPath, reportingDirectoryOption.GetValue<string>()));
-        #else
-        ReportingDirectory = new DirectoryInfo(reportingDirectoryOption.GetValue<string>());
-        #endif
+        ReportingDirectory = new DirectoryInfo(Path.Combine(Vents.BasePath, OperatingSystem.IsAndroid() ? AssemblyUtils.GetAssemblyRefName(Assembly.GetExecutingAssembly()) : string.Empty,
+            reportingDirectoryOption.GetValue<string>()));
         if (!ReportingDirectory.Exists) ReportingDirectory.Create();
 
         Enum.GetValues<ReportTag>().ForEach(t => ReportProducers.Add(t, new OrderedSet<IReportProducer>()));

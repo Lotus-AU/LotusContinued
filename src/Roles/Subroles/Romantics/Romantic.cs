@@ -26,7 +26,7 @@ using VentLib.Utilities.Extensions;
 using VentLib.Utilities.Optionals;
 using System.Collections.Generic;
 using Lotus.API.Vanilla.Meetings;
-using Lotus.GameModes.Standard;
+using Lotus.GameModes.Normal.Standard;
 using Lotus.Managers.History.Events;
 using Lotus.Roles.Interfaces;
 
@@ -160,7 +160,7 @@ public class Romantic : Subrole, IInfoResender
         Optional<PlayerControl> partnerControl = Players.PlayerById(partner);
         if (!partnerControl.Exists()) return; // if we win round1, do nothing
         if (!partnerControl.Get().IsAlive()) return; // if they died, do nothing.
-        StandardGameMode.Instance.Assign(partnerControl.Get(), new Partner(), false);
+        NormalStandardGameMode.Instance.Assign(partnerControl.Get(), new Partner(), false);
         bool hasRomantic = winDelegate.GetWinners().Any(w => w.PlayerId == MyPlayer.PlayerId);
         bool hasPartner = winDelegate.GetWinners().Any(w => w.PlayerId == partner);
         if ((!hasRomantic && !hasPartner) || (hasRomantic && hasPartner)) return; // includes neither or both us so we skip.

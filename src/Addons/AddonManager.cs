@@ -32,13 +32,15 @@ public class AddonManager
 
     internal static void ImportAddons()
     {
-        #if ANDROID
-        DirectoryInfo addonDirectory = new(Path.Combine(Application.persistentDataPath, "addons"));
-        #else
-        DirectoryInfo addonDirectory = new("./addons/");
-        #endif
+        DirectoryInfo addonDirectory = new(Path.Combine(Vents.BasePath,
+            OperatingSystem.IsAndroid() ? AssemblyUtils.GetAssemblyRefName(Assembly.GetExecutingAssembly()) : string.Empty,
+            "addons")
+        );
         if (!addonDirectory.Exists)
             addonDirectory.Create();
+        #if RELEASE
+            if (OperatingSystem.IsAndroid()) return; // xtra wants to disable this on android for now.
+        #endif
         addonDirectory.EnumerateFiles().Do(LoadAddon);
         Addons.ForEach(addon =>
         {

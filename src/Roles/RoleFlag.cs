@@ -5,6 +5,7 @@ namespace Lotus.Roles;
 [Flags]
 public enum RoleFlag
 {
+    None = 0,
     Hidden = 1,
     DontRegisterOptions = 2,
     Unassignable = 4,

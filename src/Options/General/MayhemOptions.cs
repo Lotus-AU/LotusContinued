@@ -2,27 +2,27 @@ using System;
 using System.Collections.Generic;
 using Lotus.API.Odyssey;
 using Lotus.Extensions;
-using Lotus.GameModes.Standard;
 using UnityEngine;
 using VentLib.Localization.Attributes;
 using VentLib.Options.UI;
 using Il2CppInterop.Runtime.InteropTypes.Arrays;
+using Lotus.GameModes.Normal.Standard;
+using VentLib.Options;
 
 namespace Lotus.Options.General;
 
 [Localized(ModConstants.Options)]
-public class MayhemOptions
+public class MayhemOptions: LotusOptionHolder
 {
+    public override OptionManager OptionManager => GeneralOptions.StandardOptionManager;
+
     private static Color _optionColor = new(0.84f, 0.8f, 1f);
-    private static List<GameOption> additionalOptions = new();
 
     public bool AllRolesCanVent;
     public bool CamoComms;
 
-    public bool UseRandomSpawn => randomSpawnOn && Game.CurrentGameMode is StandardGameMode;
+    public bool UseRandomSpawn => randomSpawnOn && Game.CurrentGameMode is NormalStandardGameMode;
     private bool randomSpawnOn;
-
-    public List<GameOption> AllOptions = new();
 
     public MayhemOptions()
     {
@@ -41,17 +41,7 @@ public class MayhemOptions
         //     .BindBool(b => CamoComms = b)
         //     .Build());
 
-        AllOptions.AddRange(additionalOptions);
-    }
-
-    /// <summary>
-    /// Adds additional options to be registered when this group of options is loaded. This is mostly used for ordering
-    /// in the main menu, as options passed in here will be rendered along with this group.
-    /// </summary>
-    /// <param name="option">Option to render</param>
-    public static void AddAdditionalOption(GameOption option)
-    {
-        additionalOptions.Add(option);
+        PostInitialize();
     }
 
     private GameOptionBuilder Builder(string key) => new GameOptionBuilder().AddBoolean(false).Builder(key, _optionColor);

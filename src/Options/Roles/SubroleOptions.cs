@@ -4,19 +4,20 @@ using UnityEngine;
 using VentLib.Localization.Attributes;
 using VentLib.Options.UI;
 using System.Collections.Generic;
+using VentLib.Options;
 
 namespace Lotus.Options.Roles;
 
 [Localized(ModConstants.Options)]
-public class SubroleOptions
+public class SubroleOptions: LotusOptionHolder
 {
+    public override OptionManager OptionManager => GeneralOptions.StandardOptionManager;
+
     public static Color ModifierColor = new(0.43f, 0.89f, 0.61f);
 
     public int ModifierLimits;
     public bool EvenlyDistributeModifiers;
     public bool UncappedModifiers => ModifierLimits == -1;
-
-    public List<GameOption> AllOptions = new();
 
     public SubroleOptions()
     {
@@ -37,19 +38,19 @@ public class SubroleOptions
             .Build());
 
         AllOptions.Add(new GameOptionBuilder()
-            .AddOnOffValues()
+            .AddBoolean()
             .Builder("Evenly Distribute Modifiers")
             .Name(TranslationUtil.Colorize(SubroleOptionTranslations.EvenlyDistributeModifierText, ModifierColor))
             .BindBool(b => EvenlyDistributeModifiers = b)
             // .Tab(DefaultTabs.MiscTab)
             .Build());
-
+        PostInitialize();
     }
 
     private GameOptionBuilder Builder(string key) => new GameOptionBuilder().Key(key).Tab(DefaultTabs.MiscTab);
 
     [Localized("Subroles")]
-    private static class SubroleOptionTranslations
+    public static class SubroleOptionTranslations
     {
         [Localized(nameof(SubroleOptions))]
         public static string SubroleOptions = "Subrole Options";

@@ -16,7 +16,6 @@ using VentLib.Options.UI;
 using VentLib.Utilities;
 using VentLib.Utilities.Extensions;
 using VentLib.Utilities.Optionals;
-using Lotus.GameModes.Standard;
 using Lotus.API.Vanilla.Meetings;
 using Lotus.Roles.Managers.Interfaces;
 using System.Linq;
@@ -27,6 +26,7 @@ using System.Collections.Generic;
 using System.Text;
 using Lotus.API;
 using Lotus.Factions.Interfaces;
+using Lotus.GameModes.Normal.Standard;
 using Lotus.GUI;
 using Lotus.GUI.Name;
 using Lotus.Managers.History.Events;
@@ -194,7 +194,7 @@ public class GuesserRole : CustomRole, IInfoResender
         lastFaction = Faction;
         guessableRoles = [];
 
-        guessableRoles = StandardRoles.Instance.AllRoles
+        guessableRoles = NormalStandardRoles.Instance.AllRoles
             .Where(r => HostTurnedRoleOn(r)
                         || r.GetRoleType() is RoleType.DontShow && r.LinkedRoles().Any(HostTurnedRoleOn)
                         || r.RoleFlags.HasFlag(RoleFlag.VariationRole) && r.LinkedRoles().Any(HostTurnedRoleOn)

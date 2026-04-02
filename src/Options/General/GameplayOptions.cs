@@ -5,15 +5,17 @@ using Lotus.Extensions;
 using Lotus.Roles.Overrides;
 using UnityEngine;
 using VentLib.Localization.Attributes;
+using VentLib.Options;
 using VentLib.Options.UI;
 
 namespace Lotus.Options.General;
 
 [Localized(ModConstants.Options)]
-public class GameplayOptions
+public class GameplayOptions: LotusOptionHolder
 {
+    public override OptionManager OptionManager => GeneralOptions.StandardOptionManager;
+
     private static Color _optionColor = new(0.81f, 1f, 0.75f);
-    private static List<GameOption> additionalOptions = new();
 
     public bool OptimizeRoleAssignment;
 
@@ -50,8 +52,6 @@ public class GameplayOptions
             _ => throw new ArgumentOutOfRangeException()
         };
     }
-
-    public List<GameOption> AllOptions = new();
 
     public GameplayOptions()
     {
@@ -413,17 +413,7 @@ public class GameplayOptions
             .BindInt(i => ModifierTextMode = (ModifierTextMode)i)
             .Build());
 
-        AllOptions.AddRange(additionalOptions);
-    }
-
-    /// <summary>
-    /// Adds additional options to be registered when this group of options is loaded. This is mostly used for ordering
-    /// in the main menu, as options passed in here will be rendered along with this group.
-    /// </summary>
-    /// <param name="option">Option to render</param>
-    public static void AddAdditionalOption(GameOption option)
-    {
-        additionalOptions.Add(option);
+        PostInitialize();
     }
 
     private Action<bool> FlagSetter<T>(T disabledTask) where T : Enum

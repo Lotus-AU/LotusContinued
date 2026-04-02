@@ -1,14 +1,18 @@
 using System.Linq;
 using AmongUs.Data;
 using HarmonyLib;
+using InnerNet;
 using Lotus.Addons;
 using Lotus.API;
 using Lotus.API.Odyssey;
 using Lotus.API.Reactive;
 using Lotus.API.Reactive.HookEvents;
+using Lotus.Extensions;
+using Lotus.GameModes;
 using Lotus.Managers;
 using Lotus.Options;
 using Lotus.Options.General;
+using VentLib.Localization;
 using VentLib.Utilities;
 
 namespace Lotus.Patches.Network;
@@ -34,9 +38,15 @@ class GameJoinPatch
         {
             gameJoinHookEvent.Loaded = true;
             AddonManager.SendAddonsToHost();
+            ProjectLotus.GameModeManager.UpdateGameModeOption();
             PluginDataManager.TitleManager.ApplyTitleWithChatFix(p);
-            if (AmongUsClient.Instance.AmHost) ModVersion.AddVersionShowerToPlayer(p, ModVersion.Version);
-        }, 0.1f, 20);
+            if (AmongUsClient.Instance.AmHost)
+            {
+                ModVersion.AddVersionShowerToPlayer(p, ModVersion.Version);
+                if (DataManager.Settings.Multiplayer.ChatMode == QuickChatModes.QuickChatOnly)
+                    AmongUsClient.Instance.DisconnectWithMessage(Localizer.Translate("DisconncetReasons.FreeChatOnly"));
+            }
+        }, 0.25f, 20);
         if (!AmongUsClient.Instance.AmHost) return;
 
         if (GeneralOptions.AdminOptions.AutoStartMaxTime != -1 && GeneralOptions.AdminOptions.AutoStartEnabled)

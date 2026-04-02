@@ -5,7 +5,6 @@
     <langVersion>latest</langVersion>
     <Description>Project Lotus</Description>
     <Authors>Tealeaf, Discussions</Authors>
-    <AmongUs>D:\Games\AmongUs\steam\Lotus</AmongUs>
     <RootNamespace>Lotus</RootNamespace>
     <Nullable>enable</Nullable>
     <GenerateAssemblyFileVersionAttribute>false</GenerateAssemblyFileVersionAttribute>
@@ -20,6 +19,10 @@
     <debug>true</debug>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(AmongUs)' == ''">
+    <AmongUs>D:\Games\AmongUs\steam\Lotus</AmongUs>
+  </PropertyGroup>
+
   <PropertyGroup>
 		<GamePlatform Condition="'$(GamePlatform)' == ''">Steam</GamePlatform>
 		<GameVersion Condition="'$(GamePlatform)' == 'Steam'">2025.9.9</GameVersion>
@@ -28,18 +31,13 @@
         <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
 	</PropertyGroup>
 
-  
-    <PropertyGroup Condition=" '$(Platform)' == 'Android' ">
-        <DefineConstants>TRACE;ANDROID</DefineConstants>
-    </PropertyGroup>
     <PropertyGroup Condition=" '$(Platform)' == 'AnyCPU' ">
         <DefineConstants>TRACE;PC</DefineConstants>
     </PropertyGroup>
 
 
   <ItemGroup>
-    <PackageReference Condition="$(Platform)=='Android'" Include="AmongUs.GameLibs.Android" Version="2025.9.9" PrivateAssets="all" />
-    <PackageReference Condition="$(Platform)=='AnyCPU'" Include="AmongUs.GameLibs.Steam" Version="2025.11.18" PrivateAssets="all" />
+    <PackageReference Include="AmongUs.GameLibs.Steam" Version="2026.3.31" PrivateAssets="all" />
 		<PackageReference Include="BepInEx.IL2CPP.MSBuild" Version="2.1.0-rc.1">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -47,10 +45,6 @@
 		<PackageReference Include="BepInEx.Unity.IL2CPP" Version="6.0.0-be.735" Private="false" ExcludeAssets="runtime;native" />
 		<PackageReference Condition="$(Debug) == 'false'" Include="VentFrameworkContinued" Version="1.1.0" />
     <Reference Condition="$(Debug) == 'true' and $(Platform)=='AnyCPU'" Include="../VentFramework-Continued/bin/Debug/net6.0/VentFrameworkContinued.dll">
-      <IncludeAssets>runtime; compile; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-      <PrivateAssets>all</PrivateAssets>
-    </Reference>
-    <Reference Condition="$(Debug) == 'true' and $(Platform)=='Android'" Include="../VentFramework-Continued/bin/Android/Debug/net6.0/VentFrameworkContinued.dll">
       <IncludeAssets>runtime; compile; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </Reference>
@@ -84,10 +78,9 @@
   </Target>
 
   <ItemGroup>
-        <EmbeddedResource Condition="$(Platform)=='AnyCPU'" Include=".\assets\projectlotus_bundle-win" />
-        <EmbeddedResource Condition="$(Platform)=='Android'" Include=".\assets\projectlotus_bundle-android" />
-        <EmbeddedResource Include="Resources/**/*.png" />
-    </ItemGroup>
+    <EmbeddedResource Include=".\assets\projectlotus_bundle-win" />
+    <EmbeddedResource Include=".\assets\projectlotus_bundle-android" />
+  </ItemGroup>
   
   <ItemGroup>
     <ProjectReference Condition="$(Platform)=='AnyCPU'" Include="./SourceGenerators/RoleEditorGenerator/src/RoleEditorGenerator.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
@@ -97,5 +90,9 @@
     <None Remove="./SourceGenerators/**/*" />
     <Content Remove="./SourceGenerators/**/*" />
     <Compile Remove="./SourceGenerators/**/*" />
+  </ItemGroup>
+    
+  <ItemGroup>
+    <Folder Include="src\GameModes\Normal\" />
   </ItemGroup>
 </Project>

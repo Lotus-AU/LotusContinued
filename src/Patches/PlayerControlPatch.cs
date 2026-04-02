@@ -4,6 +4,7 @@ using Lotus.Extensions;
 using UnityEngine;
 using Object = UnityEngine.Object;
 using System.Text;
+using Lotus.Logging;
 
 namespace Lotus.Patches;
 
@@ -31,7 +32,7 @@ class PlayerStartPatch
 }
 
 [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.ResetForMeeting))]
-public static class ResetForMeetingPatch
+class ResetForMeetingPatch
 {
     private static readonly StandardLogger log = LoggerFactory.GetLogger<StandardLogger>(typeof(ResetForMeetingPatch));
 

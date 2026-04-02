@@ -3,21 +3,21 @@ using System.Linq;
 using Lotus.Extensions;
 using UnityEngine;
 using VentLib.Localization.Attributes;
+using VentLib.Options;
 using VentLib.Options.UI;
 using VentLib.Utilities.Extensions;
 
 namespace Lotus.Options.General;
 
 [Localized(ModConstants.Options)]
-public class DebugOptions
+public class DebugOptions: LotusOptionHolder
 {
+    public override OptionManager OptionManager => GeneralOptions.StandardOptionManager;
+
     private static Color _optionColor = new(1f, 0.59f, 0.38f);
-    private static List<GameOption> additionalOptions = new();
 
     public bool NoGameEnd;
     public bool NameBasedRoleAssignment;
-
-    public List<GameOption> AllOptions = new();
 
     public DebugOptions()
     {
@@ -42,18 +42,8 @@ public class DebugOptions
         //     .BindBool(b => ProjectLotus.AdvancedRoleAssignment = b)
         //     .Build());
 
-        AllOptions.AddRange(additionalOptions);
         AllOptions.Where(o => !o.Attributes.ContainsKey("Title")).ForEach(o => GeneralOptions.StandardOptionManager.Register(o, VentLib.Options.OptionLoadMode.LoadOrCreate));
-    }
-
-    /// <summary>
-    /// Adds additional options to be registered when this group of options is loaded. This is mostly used for ordering
-    /// in the main menu, as options passed in here will be rendered along with this group.
-    /// </summary>
-    /// <param name="option">Option to render</param>
-    public static void AddAdditionalOption(GameOption option)
-    {
-        additionalOptions.Add(option);
+        PostInitialize();
     }
 
     private GameOptionBuilder Builder(string key) => new GameOptionBuilder().AddBoolean(false).Builder(key, _optionColor);

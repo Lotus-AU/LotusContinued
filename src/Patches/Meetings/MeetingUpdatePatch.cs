@@ -25,7 +25,8 @@ class MeetingUpdatePatch
             });
 
         // ForceSkipAll has been inlined im pretty sure.
-        if (__instance.state is not MeetingHud.VoteStates.NotVoted and MeetingHud.VoteStates.Voted) return;
+        var state = __instance.state;
+        if (state != MeetingHud.VoteStates.NotVoted && state != MeetingHud.VoteStates.Voted) return;
         int votingTime = ProjectLotus.NormalOptions.GetInt(Int32OptionNames.VotingTime);
         if (votingTime < 0) return;
         int discussionTime = ProjectLotus.NormalOptions.GetInt(Int32OptionNames.DiscussionTime);

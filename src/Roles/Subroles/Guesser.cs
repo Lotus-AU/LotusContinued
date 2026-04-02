@@ -15,7 +15,6 @@ using VentLib.Options.UI;
 using VentLib.Utilities;
 using VentLib.Utilities.Extensions;
 using VentLib.Utilities.Optionals;
-using Lotus.GameModes.Standard;
 using Lotus.API.Vanilla.Meetings;
 using Lotus.Roles.Managers.Interfaces;
 using System.Linq;
@@ -33,6 +32,7 @@ using Lotus.Factions.Impostors;
 using Lotus.Factions.Crew;
 using Lotus.Factions.Neutrals;
 using Lotus.Factions.Undead;
+using Lotus.GameModes.Normal.Standard;
 using Lotus.GUI;
 using Lotus.GUI.Name;
 using Lotus.GUI.Name.Holders;
@@ -121,7 +121,7 @@ public class Guesser : Subrole, IInfoResender
 
     public Guesser()
     {
-        StandardRoles.Callbacks.Add(PopulateGuesserSettings);
+        NormalStandardRoles.Callbacks.Add(PopulateGuesserSettings);
     }
 
     public void ResendMessages()
@@ -179,7 +179,6 @@ public class Guesser : Subrole, IInfoResender
                 if (guessedRole == null)
                 {
                     voteSelector.Reset();
-                    voteSelector.CastVote(player);
                     SelectPlayerToGuess(player, _, handle);
                     return;
                 }
@@ -256,7 +255,7 @@ public class Guesser : Subrole, IInfoResender
         lastFaction = Faction;
         guessableRoles = [];
 
-        guessableRoles = StandardRoles.Instance.AllRoles
+        guessableRoles = NormalStandardRoles.Instance.AllRoles
             .Where(r => HostTurnedRoleOn(r)
                         || r.GetRoleType() is RoleType.DontShow && r.LinkedRoles().Any(HostTurnedRoleOn)
                         || r.RoleFlags.HasFlag(RoleFlag.VariationRole) && r.LinkedRoles().Any(HostTurnedRoleOn)
@@ -378,7 +377,7 @@ public class Guesser : Subrole, IInfoResender
             RoleOptions.AddChild(option);
             GlobalRoleManager.RoleOptionManager.Register(option, OptionLoadMode.LoadOrCreate);
         });
-        StandardRoles.Instance.AllRoles.OrderBy(r => r.EnglishRoleName).ForEach(r =>
+        NormalStandardRoles.Instance.AllRoles.OrderBy(r => r.EnglishRoleName).ForEach(r =>
         {
             RoleTypeBuilders.FirstOrOptional(b => b.predicate(r)).Map(i => i.builder)
                 .IfPresent(builder =>

@@ -17,6 +17,7 @@ using Lotus.Roles.Internals.Attributes;
 using Lotus.Roles.Overrides;
 using Lotus.Roles.RoleGroups.NeutralKilling;
 using Lotus.Extensions;
+using Lotus.GameModes.Normal.Standard;
 using Lotus.GUI.Name;
 using Lotus.Roles.RoleGroups.Crew;
 using Lotus.Roles.RoleGroups.Impostors;
@@ -29,7 +30,6 @@ using VentLib.Options.UI;
 using VentLib.Utilities;
 using VentLib.Utilities.Extensions;
 using MonoMod.Utils;
-using Lotus.GameModes.Standard;
 using Lotus.Logging;
 using Lotus.Victory;
 
@@ -52,7 +52,7 @@ public class Copycat : CustomRole
 
     protected override void PostSetup()
     {
-        StandardRoles? roleHolder = StandardGameMode.Instance?.RoleManager?.RoleHolder ?? null;
+        NormalStandardRoles? roleHolder = NormalStandardGameMode.Instance?.RoleManager?.RoleHolder ?? null;
         if (roleHolder != null)
         {
             if (FallbackTypes.Keys.Count != 0) return;

@@ -329,4 +329,10 @@ public static class PlayerControlExtensions
     }
 
     public static void SetRole(this PlayerControl player, RoleTypes role, bool canOverride) => player.StartCoroutine(player.CoSetRole(role, canOverride));
+
+    public static bool HasPet(this PlayerControl player)
+    {
+        string? id = player.cosmetics?.CurrentPet?.Data?.ProductId;
+        return id != null && id != "pet_EmptyPet";
+    }
 }

@@ -37,6 +37,7 @@ public static class VictoryScreen
             DevLogger.Log($"Setting Player: {p.name} => {roleType}");
             p.CRpcSetRole(roleType);
             p.StartCoroutine(p.CoSetRole(roleType, ProjectLotus.AdvancedRoleAssignment));
+            p.Data.DefaultOutfit.PetId ??= "pet_EmptyPet";
             p.Data.PlayerName = p.name;
             p.Data.IsDead = !wasAlive;
         });
@@ -47,7 +48,6 @@ public static class VictoryScreen
 
         Hooks.ResultHooks.WinnersHook.Propagate(new WinnersHookEvent(winnerRoles));
         Hooks.ResultHooks.LosersHook.Propagate(new LosersHookEvent(losers.Select(l => Game.MatchData.FrozenPlayers[l.GetGameID()]).ToList()));
-        GeneralRPC.SendGameData();
     }
 
     private static bool IsImpostorsWin(GameOverReason reason)

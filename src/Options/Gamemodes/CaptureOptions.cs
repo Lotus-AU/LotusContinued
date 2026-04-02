@@ -5,13 +5,16 @@ using System.Threading.Tasks;
 using Lotus.Extensions;
 using Lotus.Roles;
 using VentLib.Localization.Attributes;
+using VentLib.Options;
 using VentLib.Options.UI;
 
 namespace Lotus.Options.Gamemodes;
 
 [Localized(ModConstants.Options)]
-public class CaptureOptions
+public class CaptureOptions: LotusOptionHolder
 {
+    public override OptionManager OptionManager => GeneralOptions.CaptureOptionManager;
+
     public int GameLength;
     public int ReviveDuration;
 
@@ -26,8 +29,6 @@ public class CaptureOptions
     public bool SuddenDeath;
 
     public float InvincibilityDuration;
-
-    public List<GameOption> AllOptions = new();
 
     public CaptureOptions()
     {
@@ -95,6 +96,8 @@ public class CaptureOptions
             .AddFloatRange(0.2f, 1f, .05f, 16, "x")
             .BindFloat(f => CarryingSpeedMultiplier = f)
             .Build());
+
+        PostInitialize();
     }
 
     [Localized("CaptureTheFlag")]

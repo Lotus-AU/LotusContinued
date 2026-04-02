@@ -469,7 +469,7 @@ public abstract class AbstractBaseRole
     /// <summary>
     /// This method gets the path to the target file to replace.
     /// </summary>
-    public string GetRoleOutfitPath()
+    public virtual string GetRoleOutfitPath()
     {
         string resourceDirectory = ForceRoleImageDirectory();
 

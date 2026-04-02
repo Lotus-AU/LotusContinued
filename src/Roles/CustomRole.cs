@@ -296,6 +296,7 @@ public abstract class CustomRole : AbstractBaseRole, IRpcSendable<CustomRole>
             PlayerControl? player = Utils.GetPlayerById(id);
             if (player == null) return;
             MyPlayer.RpcSetRoleDesync(impRole, player);
+            player.NameModel().GetComponentHolder<RoleHolder>().ForEach(rc => rc.AddViewer(MyPlayer));
         });
         ShowRoleToTeammates(newAllies.Select(Utils.PlayerById).Where(op => op.Exists()).Select(op => op.Get()));
 

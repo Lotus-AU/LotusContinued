@@ -1,22 +1,22 @@
 using System.Collections.Generic;
 using UnityEngine;
 using VentLib.Localization.Attributes;
+using VentLib.Options;
 using VentLib.Options.UI;
 
 namespace Lotus.Options.General;
 
 [Localized(ModConstants.Options)]
-public class MeetingOptions
+public class MeetingOptions: LotusOptionHolder
 {
+    public override OptionManager OptionManager => GeneralOptions.StandardOptionManager;
+
     private static Color _optionColor = new(0.27f, 0.75f, 1f);
-    private static List<GameOption> additionalOptions = new();
 
     public int MeetingButtonPool = -1;
     public bool SyncMeetingButtons => MeetingButtonPool != -1;
     public ResolveTieMode ResolveTieMode;
     public SkipVoteMode NoVoteMode;
-
-    public List<GameOption> AllOptions = new();
 
     public MeetingOptions()
     {
@@ -53,7 +53,7 @@ public class MeetingOptions
             .BindInt(i => NoVoteMode = (SkipVoteMode)i)
             .Build());
 
-        AllOptions.AddRange(additionalOptions);
+        PostInitialize();
     }
 
     private GameOptionBuilder Builder(string key) => new GameOptionBuilder().Key(key).Color(_optionColor);

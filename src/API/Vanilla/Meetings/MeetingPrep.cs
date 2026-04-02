@@ -9,10 +9,10 @@ using Lotus.Roles.Operations;
 using VentLib.Utilities;
 using VentLib.Utilities.Extensions;
 using VentLib.Utilities.Optionals;
-using Lotus.GameModes.Standard;
 using Lotus.Options;
 using HarmonyLib;
 using Lotus.API.Reactive.HookEvents;
+using Lotus.GameModes.Normal.Standard;
 using Lotus.Patches.Actions;
 using Lotus.RPC;
 using Lotus.Patches.Meetings;
@@ -49,7 +49,7 @@ public class MeetingPrep
     {
         if (!Prepped) _meetingDelegate = new MeetingDelegate();
         if (Prepped || !AmongUsClient.Instance.AmHost) return _meetingDelegate;
-        if (Game.CurrentGameMode is StandardGameMode && deadBody == null && GeneralOptions.MeetingOptions.SyncMeetingButtons)
+        if (GeneralOptions.MeetingOptions.IsSubscribed(Game.CurrentGameMode.MainTab()) && deadBody == null && GeneralOptions.MeetingOptions.SyncMeetingButtons)
         {
             if (Game.MatchData.EmergencyButtonsUsed >= GeneralOptions.MeetingOptions.MeetingButtonPool)
             {
@@ -100,6 +100,7 @@ public class MeetingPrep
         Async.Schedule(FixChatNames, 5f);
 
         log.Trace("Finished Prepping", "MeetingPrep");
+        Reported = deadBody;
         Prepped = true;
 
         CheckEndGamePatch.Deferred = true;

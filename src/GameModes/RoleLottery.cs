@@ -1,7 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using Lotus.GameModes.Standard;
+using Lotus.GameModes.Normal.Standard;
 using Lotus.Roles;
 using Lotus.Roles.Interfaces;
 using VentLib.Utilities.Collections;
@@ -40,7 +40,7 @@ public class RoleLottery : IEnumerator<CustomRole>, IEnumerable<CustomRole>
         uint id = Roles.Add(role);
         uint batch = BatchNumber++;
 
-        int roleId = StandardGameMode.Instance.RoleManager.GetRoleId(role);
+        int roleId = NormalStandardGameMode.Instance.RoleManager.GetRoleId(role);
 
         // Add Roles using Subsequenct chances.
         if (!useSubsequentChance && role.Count > 1)

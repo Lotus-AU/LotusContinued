@@ -1,7 +1,7 @@
 using System;
 using Lotus.API.Odyssey;
 using Lotus.Extensions;
-using Lotus.GameModes.Standard;
+using Lotus.GameModes.Normal.Standard;
 using Lotus.Managers;
 using Lotus.Options;
 using Lotus.Utilities;
@@ -35,7 +35,7 @@ public class TeleportCommands
         switch (Game.State)
         {
             case GameState.Roaming:
-                if (Game.CurrentGameMode is not StandardGameMode || source.IsAlive())
+                if (Game.CurrentGameMode is not NormalStandardGameMode || source.IsAlive())
                 {
                     ChatHandlers.NotPermitted().Send(source);
                     break;
@@ -61,7 +61,7 @@ public class TeleportCommands
         switch (Game.State)
         {
             case GameState.Roaming:
-                if (Game.CurrentGameMode is not StandardGameMode || source.IsAlive())
+                if (Game.CurrentGameMode is not NormalStandardGameMode || source.IsAlive())
                 {
                     ChatHandlers.NotPermitted().Send(source);
                     break;

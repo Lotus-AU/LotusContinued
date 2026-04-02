@@ -11,10 +11,10 @@ using Lotus.Options.General;
 using Lotus.Options;
 using VentLib.Utilities.Extensions;
 using Lotus.API.Odyssey;
-using Lotus.GameModes.Standard;
 using Sentry.Unity.NativeUtils;
 using System.Linq;
-using Lotus.GameModes.Draft;
+using Lotus.GameModes.Normal.Draft;
+using Lotus.GameModes.Normal.Standard;
 
 namespace Lotus.Patches.Systems;
 
@@ -33,7 +33,8 @@ public class RpcSetTasksPatch
     public static bool Prefix(NetworkedPlayerInfo __instance, ref Il2CppStructArray<byte> taskTypeIds)
     {
         if (!AmongUsClient.Instance.AmHost) return true;
-        if (Game.CurrentGameMode is StandardGameMode or DraftGameMode) taskTypeIds = RemoveIllegalTasks(taskTypeIds);
+        if (GeneralOptions.GameplayOptions.IsSubscribed(Game.CurrentGameMode.MainTab()))
+            taskTypeIds = RemoveIllegalTasks(taskTypeIds);
 
         CustomRole? role = Utils.GetPlayerById(__instance.PlayerId)?.PrimaryRole();
         // This function mostly deals with override, so if not overriding immediately exit
@@ -129,7 +130,7 @@ public class RpcSetTasksPatch
 
     private static bool CheckIllegalTask(NormalPlayerTask task)
     {
-        if (Game.CurrentGameMode is not StandardGameMode) return false;
+        if (Game.CurrentGameMode is not NormalStandardGameMode) return false;
         return IsTaskIllegal(task);
     }
 

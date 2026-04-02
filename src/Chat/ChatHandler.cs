@@ -153,6 +153,7 @@ public class ChatHandler
 
         int leftIndex = 0;
         int rightIndex = Math.Min(message.Length, _maxMessagePacketSize);
+        bool separateMessages = ConnectionManager.IsVanillaServer && sender.AmOwner && sender.Data.IsDead;
 
         RoleTypes startRoleType = sender.Data.RoleType;
         MassRpc massRpc;
@@ -170,7 +171,7 @@ public class ChatHandler
                 .Write(title.Replace("@n", "\n"))
                 .End();
 
-            if (ConnectionManager.IsVanillaServer && sender.AmOwner && sender.Data.IsDead)
+            if (separateMessages)
                 subMassRpc.Start(sender.NetId, RpcCalls.SetRole)
                     .Write((ushort)RoleTypes.Crewmate)
                     .Write(true)
@@ -180,7 +181,7 @@ public class ChatHandler
                 .Write(subMessage)
                 .End();
 
-            if (ConnectionManager.IsVanillaServer && sender.AmOwner && sender.Data.IsDead)
+            if (separateMessages)
                 subMassRpc.Start(sender.NetId, RpcCalls.SetRole)
                     .Write((ushort)startRoleType)
                     .Write(true)
@@ -198,7 +199,7 @@ public class ChatHandler
             .Write(title.Replace("@n", "\n"))
             .End();
 
-        if (ConnectionManager.IsVanillaServer && sender.AmOwner && sender.Data.IsDead)
+        if (separateMessages)
             massRpc.Start(sender.NetId, RpcCalls.SetRole)
                 .Write((ushort)RoleTypes.Crewmate)
                 .Write(true)
@@ -209,7 +210,7 @@ public class ChatHandler
             .Write(message)
             .End();
 
-        if (ConnectionManager.IsVanillaServer && sender.AmOwner && sender.Data.IsDead)
+        if (separateMessages)
             massRpc.Start(sender.NetId, RpcCalls.SetRole)
                 .Write((ushort)startRoleType)
                 .Write(true)
@@ -233,6 +234,7 @@ public class ChatHandler
     {
         int leftIndex = 0;
         int rightIndex = Math.Min(title.Length, _maxMessagePacketSize);
+        bool separateMessages = ConnectionManager.IsVanillaServer && sender.AmOwner && sender.Data.IsDead;
 
         RoleTypes startRoleType = sender.Data.RoleType;
         while (rightIndex < title.Length)
@@ -249,7 +251,7 @@ public class ChatHandler
                 .Write(subTitle)
                 .End();
 
-            if (ConnectionManager.IsVanillaServer && sender.AmOwner && sender.Data.IsDead)
+            if (separateMessages)
                 subMassRpc.Start(sender.NetId, RpcCalls.SetRole)
                     .Write((ushort)RoleTypes.Crewmate)
                     .Write(true)
@@ -259,7 +261,7 @@ public class ChatHandler
                 .Write(message.Replace("@n", "\n"))
                 .End();
 
-            if (ConnectionManager.IsVanillaServer && sender.AmOwner && sender.Data.IsDead)
+            if (separateMessages)
                 subMassRpc.Start(sender.NetId, RpcCalls.SetRole)
                     .Write((ushort)startRoleType)
                     .Write(true)
@@ -276,7 +278,7 @@ public class ChatHandler
             .Write(title)
             .End();
 
-        if (ConnectionManager.IsVanillaServer && sender.AmOwner && sender.Data.IsDead)
+        if (separateMessages)
             massRpc.Start(sender.NetId, RpcCalls.SetRole)
                 .Write((ushort)RoleTypes.Crewmate)
                 .Write(true)
@@ -286,7 +288,7 @@ public class ChatHandler
             .Write(message.Replace("@n", "\n"))
             .End();
 
-        if (ConnectionManager.IsVanillaServer && sender.AmOwner && sender.Data.IsDead)
+        if (separateMessages)
             massRpc.Start(sender.NetId, RpcCalls.SetRole)
                 .Write((ushort)startRoleType)
                 .Write(true)

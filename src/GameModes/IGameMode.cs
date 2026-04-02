@@ -24,13 +24,13 @@ public interface IGameMode
     public MatchData MatchData { get; protected internal set; }
     public RoleOperations RoleOperations { get; }
     public Roles.Managers.RoleManager RoleManager { get; }
+    public BaseGameMode BaseGameMode { get; }
 
     IEnumerable<GameOptionTab> EnabledTabs();
     MainSettingTab MainTab();
 
     void Assign(PlayerControl player, CustomRole role, bool addAsMainRole = true, bool sendToClient = false);
     void AssignRoles(List<PlayerControl> players);
-    // void OnShowRole();
 
     protected internal void Activate();
 
@@ -62,4 +62,9 @@ public interface IGameMode
     }
 
     void Trigger(LotusActionType action, ActionHandle handle, params object[] arguments);
+}
+public enum BaseGameMode
+{
+    Standard = 0,
+    HideAndSeek = 1
 }

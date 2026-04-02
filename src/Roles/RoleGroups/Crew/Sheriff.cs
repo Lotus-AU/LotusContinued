@@ -18,6 +18,7 @@ using Lotus.API.Vanilla.Sabotages;
 using Lotus.Roles.Internals.Enums;
 using Lotus.Extensions;
 using Lotus.Factions.Impostors;
+using Lotus.GameModes.Normal.Standard;
 using Lotus.Managers;
 using Lotus.Options;
 using Lotus.Patches.Systems;
@@ -30,7 +31,6 @@ using VentLib.Options;
 using VentLib.Options.UI;
 using VentLib.Utilities;
 using VentLib.Utilities.Extensions;
-using Lotus.GameModes.Standard;
 using Lotus.Roles.GUI;
 using Lotus.Roles.GUI.Interfaces;
 using Lotus.Roles.RoleGroups.Impostors;
@@ -102,7 +102,7 @@ public class Sheriff : Crewmate, IRoleUI
 
     public Sheriff()
     {
-        StandardRoles.Callbacks.Add(PopulateSheriffOptions);
+        NormalStandardRoles.Callbacks.Add(PopulateSheriffOptions);
     }
 
     protected override void Setup(PlayerControl player)
@@ -224,7 +224,7 @@ public class Sheriff : Crewmate, IRoleUI
 
     private void PopulateSheriffOptions()
     {
-        StandardRoles.Instance.AllRoles.OrderBy(r => r.EnglishRoleName).ForEach(r =>
+        NormalStandardRoles.Instance.AllRoles.OrderBy(r => r.EnglishRoleName).ForEach(r =>
         {
             RoleTypeBuilders.FirstOrOptional(b => b.predicate(r)).Map(i => i.builder)
                 .IfPresent(builder =>
