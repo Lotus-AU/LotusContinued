@@ -8,6 +8,7 @@ using Lotus.API.Reactive.HookEvents;
 using Lotus.API.Vanilla.Meetings;
 using Lotus.Chat;
 using Lotus.Extensions;
+using Lotus.GameModes.Normal.Standard;
 using Lotus.Managers;
 using Lotus.Options.Roles;
 using Lotus.Roles.Internals;
@@ -18,7 +19,6 @@ using Lotus.Options;
 using VentLib.Utilities.Attributes;
 using VentLib.Utilities.Extensions;
 using Lotus.Options.General;
-using Lotus.GameModes.Standard;
 
 namespace Lotus.Patches.Meetings;
 
@@ -79,7 +79,7 @@ public class MeetingStartPatch
 
         Game.SyncAll(); // This syncs up all the cooldowns to fix doubling after meeting
 
-        if (!GeneralOptions.MeetingOptions.SyncMeetingButtons || Game.CurrentGameMode is not StandardGameMode) return;
+        if (!GeneralOptions.MeetingOptions.SyncMeetingButtons || Game.CurrentGameMode is not NormalStandardGameMode) return;
 
         if (buttonsRemaining != Game.MatchData.EmergencyButtonsUsed) return;
         buttonsRemaining = Game.MatchData.EmergencyButtonsUsed;

@@ -6,12 +6,15 @@ using VentLib.Options.UI;
 using VentLib.Options.IO;
 using static Lotus.ModConstants.Palette;
 using System.Collections.Generic;
+using VentLib.Options;
 
 namespace Lotus.Options.Roles;
 
 [Localized(ModConstants.Options)]
-public class NeutralOptions
+public class NeutralOptions: LotusOptionHolder
 {
+    public override OptionManager OptionManager => GeneralOptions.StandardOptionManager;
+
     public int MinimumNeutralPassiveRoles;
     public int MaximumNeutralPassiveRoles;
 
@@ -22,8 +25,6 @@ public class NeutralOptions
     public bool NeutralsKnowAlliedRoles => NeutralTeamingMode is not NeutralTeaming.Disabled && knowAlliedRoles;
 
     private bool knowAlliedRoles;
-
-    public List<GameOption> AllOptions = new();
 
     public NeutralOptions()
     {
@@ -46,7 +47,7 @@ public class NeutralOptions
             // .Tab(DefaultTabs.NeutralTab)
             .ShowSubOptionPredicate(v => (int)v >= 1)
             .SubOption(sub => sub
-                .AddOnOffValues(true)
+                .AddBoolean(true)
                 .KeyName("Team Knows Each Other's Roles", NeutralOptionTranslations.AlliedKnowRoles)
                 .BindBool(b => knowAlliedRoles = b)
                 .Build())
@@ -84,10 +85,11 @@ public class NeutralOptions
             .Builder("Maximum Neutral Killing Roles")
             .Name(GColor(NeutralOptionTranslations.MaximumNeutralKillingRoles))
             .Build());
+        PostInitialize();
     }
 
     [Localized("RolesNeutral")]
-    private static class NeutralOptionTranslations
+    public static class NeutralOptionTranslations
     {
         [Localized(nameof(MinimumNeutralPassiveRoles))]
         public static string MinimumNeutralPassiveRoles = "Minimum Neutral::0 Passive::1 Roles";

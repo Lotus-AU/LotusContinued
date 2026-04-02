@@ -8,6 +8,7 @@ using Lotus.Patches.Network;
 using Lotus.Roles.Builtins;
 using UnityEngine;
 using VentLib.Localization.Attributes;
+using VentLib.Options;
 using VentLib.Options.IO;
 using VentLib.Options.UI;
 using VentLib.Utilities.Extensions;
@@ -15,10 +16,11 @@ using VentLib.Utilities.Extensions;
 namespace Lotus.Options.General;
 
 [Localized(ModConstants.Options)]
-public class AdminOptions
+public class AdminOptions: LotusOptionHolder
 {
+    public override OptionManager OptionManager => GeneralOptions.StandardOptionManager;
+
     private static Color _optionColor = GameMaster.GMColor;
-    private static List<GameOption> additionalOptions = new();
 
     // ReSharper disable once InconsistentNaming
     public bool HostGM;
@@ -38,7 +40,6 @@ public class AdminOptions
 
     public Cooldown AutoCooldown = new();
     public bool AutoStartEnabled;
-    public List<GameOption> AllOptions = new();
 
     public AdminOptions()
     {
@@ -154,18 +155,8 @@ public class AdminOptions
             .BindBool(b => AutoPlayAgain = b)
             .Build());
 
-        AllOptions.AddRange(additionalOptions);
         AllOptions.Where(o => !o.Attributes.ContainsKey("Title")).ForEach(o => GeneralOptions.StandardOptionManager.Register(o, VentLib.Options.OptionLoadMode.LoadOrCreate));
-    }
-
-    /// <summary>
-    /// Adds additional options to be registered when this group of options is loaded. This is mostly used for ordering
-    /// in the main menu, as options passed in here will be rendered along with this group.
-    /// </summary>
-    /// <param name="option">Option to render</param>
-    public static void AddAdditionalOption(GameOption option)
-    {
-        additionalOptions.Add(option);
+        PostInitialize();
     }
 
     [Localized("Admin")]

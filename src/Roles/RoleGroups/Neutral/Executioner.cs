@@ -21,7 +21,7 @@ using VentLib.Logging;
 using VentLib.Options.UI;
 using VentLib.Utilities.Extensions;
 using Lotus.API.Player;
-using Lotus.GameModes.Standard;
+using Lotus.GameModes.Normal.Standard;
 using Lotus.Managers.History.Events;
 using VentLib.Localization;
 using VentLib.Localization.Attributes;
@@ -69,7 +69,7 @@ public class Executioner : CustomRole
     {
         if (roleChangeWhenTargetDies == 0 || target == null || target.PlayerId != dead.PlayerId) return;
 
-        StandardRoles roleHolder = StandardRoles.Instance;
+        NormalStandardRoles roleHolder = NormalStandardRoles.Instance;
         CustomRole newRole = ((ExeRoleChange)roleChangeWhenTargetDies) switch
         {
             ExeRoleChange.Jester => roleHolder.Static.Jester,

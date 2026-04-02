@@ -6,10 +6,10 @@ using Lotus.Factions.Interfaces;
 using Lotus.Roles;
 using Lotus.Extensions;
 using Lotus.GameModes;
-using Lotus.GameModes.Standard;
 using VentLib.Utilities.Extensions;
 using Version = VentLib.Version.Version;
 using Lotus.Factions;
+using Lotus.GameModes.Normal.Standard;
 
 namespace Lotus.Addons;
 
@@ -69,8 +69,8 @@ public abstract class LotusAddon
     /// <param name="baseGameModes">The gamemodes to export these roles in. Make sure they have been registered first.</param>
     public void ExportCustomRoles(IEnumerable<CustomRole> roleDefinitions, params Type[] baseGameModes)
     {
-        if (baseGameModes.Length == 0) ExportCustomRoles(roleDefinitions, StandardGameMode.Instance);
-        else ExportCustomRoles(roleDefinitions, baseGameModes.Select(gm => ProjectLotus.GameModeManager.GetGameMode(gm) ?? StandardGameMode.Instance).ToArray());
+        if (baseGameModes.Length == 0) ExportCustomRoles(roleDefinitions, NormalStandardGameMode.Instance);
+        else ExportCustomRoles(roleDefinitions, baseGameModes.Select(gm => ProjectLotus.GameModeManager.GetGameMode(gm) ?? NormalStandardGameMode.Instance).ToArray());
     }
 
     /// <summary>

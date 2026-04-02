@@ -13,8 +13,8 @@ using VentLib.Utilities.Optionals;
 using Lotus.Roles.Internals.Trackers;
 using Lotus.API.Player;
 using System;
-using Lotus.GameModes.Standard;
 using System.Linq;
+using Lotus.GameModes.Normal.Standard;
 using VentLib.Utilities.Extensions;
 using Lotus.Roles.Interfaces;
 using VentLib.Options;
@@ -57,7 +57,7 @@ public class Genie : Crewmate, IInfoResender
 
     public Genie()
     {
-        StandardRoles.Callbacks.Add(PopulateGenieOptions);
+        NormalStandardRoles.Callbacks.Add(PopulateGenieOptions);
     }
 
     protected override void PostSetup() => remainingWishes = totalWishes;
@@ -111,7 +111,7 @@ public class Genie : Crewmate, IInfoResender
         IEnumerable<string> allowedSubRoleNames = SubroleAllowedDictionary.Where(kvp => kvp.Value).Select(kvp => kvp.Key);
         if (!allowedSubRoleNames.Any()) return;
 
-        IEnumerable<ISubrole> allowedSubRoles = allowedSubRoleNames.Select(n => (ISubrole)StandardRoles.Instance.AllRoles.First(r => r.EnglishRoleName == n)).Where(r => r.IsAssignableTo(target));
+        IEnumerable<ISubrole> allowedSubRoles = allowedSubRoleNames.Select(n => (ISubrole)NormalStandardRoles.Instance.AllRoles.First(r => r.EnglishRoleName == n)).Where(r => r.IsAssignableTo(target));
         if (!allowedSubRoles.Any()) return;
 
         allowedSubRoles = allowedSubRoles.Where(r => target.GetSubroles().All(s => s.GetType() != r.GetType()));
@@ -127,7 +127,7 @@ public class Genie : Crewmate, IInfoResender
         if (grantedWish)
         {
             ChatHandler.Of(Translations.WishGranted.Formatted(target.name, chosenSubRole.RoleName), RoleColor.Colorize(RoleName)).Send(MyPlayer);
-            StandardGameMode.Instance.Assign(target, chosenSubRole, false);
+            NormalStandardGameMode.Instance.Assign(target, chosenSubRole, false);
         }
         else ChatHandler.Of(Translations.WishFailed.Formatted(target.name, chosenSubRole.RoleName), RoleColor.Colorize(RoleName)).Send(MyPlayer);
 
@@ -149,7 +149,7 @@ public class Genie : Crewmate, IInfoResender
 
     private void PopulateGenieOptions()
     {
-        StandardRoles.Instance.AllRoles.OrderBy(r => r.EnglishRoleName).ForEach(r =>
+        NormalStandardRoles.Instance.AllRoles.OrderBy(r => r.EnglishRoleName).ForEach(r =>
         {
             if (r is not ISubrole) return;
             if (!GoodSubroles.Contains(r.GetType())) return;

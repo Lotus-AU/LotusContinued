@@ -5,13 +5,16 @@ using System.Threading.Tasks;
 using Lotus.Extensions;
 using Lotus.Roles;
 using VentLib.Localization.Attributes;
+using VentLib.Options;
 using VentLib.Options.UI;
 
 namespace Lotus.Options.Gamemodes;
 
 [Localized(ModConstants.Options)]
-public class ColorwarsOptions
+public class ColorwarsOptions: LotusOptionHolder
 {
+    public override OptionManager OptionManager => GeneralOptions.ColorwarsOptionManager;
+
     public int TeamSize;
 
     public float GracePeriod;
@@ -29,8 +32,6 @@ public class ColorwarsOptions
     public bool EnableArrows;
 
     public GameOption CustomTeamsOption;
-
-    public List<GameOption> AllOptions = new();
 
     public ColorwarsOptions()
     {
@@ -117,6 +118,7 @@ public class ColorwarsOptions
             .Build();
 
         AllOptions.Add(CustomTeamsOption);
+        PostInitialize();
     }
 
     [Localized("Colorwars")]

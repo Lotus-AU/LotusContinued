@@ -33,7 +33,7 @@ class HudManagerPatch
         }
 
         if (!AmongUsClient.Instance.IsGameStarted) __instance.ReportButton.Hide();
-        else if (Game.State is GameState.InMeeting) __instance.ReportButton.Hide();
+        else if (Game.State is GameState.InMeeting || GameManager.Instance.IsHideAndSeek()) __instance.ReportButton.Hide();
         else if (!PlayerControl.LocalPlayer.IsAlive()) __instance.ReportButton.Hide();
         else __instance.ReportButton.Show();
 

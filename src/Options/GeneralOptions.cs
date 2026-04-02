@@ -33,27 +33,31 @@ public static class GeneralOptions
         // StandardOptions.AddRange(AdminOptions.AllOptions);
 
         GameplayOptions = new GameplayOptions();
-        StandardOptions.AddRange(GameplayOptions.AllOptions);
+        GameplayOptions.AddTabListener(DefaultTabs.NormalStandardTab, () => 2 + AdminOptions.AllOptions.Count);
 
         SabotageOptions = new SabotageOptions();
-        StandardOptions.AddRange(SabotageOptions.AllOptions);
+        SabotageOptions.AddTabListener(DefaultTabs.NormalStandardTab, () => 2 + AdminOptions.AllOptions.Count + SabotageOptions.AllOptions.Count);
 
         MeetingOptions = new MeetingOptions();
-        StandardOptions.AddRange(MeetingOptions.AllOptions);
+        MeetingOptions.AddTabListener(DefaultTabs.NormalStandardTab,
+            () => 2 + AdminOptions.AllOptions.Count + SabotageOptions.AllOptions.Count + SabotageOptions.AllOptions.Count);
 
         MayhemOptions = new MayhemOptions();
-        StandardOptions.AddRange(MayhemOptions.AllOptions);
-
+        MayhemOptions.AddTabListener(DefaultTabs.NormalStandardTab,
+            () => 2 + AdminOptions.AllOptions.Count + SabotageOptions.AllOptions.Count + SabotageOptions.AllOptions.Count);
         MiscellaneousOptions = new MiscellaneousOptions();
-        // StandardOptions.AddRange(MiscellaneousOptions.AllOptions);
+        // MiscellaneousOptions.AddTabListener(DefaultTabs.StandardTab);
 
         DebugOptions = new DebugOptions();
-        // StandardOptions.AddRange(DebugOptions.AllOptions);
+        // DebugOptions.AddTabListener(DefaultTabs.StandardTab);
 
-        StandardOptions.AddRange(RoleOptions.LoadMadmateOptions().AllOptions);
-        StandardOptions.AddRange(RoleOptions.LoadNeutralOptions().AllOptions);
-        StandardOptions.AddRange(RoleOptions.LoadSubroleOptions().AllOptions);
-
-        StandardOptions.Where(o => !o.Attributes.ContainsKey("Title")).ForEach(o => StandardOptionManager.Register(o, OptionLoadMode.LoadOrCreate));
+        RoleOptions.LoadMadmateOptions().AddTabListener(DefaultTabs.NormalStandardTab,
+            () => 2 + AdminOptions.AllOptions.Count + SabotageOptions.AllOptions.Count + SabotageOptions.AllOptions.Count + MayhemOptions.AllOptions.Count );
+        RoleOptions.LoadNeutralOptions().AddTabListener(DefaultTabs.NormalStandardTab,
+            () => 2 + AdminOptions.AllOptions.Count + SabotageOptions.AllOptions.Count + SabotageOptions.AllOptions.Count + MayhemOptions.AllOptions.Count
+                  + RoleOptions.LoadMadmateOptions().AllOptions.Count);
+        RoleOptions.LoadSubroleOptions().AddTabListener(DefaultTabs.NormalStandardTab,
+            () => 2 + AdminOptions.AllOptions.Count + SabotageOptions.AllOptions.Count + SabotageOptions.AllOptions.Count + MayhemOptions.AllOptions.Count
+                  + RoleOptions.LoadMadmateOptions().AllOptions.Count + RoleOptions.LoadNeutralOptions().AllOptions.Count);
     }
 }

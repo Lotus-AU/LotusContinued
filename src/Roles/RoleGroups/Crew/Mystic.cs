@@ -143,6 +143,4 @@ public class Mystic : Crewmate, ISubrole
             public static string SendAudioAlert = "Send Audio Alert";
         }
     }
-
-
 }

@@ -1,5 +1,7 @@
 using System;
 using System.Linq;
+using HarmonyLib;
+using Lotus.API.Player;
 using Lotus.API.Reactive;
 using Lotus.GUI;
 using Lotus.GUI.Menus.OptionsMenu;
@@ -90,5 +92,10 @@ public static class ModVersion
                 // idk how you would get here but gl.
                 renderer.color = Color.cyan;
         }
+    }
+
+    public static void DestroyPlayerVersions()
+    {
+        Players.GetPlayers().Do(p => p.FindChildOrEmpty<SpriteRenderer>("Background").IfPresent(s => s.gameObject.Destroy()));
     }
 }

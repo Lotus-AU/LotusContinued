@@ -70,7 +70,6 @@ public class ReportDeadBodyPatch
             }
         }
 
-        MeetingPrep.Reported = target;
         MeetingPrep.PrepMeeting(__instance, target, checkReportBodyCancel: false);
         return false;
     }

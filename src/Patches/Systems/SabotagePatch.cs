@@ -71,6 +71,10 @@ public static class SabotagePatch
                     _ => throw new Exception($"Invalid Sabotage Type:{(SystemTypes)amount} {amount}")
                 };
 
+                if (GeneralOptions.SabotageOptions.IsSubscribed(Game.CurrentGameMode.MainTab()))
+                    if (GeneralOptions.SabotageOptions.DisabledSabotages.HasFlag(sabotage))
+                        return false;
+
                 ISabotage sabo = ISabotage.From(sabotage, player);
                 handle = RoleOperations.Current.Trigger(LotusActionType.SabotageStarted, player, sabo);
                 if (!handle.IsCanceled) CurrentSabotage = sabo;

@@ -25,6 +25,15 @@ public class GamemodeTranslations
         [Localized(nameof(GamemodeDescription))] public static string GamemodeDescription = "This text is shown to players when they join to explain the current gamemode.";
     }
 
+    [Localized(nameof(HNSStandard))]
+    public class HNSStandard
+    {
+        [Localized(nameof(Name))] public static string Name = "Standard";
+
+        [Localized(nameof(GamemodeDescription))] public static string GamemodeDescription = "The standard Hide & Seek Gameplay. Hiders complete tasks to reduce time and hide in vents when necessary. The Seeker must kill all players before time runs out or the hiders win.";
+    }
+
+
     [Localized(nameof(CaptureTheFlag))]
     public class CaptureTheFlag
     {

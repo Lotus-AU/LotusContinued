@@ -21,8 +21,8 @@ using VentLib.Options.UI;
 using VentLib.Utilities;
 using VentLib.Utilities.Extensions;
 using Lotus.API.Player;
-using Lotus.GameModes.Standard;
 using Lotus.Factions;
+using Lotus.GameModes.Normal.Standard;
 using Lotus.Managers.History.Events;
 using VentLib.Localization.Attributes;
 using static Lotus.Roles.RoleGroups.Neutral.Archangel.Translations;
@@ -154,7 +154,7 @@ public class Archangel : CustomRole, IRoleUI
         indicatorRemote?.Delete();
         if (roleChangeWhenTargetDies is ArchangelRoleChange.None) return;
 
-        StandardRoles roleHolder = StandardRoles.Instance;
+        NormalStandardRoles roleHolder = NormalStandardRoles.Instance;
         CustomRole newRole = roleChangeWhenTargetDies switch
         {
             ArchangelRoleChange.Jester => roleHolder.Static.Jester,

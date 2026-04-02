@@ -7,7 +7,7 @@ using Lotus.API.Odyssey;
 using Lotus.Extensions;
 using Lotus.Factions.Crew;
 using Lotus.Factions.Impostors;
-using Lotus.GameModes.Standard;
+using Lotus.GameModes.Normal.Standard;
 using Lotus.Logging;
 using Lotus.Roles;
 using Lotus.Roles.Builtins;
@@ -46,7 +46,7 @@ class BeginCrewmatePatch
                 __instance.BackgroundBar.material.color = role.RoleColor;
                 break;
             case SpecialType.Madmate:
-                __instance.TeamTitle.text = StandardRoles.Instance.Static.Madmate.RoleName;
+                __instance.TeamTitle.text = NormalStandardRoles.Instance.Static.Madmate.RoleName;
                 __instance.TeamTitle.color = ModConstants.Palette.MadmateColor;
                 __instance.ImpostorText.text = "";
                 StartFadeIntro(__instance, Palette.CrewmateBlue, Palette.ImpostorRed);

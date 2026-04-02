@@ -1,11 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Il2CppInterop.Runtime.InteropTypes.Arrays;
+using Lotus.API.Odyssey;
 using Lotus.API.Vanilla.Meetings;
 using Lotus.Chat;
 using Lotus.Extensions;
 using Lotus.GameModes;
-using Lotus.GameModes.Draft;
+using Lotus.GameModes.Normal.Draft;
 using Lotus.Logging;
 using Lotus.Roles.Internals;
 using Lotus.Roles.Internals.Attributes;
@@ -105,7 +106,8 @@ public class Drafter: CustomRole
     public void AssignRole()
     {
         if (MyPlayer == null || !MyPlayer.IsAlive()) return;
-        ChangeRoleTo(roleToAssign);
+        // ChangeRoleTo(roleToAssign);
+        Game.CurrentGameMode.Assign(MyPlayer, roleToAssign);
     }
 
     public void SetFakePlayerId(int id) => myPlayerId = id;
@@ -126,11 +128,10 @@ public class Drafter: CustomRole
     private void ChangeSelection(int change)
     {
         curSelected += change;
-        if (curSelected < 0) curSelected = myRoleOptions.Count + 1;
         if (curSelected > myRoleOptions.Count) curSelected = 0;
 
         if (curSelected == myRoleOptions.Count)
-            CHandler(GamemodeTranslations.Draft.PlayerSwapChoice.Formatted(GamemodeTranslations.Draft.RandomOption)).Send(MyPlayer);
+            CHandler(GamemodeTranslations.Draft.PlayerSwapChoice.Formatted(GamemodeTranslations.Draft.RandomOption, string.Empty)).Send(MyPlayer);
         else
         {
             var curSelectedRole = myRoleOptions[curSelected];
