@@ -9,7 +9,9 @@ namespace Lotus.Server.Patches;
 
 // This is taken from Reactor modded handshake.
 // We do not want to pull in Reactor as a dependency though.
-// Credit: Reactor, xtracube, mini
+
+// Code from: https://github.com/NuclearPowered/Reactor/blob/9bd370bfc10d666431efdb70f4cd02f0d9eefe91/Reactor/Networking/Patches/ClientPatches.cs#L321
+// Credit: xtracube, miniduikboot, 6pak
 
 /// <summary>
 /// Represents flags of the mod.
