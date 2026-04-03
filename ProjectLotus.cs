@@ -55,7 +55,7 @@ namespace Lotus;
 public class ProjectLotus : BasePlugin, IGitVersionEmitter
 {
     private static readonly StandardLogger log = LoggerFactory.GetLogger<StandardLogger>(typeof(ProjectLotus));
-    private const string Id = "com.discussions.LotusContinued";
+    public const string Id = "com.discussions.LotusContinued";
     public const string VisibleVersion = $"{MajorVersion}.{MinorVersion}.{PatchVersion}";
     public const string CompileVersion = $"{MajorVersion}.{MinorVersion}.{PatchVersion}.{BuildNumber}";
 

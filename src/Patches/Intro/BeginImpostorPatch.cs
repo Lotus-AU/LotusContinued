@@ -1,3 +1,4 @@
+using System;
 using HarmonyLib;
 using Lotus.Factions.Crew;
 using Lotus.Extensions;
@@ -42,9 +43,7 @@ class BeginImpostorPatch
         }
 
         __instance.BeginCrewmate(yourTeam);
-        #if PC
-        __instance.overlayHandle.color = Palette.CrewmateBlue;
-        #endif
+        if (!OperatingSystem.IsAndroid()) __instance.overlayHandle.color = Palette.CrewmateBlue;
         return false;
     }
 
