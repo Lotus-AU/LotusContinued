@@ -3,12 +3,13 @@ using HarmonyLib;
 using Hazel;
 using Il2CppInterop.Runtime.InteropTypes.Arrays;
 using InnerNet;
+using Lotus.Network;
 
 namespace Lotus.Server.Patches;
 
-
 // This is taken from Reactor modded handshake.
 // We do not want to pull in Reactor as a dependency though.
+// Credit: Reactor, xtracube, mini
 
 /// <summary>
 /// Represents flags of the mod.
@@ -79,6 +80,7 @@ public static class ReactorHandshakePatch
 
     public static void Postfix(ref Il2CppStructArray<byte> __result)
     {
+        if (ConnectionManager.IsVanillaServer) return;
         var handshake = new MessageWriter(1000);
 
         // Original data
