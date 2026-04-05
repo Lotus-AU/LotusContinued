@@ -1,6 +1,7 @@
 using HarmonyLib;
 using Lotus.API.Odyssey;
 using Lotus.Extensions;
+using Lotus.GUI.Keybinds;
 using Lotus.Options;
 using UnityEngine;
 using VentLib.Utilities.Extensions;
@@ -31,6 +32,8 @@ class HudManagerPatch
                 player.Collider.offset = new Vector2(0f, -0.3636f);
             }
         }
+
+        KeybindHud.Instance?.UpdateButtons();
 
         if (!AmongUsClient.Instance.IsGameStarted) __instance.ReportButton.Hide();
         else if (Game.State is GameState.InMeeting || GameManager.Instance.IsHideAndSeek()) __instance.ReportButton.Hide();

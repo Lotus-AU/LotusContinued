@@ -12,6 +12,7 @@ public class Hotkey
     private static readonly StandardLogger log = LoggerFactory.GetLogger<StandardLogger>(typeof(Hotkey));
 
     public ulong TimesUsed { get; private set; }
+    public string Text { get; private set; }
 
     private readonly KeyCode[] keyCodes;
     private List<Func<bool>> predicates = new();
@@ -27,6 +28,7 @@ public class Hotkey
         return new Hotkey(keyCodes);
     }
 
+    public bool PredicatesPass() => predicates.All(p => p());
 
     public Hotkey If(Func<bool> predicate)
     {
@@ -52,6 +54,12 @@ public class Hotkey
         return this;
     }
 
+    public Hotkey Name(string name)
+    {
+        Text = name;
+        return this;
+    }
+
     public Hotkey DevOnly()
     {
         predicates.Add(() => ProjectLotus.DevVersion);
@@ -64,6 +72,13 @@ public class Hotkey
         if (!keyCodes.All(Input.GetKey)) return;
         if (!predicates.All(p => p())) return;
         log.Trace($"HotKey Pressed ({keyCodes.Fuse()})", "HotKey::Update");
+        actions.ForEach(a => a());
+        TimesUsed++;
+    }
+
+    public void Call()
+    {
+        log.Trace($"HotKey called manually. Keybinds: ({keyCodes.Fuse()})", "HotKey::Update");
         actions.ForEach(a => a());
         TimesUsed++;
     }

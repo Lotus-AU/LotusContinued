@@ -41,7 +41,7 @@ public static class ReportManager
         if (!ReportingDirectory.Exists) ReportingDirectory.Create();
 
         Enum.GetValues<ReportTag>().ForEach(t => ReportProducers.Add(t, new OrderedSet<IReportProducer>()));
-        _hotkey = HotkeyManager.Bind(KeyCode.F3).Do(() => GenerateReport());
+        _hotkey = HotkeyManager.Bind(KeyCode.F3).Name("Create RPC Report").Do(() => GenerateReport());
     }
 
     public static void AddProducer(IReportProducer reportProducer, params ReportTag[] tags)

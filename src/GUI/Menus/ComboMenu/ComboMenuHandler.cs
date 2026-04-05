@@ -13,6 +13,8 @@ public class ComboMenuHandler: MonoBehaviour
 {
     private static readonly StandardLogger log = LoggerFactory.GetLogger<StandardLogger>(typeof(ComboMenuHandler));
 
+    public ComboMenu ComboMenu => comboMenu;
+
     private ComboButton comboButton;
     private ComboMenu comboMenu;
 
