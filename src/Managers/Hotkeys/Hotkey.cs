@@ -71,14 +71,14 @@ public class Hotkey
         if (!keyCodes.Any(Input.GetKeyDown)) return;
         if (!keyCodes.All(Input.GetKey)) return;
         if (!predicates.All(p => p())) return;
-        log.Trace($"HotKey Pressed ({keyCodes.Fuse()})", "HotKey::Update");
+        log.Trace($"HotKey Pressed ({keyCodes.Fuse()} | {Text})", "HotKey::Update");
         actions.ForEach(a => a());
         TimesUsed++;
     }
 
     public void Call()
     {
-        log.Trace($"HotKey called manually. Keybinds: ({keyCodes.Fuse()})", "HotKey::Update");
+        log.Trace($"HotKey called manually. ({keyCodes.Fuse()} | {Text})", "HotKey::Update");
         actions.ForEach(a => a());
         TimesUsed++;
     }

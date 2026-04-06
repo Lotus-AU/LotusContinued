@@ -14,6 +14,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
 using VentLib.Localization;
+using VentLib.Utilities;
 using VentLib.Utilities.Extensions;
 
 namespace Lotus.GUI.Keybinds;
@@ -50,7 +51,7 @@ public class KeybindHud
         SetVisible(ClientOptions.AdvancedOptions.KeybindGuiToggleVisible);
         _initialized = true;
 
-        SetupHooks();
+        // SetupHooks();
     }
 
     public void UpdateAspectPos()
@@ -77,7 +78,9 @@ public class KeybindHud
 
     public void UpdateButtons()
     {
-        if (!_initialized && !KeybindMenu.gameObject.active) return;
+        if (!_initialized) return;
+        UpdateAspectPos();
+        if (!KeybindMenu.gameObject.active) return;
         foreach(var kvp in _hotkeyToButton)
             kvp.Value.SetTransparency(kvp.Key.PredicatesPass() ? 1f : 0.5f);
     }
@@ -182,8 +185,9 @@ public class KeybindHud
 
         Hooks.PlayerHooks.PlayerDeathHook.Bind(KeybindHudHookKey, _ => UpdateAspectPos());
         Hooks.PlayerHooks.PlayerExiledHook.Bind(KeybindHudHookKey, _ => UpdateAspectPos());
-        Hooks.PlayerHooks.PlayerRevivedHook.Bind(KeybindHudHookKey, _ => UpdateAspectPos());
+        Hooks.PlayerHooks.PlayerRevivedHook.Bind(KeybindHudHookKey, _ => Async.Schedule(UpdateAspectPos, 1f));
         Hooks.GameStateHooks.RoundStartHook.Bind(KeybindHudHookKey, _ => UpdateAspectPos());
+        Hooks.GameStateHooks.RoundEndHook.Bind(KeybindHudHookKey, _ => Async.Schedule(UpdateAspectPos, 1f));
 
         Hooks.GameStateHooks.GameStartHook.Bind(KeybindHudHookKey, _ =>
         {

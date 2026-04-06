@@ -13,6 +13,12 @@ public static class KeybindMenuPatches
         _ = new KeybindHud(__instance);
     }
 
+    [QuickPostfix(typeof(HudManager), nameof(HudManager.OnDestroy))]
+    public static void HudManager_OnDestroyPostfix(HudManager __instance)
+    {
+        if (KeybindHud.Instance != null) KeybindHud.Instance.Destroy();
+    }
+
     [HarmonyPostfix]
     [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.CanMove), MethodType.Getter)]
     public static void PlayerControl_CanMovePatch(PlayerControl __instance, ref bool __result)
