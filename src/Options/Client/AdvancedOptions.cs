@@ -1,4 +1,5 @@
 ﻿using System;
+using Lotus.Extensions;
 using Lotus.GUI.Keybinds;
 using Lotus.Server.Patches;
 using VentLib.Options;
@@ -30,14 +31,15 @@ public class AdvancedOptions
         OptionManager defaultManager = OptionManager.GetManager(file: "advanced.txt", managerFlags: OptionManagerFlags.IgnorePreset);
 
         guiToggleOption = new GameOptionBuilder()
-            .Key("Keybinds GUI Toggle")
-            .AddBoolean(!OperatingSystem.IsWindows())
+            .AddBoolean(OperatingSystem.IsAndroid())
+            .KeyName("Keybinds GUI Toggle", "Keybinds GUI Toggle")
+            .Description("Whether to show keybinds button in-game.")
             .BindBool(b =>
             {
                 _showKeybindGuiToggle = b;
                 defaultManager.DelaySave(0);
             })
-            .IOSettings(s => s.UnknownValueAction = ADEAnswer.UseDefault)
+            .IOSettings(s => s.UnknownValueAction = ADEAnswer.Allow)
             .BuildAndRegister(defaultManager);
     }
 }
