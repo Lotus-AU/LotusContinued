@@ -12,10 +12,12 @@ using Lotus.Victory.Conditions;
 using Lotus.Options;
 using UnityEngine;
 using VentLib.Utilities;
+using VentLib.Utilities.Attributes;
 using VentLib.Utilities.Debug.Profiling;
 
 namespace Lotus.Victory.Patches;
 
+[LoadStatic]
 [HarmonyPatch(typeof(LogicGameFlowNormal), nameof(LogicGameFlowNormal.CheckEndCriteria))]
 public class CheckEndGamePatch
 {
@@ -31,6 +33,7 @@ public class CheckEndGamePatch
     {
         HotkeyManager.Bind(KeyCode.LeftShift, KeyCode.L, KeyCode.Return)
             .If(p => p.HostOnly().State(Game.InGameStates))
+            .Name("Force End Game")
             .Do(() =>
             {
                 Deferred = false;
