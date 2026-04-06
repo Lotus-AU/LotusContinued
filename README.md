@@ -3,7 +3,7 @@
 </p>
 <h1 align="center">Project: Lotus</h1>
 
-<h2 align="center"> <a href="https://discord.gg/projectlotus">Discord Server</a> | <a href="https://lotusau.top/rd/install">Install Guide</a> | <a href="https://lotusau.top/">Website</a> | <a href="https://github.com/Lotus-AU/LotusContinued/releases/latest">Download The Latest Release!</a></h2>
+<h2 align="center"><a href="https://discord.gg/projectlotus"> <img src=".github/discord_badge.png" width="175" height="30" alt="Discord Badge"></a> <a href="https://lotusau.top/"><img src=".github/website_badge.png" width="175" height="30" alt="Website Badge"></a> <a href="https://github.com/Lotus-AU/LotusContinued/releases/latest"><img src=".github/latest_release_badge.png" width="175" height="30" alt="Latest Release Badge"></a> <a href="https://lotusau.top/android"><img src=".github/starlight_badge2.png" width="175" height="30" alt="Starlight Badge"></a></h2>
 
 <h3 align="center">This is a continuation of the <a href="https://github.com/ImaMapleTree/Lotus">original Project Lotus mod</a> due to the original creator passing the project. </h3>
 <i align="center">This mod is not affiliated with Among Us or Innersloth LLC, and the content contained therein is not endorsed or otherwise sponsored by Innersloth LLC. Portions of the materials contained herein are the property of Innersloth LLC.</i>
@@ -49,13 +49,13 @@ This Mod only needs to be installed on the **Host**, which needs to be on a PC. 
 > - [**Online YAML Editor**](https://lotusau.top/yaml-editor)
 > - [**Modded Lobby Viewer**](https://lotusau.top/lobbies)
 
-| [Welcome to Project: Lotus!](https://lotusau.top/rd/start)                  | [Features of This Mod.](https://lotusau.top/rd/options) | [Frequently Asked Questions](#frequently-asked-questions)      |
-|:----------------------------------------------------------------------------|-----------------------------------------------------------| :------------------------------------------------------------: |
-| [**Converting from other mods** ↗](https://lotusau.top/rd/convert)         | [Commands ↗](https://lotusau.top/rd/commands)           | [Can I get this mod on Mobile?](#can-i-download-this-mod-on-mobile) |
-| [Installing the mod! ↗](https://lotusau.top/rd/install)                    | [Templates ↗](https://lotusau.top/rd/templates)         | [How do I update the mod?](#what-do-the-different-things-in-the-releases-mean--how-do-i-update-the-mod) |
-| [Setting up your First Templates. ↗](https://lotusau.top/rd/ftemplates)    | [Custom Cosmetics ↗](https://lotusau.top/rd/cosmetics)  | [Why aren't people joining my lobby when I make it public?](#how-can-i-make-my-lobby-public--why-arent-people-joining-my-lobby) |
-| [Making your first Title! ↗](https://lotusau.top/rd/ftitle)                | [User Titles ↗](https://lotusau.top/rd/titles)          | [Why do I get randomly kicked?](#why-do-i-get-randomly-kicked) |
-| [Setting up your Settings. ↗](https://lotusau.top/rd/settings)             | [Combos ↗](https://lotusau.top/rd/combos)               | [Why do I get blackscreened?](#why-do-i-keep-getting-black-screened) |
+| [Welcome to Project: Lotus!](https://lotusau.top/rd/start)              | [Features of This Mod.](https://lotusau.top/rd/options) |                                    [Frequently Asked Questions](#frequently-asked-questions)                                    |
+|:------------------------------------------------------------------------|---------------------------------------------------------|:-------------------------------------------------------------------------------------------------------------------------------:|
+| [**Converting from other mods** ↗](https://lotusau.top/rd/convert)      | [Commands ↗](https://lotusau.top/rd/commands)           |                               [Can I get this mod on Mobile?](#can-i-download-this-mod-on-mobile)                               |
+| [Installing the mod! ↗](https://lotusau.top/rd/install)                 | [Templates ↗](https://lotusau.top/rd/templates)         |             [How do I update the mod?](#what-do-the-different-things-in-the-releases-mean--how-do-i-update-the-mod)             |
+| [Setting up your First Templates. ↗](https://lotusau.top/rd/ftemplates) | [Custom Cosmetics ↗](https://lotusau.top/rd/cosmetics)  | [Why aren't people joining my lobby when I make it public?](#how-can-i-make-my-lobby-public--why-arent-people-joining-my-lobby) |
+| [Making your first Title! ↗](https://lotusau.top/rd/ftitle)             | [User Titles ↗](https://lotusau.top/rd/titles)          |                                 [Why do I get randomly kicked?](#why-do-i-get-randomly-kicked)                                  |
+| [Setting up your Settings. ↗](https://lotusau.top/rd/settings)          | [Combos ↗](https://lotusau.top/rd/combos)               |                              [Why do I get blackscreened?](#why-do-i-keep-getting-black-screened)                               |
 
 ---
 
@@ -67,8 +67,10 @@ This Mod only needs to be installed on the **Host**, which needs to be on a PC. 
 [![How to install the Project: Lotus Mod! (2025)](https://img.youtube.com/vi/3HXW4ceKaac/0.jpg)](https://www.youtube.com/watch?v=3HXW4ceKaac)
 
 ### Can I <u>download</u> this mod on Mobile?
-As of right now, **no.**<br>
-> The people at **All Of Us: AU Mods** have made a mod launcher for Android known as **[Starlight](https://allofus.dev/starlight.html) ([Google Play Link](https://play.google.com/store/apps/details?id=dev.allofus.starlight))**, Project: Lotus is currently not compatible with it but compatibility is being worked on.
+If you are on Android, then yes!
+You can download it by installing [Starlight](https://allofus.dev/starlight.html), then clicking on [this link.](https://lotusau.top/android)
+
+Unfortunately, we do not have a version for iOS.
 
 ## What do the different things in the releases mean? / How do I update the mod?
 Here's a Quick Explanation -
