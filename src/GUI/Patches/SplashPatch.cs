@@ -14,6 +14,8 @@ using VentLib.Utilities.Harmony.Attributes;
 using VentLib.Utilities.Optionals;
 using Object = UnityEngine.Object;
 using System.Collections;
+using BepInEx.Unity.IL2CPP.Utils.Collections;
+
 namespace Lotus.GUI.Patches;
 
 [HarmonyPatch(typeof(MainMenuManager), nameof(MainMenuManager.Start))]
@@ -101,9 +103,21 @@ class SplashPatch
         leftPanel.FindChild<SpriteRenderer>("Divider").enabled = false;
         leftPanel.GetComponentsInChildren<SpriteRenderer>(true).Where(r => r.name == "Shine").ForEach(r => r.enabled = false);
 
-        PassiveButton inventoryButton = MakeIconButton(__instance.inventoryButton, new Vector3(0.26f, 1.2f, 1f), LotusAssets.LoadSprite("main_menu/InventoryIconInactive.png"),
+        float iconWidth = OperatingSystem.IsWindows() ? 1.425f : 1.3f;
+        float colliderWidth = 1.2f;
+        PassiveButton inventoryButton = MakeIconButton(__instance.inventoryButton, new Vector3(0.558f, 0.558f, 1), LotusAssets.LoadSprite("main_menu/InventoryIconInactive.png"),
             activeSprite: LotusAssets.LoadSprite("main_menu/InventoryIconHighlighted.png"));
-        inventoryButton.transform.localPosition = new Vector3(5.25f, -1.96f, 0f);
+        inventoryButton.transform.localPosition = new Vector3(1.06f, -2.403f, 0f);
+        foreach (var scaledSprite in inventoryButton.GetComponent<AspectScaledAsset>().allSprites)
+        {
+            scaledSprite.Sprite.size = new Vector2(iconWidth, 1.415f);
+            scaledSprite.OriginalWidth = iconWidth;
+        }
+        foreach (var scaledCollider in inventoryButton.GetComponent<AspectScaledAsset>().allColliders)
+        {
+            scaledCollider.Collider.size = new Vector2(colliderWidth, 0.6565f);
+            scaledCollider.OriginalWidth = iconWidth;
+        }
 
         PassiveButton discordButton = Object.Instantiate(inventoryButton, __instance.transform);
         discordButton.transform.localPosition = new Vector3(0.08f, -2.403f, 0f);
@@ -163,13 +177,35 @@ class SplashPatch
         }
         websiteButton.name = "WebsiteButton";
 
-        PassiveButton shopButton = MakeIconButton(__instance.shopButton, new Vector3(0.26f, 1.2f, 1f), LotusAssets.LoadSprite("main_menu/ShopIconInactive.png"),
+        PassiveButton shopButton = MakeIconButton(__instance.shopButton, new Vector3(0.558f, 0.558f, 1), LotusAssets.LoadSprite("main_menu/ShopIconInactive.png"),
             activeSprite: LotusAssets.LoadSprite("main_menu/ShopIconHighlighted.png"));
-        shopButton.transform.localPosition = new Vector3(6.355f, -1.9571f, 0f);
+        shopButton.transform.localPosition = new Vector3(2.04f, -2.403f, 0f);
+        foreach (var scaledSprite in shopButton.GetComponent<AspectScaledAsset>().allSprites)
+        {
+            scaledSprite.Sprite.size = new Vector2(iconWidth, 1.415f);
+            scaledSprite.OriginalWidth = iconWidth;
+        }
+        foreach (var scaledCollider in shopButton.GetComponent<AspectScaledAsset>().allColliders)
+        {
+            scaledCollider.Collider.size = new Vector2(colliderWidth, 0.6565f);
+            scaledCollider.OriginalWidth = iconWidth;
+        }
 
-        PassiveButton newsButton = MakeIconButton(__instance.newsButton, new Vector3(0.22f, 1.5f, 0f), LotusAssets.LoadSprite("main_menu/AnnouncementIconInactive.png"),
+        PassiveButton newsButton = MakeIconButton(__instance.newsButton, new Vector3(0.558f, 0.558f, 1), LotusAssets.LoadSprite("main_menu/AnnouncementIconInactive.png"),
             activeSprite: LotusAssets.LoadSprite("main_menu/AnnouncementIconHighlighted.png"));
-        newsButton.transform.localPosition = new Vector3(7.4629f, -1.8329f, 0f);
+        newsButton.transform.localPosition = new Vector3(3.02f, -2.36f, 0f);
+        foreach (var scaledSprite in newsButton.GetComponent<AspectScaledAsset>().allSprites)
+        {
+            scaledSprite.Sprite.size = new Vector2(iconWidth, 1.415f);
+            scaledSprite.OriginalWidth = iconWidth;
+        }
+        foreach (var scaledCollider in newsButton.GetComponent<AspectScaledAsset>().allColliders)
+        {
+            scaledCollider.Collider.size = new Vector2(colliderWidth, 0.6565f);
+            scaledCollider.OriginalWidth = iconWidth;
+        }
+
+        // next would be new Vector3(4f, -2.403f, 0f);
 
         __instance.playButton.transform.localPosition -= new Vector3(0f, 1.4f);
         // __instance.playButton.transform.localPosition += new Vector3(.02f, 0f, 0f);
@@ -195,10 +231,29 @@ class SplashPatch
         var enterCodeButtons = __instance.FindChild<Transform>("EnterCodeButtons", true).gameObject;
         enterCodeButtons.GetComponent<AspectPosition>().Destroy();
         enterCodeButtons.transform.SetParent(playBG.transform);
-
         var onlineButtons = __instance.onlineButtons;
         onlineButtons.GetComponent<AspectPosition>().Destroy();
+        onlineButtons.FindChild<AspectSize>("AspectSize").Destroy();
+
         onlineButtons.transform.SetParent(playBG.transform);
+        Async.Schedule(() =>
+        {
+            if (playBG.gameObject.active) onlineButtons.gameObject.SetActive(true);
+        }, .1f);
+
+        if (OperatingSystem.IsAndroid())
+        {
+            Vector3 nudgeLeft = new Vector3(-0.5f, 0, 0);
+            Vector3 nudgeRight = new Vector3(0.5f, 0, 0);
+            Async.Schedule(() => onlineButtons.FindChild<Transform>("Divider").localScale
+                = enterCodeButtons.FindChild<Transform>("Divider").localScale, .1f);
+            enterCodeButtons.FindChild<AspectPosition>("TitleEnterCode").Destroy();
+            enterCodeButtons.FindChild<AspectPosition>("BackButton").Destroy();
+            onlineButtons.FindChild<AspectPosition>("Text_TMP").Destroy();
+            enterCodeButtons.FindChild<Transform>("TitleEnterCode").localPosition += nudgeLeft;
+            enterCodeButtons.FindChild<Transform>("BackButton").localPosition += nudgeRight;
+            onlineButtons.FindChild<Transform>("Text_TMP").localPosition += nudgeLeft;
+        }
 
         __instance.onlineButtons = playBG;
 
@@ -324,6 +379,16 @@ class SplashPatch
         playLocalButton.activeSprites.FindChild<SpriteRenderer>("Icon", true).transform.localScale = new Vector3(.8f, .7f, 1f);
         playLocalButton.OnClick = __instance.playLocalButton.OnClick;
         Async.Schedule(() => playLocalButton.buttonText.text = "Play Local", 0.001f);
+        playLocalButton.gameObject.GetComponent<AspectScaledAsset>().Destroy();
+        {
+            AspectScaledAsset aspectScaledAsset = __instance.playButton.GetComponent<AspectScaledAsset>();
+            foreach (var sr in playLocalButton.GetComponentsInChildren<SpriteRenderer>(true))
+                aspectScaledAsset.allSprites.Add(new AspectScaledAsset.ScaledSprite(sr.size.x, sr));
+            foreach (var tmp in playLocalButton.GetComponentsInChildren<TextMeshPro>(true))
+                aspectScaledAsset.allText.Add(new AspectScaledAsset.ScaledText(tmp.rectTransform.sizeDelta.x, tmp));
+            foreach (var bc2D in playLocalButton.GetComponentsInChildren<BoxCollider2D>(true))
+                aspectScaledAsset.allColliders.Add(new AspectScaledAsset.ScaledCollider(bc2D.size.x, bc2D));
+        }
 
         // __instance.myAccountButton.inactiveSprites.GetComponent<SpriteRenderer>().color = new Color(0.95f, 0f, 1f);
         // __instance.myAccountButton.activeSprites.GetComponent<SpriteRenderer>().color = new Color(1f, 0f, 0.85f);
@@ -340,7 +405,7 @@ class SplashPatch
         __instance.settingsButton.inactiveTextColor = Color.white;
 
         var tohLogo = new GameObject("titleLogo_PL");
-        tohLogo.transform.position = new Vector3(4.5f, -2.1f);
+        tohLogo.transform.position = OperatingSystem.IsWindows() ? new Vector3(4.5f, -2.1f): new Vector3(5.5f, -2.1f);
         tohLogo.transform.localScale = new Vector3(1f, 1f, 1f);
         var renderer = tohLogo.AddComponent<SpriteRenderer>();
         renderer.sprite = LotusAssets.LoadSprite("Lotus_Icon.png", 1100);
@@ -393,12 +458,14 @@ class SplashPatch
         splashArt.transform.localPosition = new Vector3(0f, 0f, 600f);
         var spriteRenderer = splashArt.AddComponent<SpriteRenderer>();
         // spriteRenderer.sprite = LotusAssets.LoadSprite("PLBackground-Upscale.png", 250);
-        spriteRenderer.sprite = LotusAssets.LoadSprite("PLBackground-Upscale.png", 190);
+        spriteRenderer.sprite = LotusAssets.LoadSprite("PLBackground-Upscale.png", OperatingSystem.IsWindows() ? 190 : 155);
         return splashArt;
     }
 
     private static PassiveButton MakeIconButton(PassiveButton passiveButton, Vector3 localScale, Sprite inactiveSprite, Sprite? activeSprite)
     {
+        passiveButton.transform.SetParent(GameObject.Find("MainMenuManager").transform, true);
+        // passiveButton.GetComponent<AspectScaledAsset>().allColliders.Clear();
         SpriteRenderer icon = passiveButton.FindChild<SpriteRenderer>("Icon");
         SpriteRenderer buttonRender = passiveButton.inactiveSprites.GetComponent<SpriteRenderer>();
         icon.sprite = inactiveSprite;
@@ -425,12 +492,20 @@ class SplashPatch
         NewsCountButton? newsCountButton = passiveButton.GetComponentInChildren<NewsCountButton>();
         if (newsCountButton != null)
         {
-            newsCountButton.FindChild<Transform>("NewItem", true).localScale = new Vector3(4f, 0.6f, 1f);
-            // passiveButton.transform.localScale += new Vector3(0f, 0.2f);
+            Transform newItem = newsCountButton.FindChild<Transform>("NewItem", true);
+            newItem.gameObject.GetComponent<AspectPosition>().Destroy();
+            newItem.localPosition = new Vector3(0.35f, 0.35f, -3f);
+            newItem.localScale = 1.2f * Vector3.one;
         }
 
         // Shop Button Icon
-        if (passiveButton.name == "ShopButton") passiveButton.FindChild<SpriteRenderer>("Sprite", true).transform.localScale = new Vector3(3.55f, 0.95f, 1f);
+        if (passiveButton.name == "ShopButton")
+        {
+            Transform newItem = passiveButton.FindChild<Transform>("NewItem", true);
+            newItem.gameObject.GetComponent<AspectPosition>().Destroy();
+            newItem.localPosition = new Vector3(0.8f, 0.8f, -3f);
+            newItem.localScale = 1.2f * Vector3.one;
+        }
 
         passiveButton.Debug();
         return passiveButton;

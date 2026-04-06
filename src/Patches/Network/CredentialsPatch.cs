@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using HarmonyLib;
 using Lotus.Addons;
@@ -6,6 +7,7 @@ using TMPro;
 using UnityEngine;
 using VentLib.Localization.Attributes;
 using VentLib.Utilities;
+using Object = UnityEngine.Object;
 
 namespace Lotus.Patches.Network;
 
@@ -48,7 +50,7 @@ public class VersionShowerStartPatch
         credentials.fontSize = 1.5f;
         credentials.text = ProjectLotus.CredentialsText;
         credentials.alignment = TextAlignmentOptions.TopRight;
-        credentials.transform.position = new Vector3(3.3f, 3f, 0);
+        credentials.transform.position = OperatingSystem.IsWindows() ? new Vector3(3.3f, 3f, 0) :  new Vector3(4.3f, 3f, 0);
 
 
         if (SpecialEventText == null)

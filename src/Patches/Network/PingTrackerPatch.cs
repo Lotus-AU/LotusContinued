@@ -51,6 +51,7 @@ class PingTrackerPatch
         var offset_x = settingButtonTransformPosition.x - 1.58f;
         var offset_y = settingButtonTransformPosition.y + 3.2f;
         Vector3 position;
+        if (ClientOptions.AdvancedOptions.KeybindGuiToggleVisible) offset_y -= 0.55f;
         if (AmongUsClient.Instance.IsGameStarted)
         {
             if (DestroyableSingleton<HudManager>.Instance && !HudManager.Instance.Chat.isActiveAndEnabled)
