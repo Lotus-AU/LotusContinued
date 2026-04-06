@@ -24,8 +24,8 @@ using VentLib.Utilities.Collections;
 using VentLib.Utilities.Extensions;
 using Object = UnityEngine.Object;
 using Lotus.Logging;
-using Lotus.GameModes.Standard;
 using System.Collections.Generic;
+using Lotus.GameModes.Normal.Standard;
 using Lotus.Managers.History.Events;
 using Lotus.Roles.GUI;
 using Lotus.Roles.GUI.Interfaces;
@@ -70,7 +70,7 @@ public class Amnesiac : CustomRole, IVariableRole, IRoleUI
         CustomRole targetRole = reported.Get().GetPrimaryRole()!;
         if (!ProjectLotus.AdvancedRoleAssignment) Copycat.FallbackTypes.GetOptional(targetRole.GetType()).IfPresent(r => targetRole = r());
 
-        StandardRoles roleHolder = StandardGameMode.Instance.RoleManager.RoleHolder;
+        NormalStandardRoles roleHolder = NormalStandardGameMode.Instance.RoleManager.RoleHolder;
 
         if (!stealExactRole)
         {

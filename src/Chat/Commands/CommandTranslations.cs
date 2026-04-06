@@ -16,6 +16,8 @@ public class CommandTranslations
     [Localized(nameof(PlayerNotFoundText))] protected static string PlayerNotFoundText = "Player \"{0}\" not found.";
     [Localized(nameof(CommandError))] protected static string CommandError = "⚠ Command Error ⚠";
 
+    [Localized(nameof(OldCommandWarning))] protected static string OldCommandWarning = "You are using a deprecated command!\nEvery command has changed to use '/cmd' in front. For example, you typed: '/{0}'. The correct command should be '/cmd {0}'.\nYou have been warned for now, but this deprecated command will stop working sometime in March.";
+
     [Localized(nameof(NoPreviousGameText))] public static string NoPreviousGameText = "No game played yet!";
 
     [Localized("HostOptions")]

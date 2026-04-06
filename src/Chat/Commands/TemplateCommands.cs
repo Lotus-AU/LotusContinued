@@ -44,7 +44,6 @@ public class TemplateCommands: CommandTranslations, ICommandReceiver
     [Command(CommandFlag.HostOnly, "reload")]
     public static void Reload(PlayerControl source)
     {
-        OnChatPatch.EatMessage = true;
         string? exception = PluginDataManager.TemplateManager.LoadTemplates();
         if (exception != null) ErrorMsg(exception).Send(source);
         else SuccessMsg(TemplateCommandTranslations.ReloadTemplatesText).Send(source);
@@ -53,11 +52,11 @@ public class TemplateCommands: CommandTranslations, ICommandReceiver
     [Command(CommandFlag.HostOnly, "help", "h")]
     public static void Help(PlayerControl source)
     {
-        const string help = @"/template [tag] → Shows the template with the given tag to all players.
-/template variables → Shows all built-in template variables.
-/template tags → Shows all built-in template tags.
-/template list → Shows all loaded templates
-/template reload → Reloads all templates from file.
+        const string help = @"/cmd template [tag] → Shows the template with the given tag to all players.
+/cmd template variables → Shows all built-in template variables.
+/cmd template tags → Shows all built-in template tags.
+/cmd template list → Shows all loaded templates
+/cdm template reload → Reloads all templates from file.
 ";
         SuccessMsg(help).Send(source);
     }
@@ -116,7 +115,6 @@ public class TemplateCommands: CommandTranslations, ICommandReceiver
     public void Receive(PlayerControl source, CommandContext context)
     {
         if (context.Args.Length == 0) return;
-        if (source.IsHost()) RpcSendChatPatch.EatCommand = true;
 
         string tag = context.Join();
         if (source.IsHost() && HotkeyManager.HoldingRightShift) Templates.ShowAll(tag, source, Players.GetPlayers(PlayerFilter.Dead));

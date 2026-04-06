@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using HarmonyLib;
+using Il2CppInterop.Runtime.InteropTypes;
+using Il2CppSystem.Reflection;
 using Lotus.API.Odyssey;
 using Lotus.API.Reactive;
 using Lotus.API.Reactive.HookEvents;
@@ -14,6 +16,7 @@ using VentLib.Utilities.Extensions;
 using Lotus.RPC;
 using Lotus.Utilities;
 using VentLib.Utilities;
+using MethodBase = System.Reflection.MethodBase;
 
 namespace Lotus.Patches;
 
@@ -41,15 +44,21 @@ static class ExileControllerWrapUpPatch
         }
     }
 
-    [HarmonyPatch(typeof(AirshipExileController._WrapUpAndSpawn_d__11), nameof(AirshipExileController._WrapUpAndSpawn_d__11.MoveNext))]
+    [HarmonyPatch]
     class AirshipExileControllerPatch
     {
-        public static void Postfix(AirshipExileController._WrapUpAndSpawn_d__11 __instance, ref bool __result)
+        public static MethodBase TargetMethod()
         {
-            if (__result) return;
+            return Utils.GetStateMachineMoveNext<AirshipExileController>(nameof(AirshipExileController.WrapUpAndSpawn))!;
+        }
+
+        public static void Postfix(Il2CppObjectBase __instance)
+        {
+            var wrapper = new StateMachineWrapper<AirshipExileController>(__instance);
+            if (wrapper.GetState() != -1) return;
             try
             {
-                WrapUpPostfix(__instance.__4__this.initData);
+                WrapUpPostfix(wrapper.Instance.initData);
             }
             catch (Exception ex)
             {

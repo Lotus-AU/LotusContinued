@@ -121,6 +121,9 @@ public class GameOptionOverride
             case Override.ViperDissolveTime:
                 options.SetFloat(FloatOptionNames.ViperDissolveTime, (float)(value ?? AUSettings.ViperDissolveTime()));
                 break;
+            case Override.ShapeshifterEvidence:
+                options.SetBool(BoolOptionNames.ShapeshifterLeaveSkin, (bool)(value ?? AUSettings.ShapeshifterLeaveSkin()));
+                break;
             case Override.CanUseVent:
             default:
                 log.Warn($"Invalid Option Override: {this}", "ApplyOverride");

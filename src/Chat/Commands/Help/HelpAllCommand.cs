@@ -16,50 +16,50 @@ public class HelpAllCommand : CommandTranslations
         {
             { CommandSection.Host, new List<CommandHelp>
             {
-                new("/id", IdCommandDescription),
-                new($"/say [{MessageParameter}]", SayCommandDescription),
-                new($"/kick [{NameParameter} | ID]", KickCommandDescription),
-                new($"/ban [{NameParameter} | ID]", BanCommandDescription),
-                new($"/mod [{NameParameter} | ID]", ModCommandDescription),
-                new($"/admin [{NameParameter} | ID]", AdminCommandDescription),
-                new("/start", StartCommandDescription),
-                new("/dump", DumpCommandDescription),
-                new("/t help", TemplateHelpCommandDescription)
+                new("/cmd id", IdCommandDescription),
+                new($"/cmd say [{MessageParameter}]", SayCommandDescription),
+                new($"/cmd kick [{NameParameter} | ID]", KickCommandDescription),
+                new($"/cmd ban [{NameParameter} | ID]", BanCommandDescription),
+                new($"/cmd mod [{NameParameter} | ID]", ModCommandDescription),
+                new($"/cmd admin [{NameParameter} | ID]", AdminCommandDescription),
+                new("/cmd start", StartCommandDescription),
+                new("/cmd dump", DumpCommandDescription),
+                new("/cmd t help", TemplateHelpCommandDescription)
             } },
 
             { CommandSection.General, new List<CommandHelp>
             {
-                new($"/r [{RoleNameParameter}]", RoleInfoCommandDescription),
-                new("/r", RolesCommandDescription),
-                new("/n [crew|imp|nk|mods]", NowSpecificCommandDescription),
-                new("/n r", NowAllCommandDescription),
-                new("/perc", PercCommandDescription)
+                new($"/cmd r [{RoleNameParameter}]", RoleInfoCommandDescription),
+                new("/cmd r", RolesCommandDescription),
+                new("/cmd n [crew|imp|nk|mods]", NowSpecificCommandDescription),
+                new("/cmd n r", NowAllCommandDescription),
+                new("/cmd perc", PercCommandDescription)
             } },
 
             { CommandSection.InGame, new List<CommandHelp>
             {
-                new("/m", MyRoleCommandDescription),
-                new("/o", RoleOptionCommandDescription),
-                new("/desc", DescCommandDescription),
-                new("/info", InfoCommandDescription),
-                new($"/status [{NameParameter} | ID]", StatusCommandDescription)
+                new("/cmd m", MyRoleCommandDescription),
+                new("/cmd o", RoleOptionCommandDescription),
+                new("/cmd desc", DescCommandDescription),
+                new("/cmd info", InfoCommandDescription),
+                new($"/cmd status [{NameParameter} | ID]", StatusCommandDescription)
             } },
 
             { CommandSection.Lobby, new List<CommandHelp>
             {
-                new("/last", LastResultCommandDescription),
-                new("/winner", WinnerCommandDescription),
-                new("/death", DeathCommandDescription),
-                new($"/death [{NameParameter}]", DeathOtherCommandDescription),
-                new("/history", HistoryCommandDescription)
+                new("/cmd last", LastResultCommandDescription),
+                new("/cmd winner", WinnerCommandDescription),
+                new("/cmd death", DeathCommandDescription),
+                new($"/cmd death [{NameParameter}]", DeathOtherCommandDescription),
+                new("/cmd history", HistoryCommandDescription)
             } },
 
             { CommandSection.Other, new List<CommandHelp>
             {
-                new($"/name [{NameParameter}]", NameCommandDescription),
-                new("/color [ID]", ColorCommandDescription),
-                new("/stats", StatsCommandDescription),
-                new($"/stats [{NameParameter}]", StatsOtherCommandDescription)
+                new($"/cmd name [{NameParameter}]", NameCommandDescription),
+                new("/cmd color [ID]", ColorCommandDescription),
+                new("/cmd stats", StatsCommandDescription),
+                new($"/cmd stats [{NameParameter}]", StatsOtherCommandDescription)
             } },
         };
 

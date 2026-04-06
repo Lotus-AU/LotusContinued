@@ -7,7 +7,7 @@ using Lotus.API.Odyssey;
 using Lotus.API.Player;
 using Lotus.Extensions;
 using Lotus.GameModes;
-using Lotus.GameModes.Standard;
+using Lotus.GameModes.Normal.Standard;
 using Lotus.GUI.Name.Holders;
 using Lotus.Logging;
 using Lotus.Managers;
@@ -35,7 +35,7 @@ class SelectRolesPatch
             List<PlayerControl> unassignedPlayers = Players.GetPlayers().ToList();
             if (GeneralOptions.AdminOptions.HostGM)
             {
-                Game.AssignRole(PlayerControl.LocalPlayer, StandardRoles.Instance.Special.GM, true);
+                Game.AssignRole(PlayerControl.LocalPlayer, NormalStandardRoles.Instance.Special.GM, true);
                 unassignedPlayers.RemoveAll(p => p.PlayerId == PlayerControl.LocalPlayer.PlayerId);
             }
 

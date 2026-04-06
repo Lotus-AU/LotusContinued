@@ -12,6 +12,7 @@ using Lotus.Roles.Internals.Enums;
 using Lotus.Roles.Internals.Attributes;
 using Lotus.API;
 using Lotus.Extensions;
+using Lotus.Factions.Undead;
 using Lotus.Options;
 using Lotus.Roles.GUI;
 using Lotus.Roles.GUI.Interfaces;
@@ -59,8 +60,8 @@ public class Deathknight : UndeadRole, IRoleUI
         inRangePlayers.Clear();
         if (influenceCooldown.NotReady()) return;
         inRangePlayers = (influenceRange < 0
-            ? MyPlayer.GetPlayersInAbilityRangeSorted().Where(p => !IsConvertedUndead(p) && !IsUnconvertedUndead(p))
-            : RoleUtils.GetPlayersWithinDistance(MyPlayer, influenceRange).Where(p => !IsConvertedUndead(p) && !IsUnconvertedUndead(p)))
+            ? MyPlayer.GetPlayersInAbilityRangeSorted().Where(p => p.PrimaryRole().Faction is not TheUndead)
+            : RoleUtils.GetPlayersWithinDistance(MyPlayer, influenceRange).Where(p => p.PrimaryRole().Faction is not TheUndead))
             .ToList();
     }
     [RoleAction(LotusActionType.OnPet, priority: Priority.First)]
@@ -79,7 +80,7 @@ public class Deathknight : UndeadRole, IRoleUI
         base.RegisterOptions(optionStream)
             .SubOption(sub => sub
                 .KeyName("Can Become Necromancer", Translations.Options.CanBecomeNecromancer)
-                .AddOnOffValues()
+                .AddBoolean()
                 .BindBool(b => CanBecomeNecromancer = b)
                 .Build())
             .SubOption(sub => sub
@@ -96,7 +97,7 @@ public class Deathknight : UndeadRole, IRoleUI
             .SubOption(sub => sub
                 .KeyName("Influences Many", Translations.Options.InfluenceMany)
                 .BindBool(b => multiInfluence = b)
-                .AddOnOffValues()
+                .AddBoolean()
                 .Build());
 
     public override RoleType GetRoleType() => RoleType.Transformation;

@@ -6,10 +6,10 @@ using Lotus.Factions.Interfaces;
 using Lotus.Roles;
 using Lotus.Extensions;
 using Lotus.GameModes;
-using Lotus.GameModes.Standard;
 using VentLib.Utilities.Extensions;
 using Version = VentLib.Version.Version;
 using Lotus.Factions;
+using Lotus.GameModes.Normal.Standard;
 
 namespace Lotus.Addons;
 
@@ -43,6 +43,13 @@ public abstract class LotusAddon
         : $"{BundledAssembly.FullName}::{Name}-{Version.ToSimpleName()}";
 
     /// <summary>
+    /// Returns the display name of this addon. <br/>
+    /// This is only shown in the options right now. Defaults to the Name parameter.
+    /// </summary>
+    /// <returns></returns>
+    public virtual string GetDisplayName() => Name;
+
+    /// <summary>
     /// First function called after loading the plugin. Your plugin code should go here.
     /// </summary>
     public abstract void Initialize();
@@ -62,8 +69,8 @@ public abstract class LotusAddon
     /// <param name="baseGameModes">The gamemodes to export these roles in. Make sure they have been registered first.</param>
     public void ExportCustomRoles(IEnumerable<CustomRole> roleDefinitions, params Type[] baseGameModes)
     {
-        if (baseGameModes.Length == 0) ExportCustomRoles(roleDefinitions, StandardGameMode.Instance);
-        else ExportCustomRoles(roleDefinitions, baseGameModes.Select(gm => ProjectLotus.GameModeManager.GetGameMode(gm) ?? StandardGameMode.Instance).ToArray());
+        if (baseGameModes.Length == 0) ExportCustomRoles(roleDefinitions, NormalStandardGameMode.Instance);
+        else ExportCustomRoles(roleDefinitions, baseGameModes.Select(gm => ProjectLotus.GameModeManager.GetGameMode(gm) ?? NormalStandardGameMode.Instance).ToArray());
     }
 
     /// <summary>
@@ -78,7 +85,11 @@ public abstract class LotusAddon
         {
             r.Addon = this;
             HashSet<IGameMode> iGameMode = ExportedDefinitions.GetOrCompute(r, () => new HashSet<IGameMode>());
-            targetGameModes.All(x => iGameMode.Add(x));
+            targetGameModes.ForEach(x =>
+            {
+                iGameMode.Add(x);
+                x.RoleManager.RoleHolder.AddAddonRole(r);
+            });
             log.Trace($"Exporting Role ({r.EnglishRoleName}) for {Name}");
         });
     }

@@ -7,7 +7,7 @@ using Lotus.Extensions;
 using Lotus.Factions;
 using Lotus.Factions.Interfaces;
 using Lotus.Factions.Neutrals;
-using Lotus.GameModes.Standard;
+using Lotus.GameModes.Normal.Standard;
 using Lotus.GUI.Name;
 using Lotus.GUI.Name.Components;
 using Lotus.GUI.Name.Holders;
@@ -36,7 +36,7 @@ public class Rebellious: Subrole
 
     public Rebellious()
     {
-        StandardRoles.Callbacks.Add(AddFactionSettings);
+        NormalStandardRoles.Callbacks.Add(AddFactionSettings);
     }
 
     protected override void PostSetup()

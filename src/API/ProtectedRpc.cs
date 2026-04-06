@@ -41,8 +41,13 @@ public class ProtectedRpc
             return;
         }
 
-        if (AmongUsClient.Instance.AmHost) killer.MurderPlayer(target, MurderResultFlags.Succeeded);
+        if (AmongUsClient.Instance.AmHost)
+        {
+            target.SetPet("pet_EmptyPet");
+            killer.MurderPlayer(target, MurderResultFlags.Succeeded);
+        }
 
+        RpcV3.Immediate(target.NetId, RpcCalls.SetPetStr).Write("").Write(target.GetNextRpcSequenceId(RpcCalls.SetPetStr)).Send();
         RpcV3.Immediate(killer.NetId, RpcCalls.MurderPlayer).Write(target).Write((int)MurderResultFlags.Succeeded).Send();
         target.Data.IsDead = true;
     }

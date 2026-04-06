@@ -1,4 +1,5 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Lotus.Extensions;
 using Lotus.Logging;
@@ -18,7 +19,7 @@ public class LotusAssets
         {
             if (_loaded) return _assetBundle!;
             _loaded = true;
-            _assetBundle = AssetLoader.LoadAssetBundle("Lotus.assets.projectlotus_bundle");
+            _assetBundle = AssetLoader.LoadAssetBundle("Lotus.assets.projectlotus_bundle-" + (OperatingSystem.IsAndroid() ? "android" : "win"));
             return _assetBundle;
         }
     }
@@ -27,7 +28,6 @@ public class LotusAssets
     {
         return Bundle.LoadAsset<T>(path.ToLower())!;
     }
-
 
     public static bool TryLoadAsset<T>(string path, [MaybeNullWhen(false)] out T asset) where T : UnityEngine.Object
     {

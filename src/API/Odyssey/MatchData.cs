@@ -137,7 +137,7 @@ public class MatchData
     public static RemoteList<GameOptionOverride> GetGlobalOverrides()
     {
         RemoteList<GameOptionOverride> globalOverrides = [
-            // new(Override.ShapeshiftCooldown, 0.1f) // I assume this is for IS anti cheat to think the cooldown is very low.
+            new(Override.ShapeshifterEvidence, false)
         ];
         if (AUSettings.ConfirmImpostor()) globalOverrides.Add(new GameOptionOverride(Override.ConfirmEjects, false));
         return globalOverrides;

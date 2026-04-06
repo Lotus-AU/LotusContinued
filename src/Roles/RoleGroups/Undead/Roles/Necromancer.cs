@@ -26,7 +26,6 @@ using VentLib.Options.UI;
 using VentLib.Utilities;
 using VentLib.Utilities.Extensions;
 using Lotus.API.Player;
-using Lotus.GameModes.Standard;
 using Lotus.Roles.GUI;
 using Lotus.Roles.GUI.Interfaces;
 using VentLib.Localization.Attributes;
@@ -132,7 +131,7 @@ public class Necromancer : UndeadRole, IRoleUI
                 .BindBool(b => immuneToPartialConverted = b)
                 .Build());
 
-    public override List<CustomRole> LinkedRoles() => base.LinkedRoles().Concat(new List<CustomRole>() { _deathknight }).ToList();
+    public override List<CustomRole> LinkedRoles() => base.LinkedRoles().Concat([_deathknight]).ToList();
 
     protected override RoleModifier Modify(RoleModifier roleModifier) =>
         base.Modify(roleModifier)

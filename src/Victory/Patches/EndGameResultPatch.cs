@@ -245,6 +245,7 @@ public class EndGameResultPatch
 
     private static IEnumerator LerpEndGame(EndGameManager gameManager, TextMeshPro winnerText, TMP_Text gameInfoText)
     {
+        if (gameManager == null) yield break;
         float LERP_DURATION = 2f;
 
         //-- Objects

@@ -22,20 +22,32 @@ using VentLib.Utilities.Debug.Profiling;
 using VentLib.Utilities.Extensions;
 using static VentLib.Utilities.Debug.Profiling.Profilers;
 using VentLib.Networking.RPC;
-using Lotus.GameModes.Standard;
 using System.Collections.Generic;
 using System;
+using System.Reflection;
+using Il2CppInterop.Runtime.InteropTypes;
+using Lotus.API;
 using Lotus.GameModes;
+using Lotus.GameModes.Normal.Standard;
+using Lotus.Utilities;
 
 namespace Lotus.Patches.Intro;
 
-
-[HarmonyPatch(typeof(IntroCutscene), nameof(IntroCutscene.OnDestroy))]
+[HarmonyPatch]
 class IntroDestroyPatch
 {
     private static readonly StandardLogger log = LoggerFactory.GetLogger<StandardLogger>(typeof(IntroDestroyPatch));
-    public static void Postfix(IntroCutscene __instance)
+
+    public static MethodBase TargetMethod()
     {
+        return Utils.GetStateMachineMoveNext<IntroCutscene>(nameof(IntroCutscene.CoBegin))!;
+    }
+
+    public static void Postfix(Il2CppObjectBase __instance)
+    {
+        var wrapper = new StateMachineWrapper<IntroCutscene>(__instance);
+        if (wrapper.GetState() != -1) return;
+        ModVersion.DestroyPlayerVersions();
         Profiler.Sample destroySample = Global.Sampler.Sampled();
         if (!AmongUsClient.Instance.AmHost)
         {
@@ -75,7 +87,7 @@ class IntroDestroyPatch
 
         Game.MatchData.RegenerateFrozenPlayers(player);
 
-        if (player.GetVanillaRole().IsImpostor() && Game.CurrentGameMode is StandardGameMode)
+        if (player.GetVanillaRole().IsImpostor() && Game.CurrentGameMode is NormalStandardGameMode)
         {
             float cooldown = GeneralOptions.GameplayOptions.GetFirstKillCooldown(player);
             log.Trace($"Fixing First Kill Cooldown for {player.name} (Cooldown={cooldown}s)", "Fix First Kill Cooldown");
@@ -98,7 +110,7 @@ class IntroDestroyPatch
             playerData.Tasks?.Clear();
         }
 
-        bool hasPet = player.cosmetics?.CurrentPet?.Data?.ProductId != "pet_EmptyPet";
+        bool hasPet = player.HasPet();
         if (hasPet) log.Trace($"Player: {player.name} has pet: {player.cosmetics?.CurrentPet?.Data?.ProductId}. Skipping assigning pet: {pet}.", "PetAssignment");
         else if (player.AmOwner) player.SetPet(pet);
         else playerData.DefaultOutfit.PetId = pet;

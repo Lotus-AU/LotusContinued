@@ -1,22 +1,24 @@
 using System.Collections.Generic;
 using Lotus.Extensions;
 using Lotus.Factions;
+using Lotus.Options.Interface;
 using Lotus.Utilities;
 using VentLib.Localization.Attributes;
+using VentLib.Options;
 using VentLib.Options.UI;
 
 namespace Lotus.Options.Roles;
 
 [Localized(ModConstants.Options)]
-public class MadmateOptions
+public class MadmateOptions: LotusOptionHolder
 {
+    public override OptionManager OptionManager => GeneralOptions.StandardOptionManager;
+
     public bool MadmatesTakeImpostorSlots;
     public int MinimumMadmates;
     public int MaximumMadmates;
 
     string GColor(string input) => TranslationUtil.Colorize(input, ModConstants.Palette.MadmateColor);
-
-    public List<GameOption> AllOptions = new();
 
     public MadmateOptions()
     {
@@ -46,6 +48,7 @@ public class MadmateOptions
             .Tab(DefaultTabs.ImpostorsTab)
             .BindInt(i => MaximumMadmates = i)
             .Build());
+        PostInitialize();
     }
 
     private static GameOptionBuilder Builder(string key) => new GameOptionBuilder().Key(key).Tab(DefaultTabs.ImpostorsTab);

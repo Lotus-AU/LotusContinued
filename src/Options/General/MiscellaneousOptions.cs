@@ -10,16 +10,18 @@ using System;
 using Lotus.Managers.Blackscreen;
 using System.Linq;
 using Lotus.API.Odyssey;
+using VentLib.Options;
 using VentLib.Utilities.Extensions;
 using static Lotus.Options.General.MayhemOptions;
 
 namespace Lotus.Options.General;
 
 [Localized(ModConstants.Options)]
-public class MiscellaneousOptions
+public class MiscellaneousOptions: LotusOptionHolder
 {
+    public override OptionManager OptionManager => GeneralOptions.StandardOptionManager;
+
     private static Color _optionColor = new(1f, 0.75f, 0.81f);
-    private static List<GameOption> additionalOptions = new();
     private static Dictionary<string, Action> BlackscreenResolvers = new()
     {
         {"Legacy", () => ProjectLotus.Instance.SetBlackscreenResolver(md => new LegacyResolver(md))},
@@ -42,12 +44,10 @@ public class MiscellaneousOptions
     public bool UseRandomMap => randomMapOn && RandomMaps != 0;
     private bool randomMapOn;
 
-    public List<GameOption> AllOptions = new();
     public GameOption BlackscreenOption;
 
     public MiscellaneousOptions()
     {
-
         AllOptions.Add(new GameOptionTitleBuilder()
             .Title(MiscOptionTranslations.MiscOptionTitle)
             .Color(_optionColor)
@@ -168,18 +168,8 @@ public class MiscellaneousOptions
             .BindInt(i => EventLogType = i)
             .Build());
 
-        AllOptions.AddRange(additionalOptions);
         AllOptions.Where(o => !o.Attributes.ContainsKey("Title")).ForEach(o => GeneralOptions.StandardOptionManager.Register(o, VentLib.Options.OptionLoadMode.LoadOrCreate));
-    }
-
-    /// <summary>
-    /// Adds additional options to be registered when this group of options is loaded. This is mostly used for ordering
-    /// in the main menu, as options passed in here will be rendered along with this group.
-    /// </summary>
-    /// <param name="option">Option to render</param>
-    public static void AddAdditionalOption(GameOption option)
-    {
-        additionalOptions.Add(option);
+        PostInitialize();
     }
 
     /// <summary>

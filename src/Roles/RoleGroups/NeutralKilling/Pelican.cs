@@ -42,6 +42,7 @@ public class Pelican : NeutralKillingBase, IRoleUI
     private static HashSet<string> _boundHooks = new();
 
     private bool allowPelicanEscape;
+    private bool spawnBodiesOnPelican;
 
     [NewOnSetup]
     private Dictionary<byte, Remote<TextComponent>> gulpedPlayers;
@@ -107,7 +108,7 @@ public class Pelican : NeutralKillingBase, IRoleUI
         lotusInteraction.Intent = fatalIntent;
         fatalIntent["PELICANED"] = true;
 
-        Utils.Teleport(target.NetTransform, MyPlayer.GetTruePosition());
+        if (spawnBodiesOnPelican) Utils.Teleport(target.NetTransform, MyPlayer.GetTruePosition());
     }
 
     [RoleAction(LotusActionType.RoundEnd)]
@@ -191,7 +192,11 @@ public class Pelican : NeutralKillingBase, IRoleUI
         AddKillCooldownOptions(base.RegisterOptions(optionStream), "Gulp Cooldown", Translations.Options.GulpCooldown)
             .SubOption(sub => sub.KeyName("Allow Escape from Pelican", Translations.Options.AllowEscapeFromPelican)
                 .BindBool(b => allowPelicanEscape = b)
-                .AddOnOffValues()
+                .AddBoolean()
+                .Build())
+            .SubOption(sub => sub.KeyName("Spawn Bodies on Pelican", Translations.Options.SpawnBodiesOnPelican)
+                .BindBool(b => spawnBodiesOnPelican = b)
+                .AddBoolean()
                 .Build());
 
     protected override RoleModifier Modify(RoleModifier roleModifier) =>
@@ -222,6 +227,9 @@ public class Pelican : NeutralKillingBase, IRoleUI
 
             [Localized(nameof(AllowEscapeFromPelican))]
             public static string AllowEscapeFromPelican = "Allow Escape from Pelican";
+
+            [Localized(nameof(SpawnBodiesOnPelican))]
+            public static string SpawnBodiesOnPelican = "Spawn Bodies on Pelican when Meeting";
         }
     }
 

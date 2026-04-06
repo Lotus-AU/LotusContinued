@@ -21,6 +21,10 @@ using Lotus.Roles;
 using Lotus.Roles.RoleGroups.Vanilla;
 using Lotus.Roles.Managers.Interfaces;
 using System.Collections.Generic;
+using HarmonyLib;
+using Il2CppInterop.Common;
+using Il2CppInterop.Runtime;
+using Il2CppInterop.Runtime.Runtime;
 using Lotus.API.Player;
 
 namespace Lotus.Utilities;
@@ -40,11 +44,14 @@ public static class Utils
         return c;
     }
 
-    public static bool HasTasks(NetworkedPlayerInfo p)
+    public static bool HasTasks(NetworkedPlayerInfo p) => HasTasks(p.GetPrimaryRole());
+
+    public static bool HasTasks(CustomRole? primaryDefinition)
     {
-        if (p.GetPrimaryRole()?.RealRole.IsImpostor() ?? true) return false;
-        CustomRole? primaryDefinition = p.GetPrimaryRole();
-        return primaryDefinition.GetType() != IRoleManager.Current.FallbackRole().GetType() && primaryDefinition is Crewmate;
+        if (primaryDefinition == null) return false;
+        if (primaryDefinition.RealRole.IsImpostor() || primaryDefinition.GetType() == IRoleManager.Current.FallbackRole().GetType()) return false;
+        if (primaryDefinition is not ITaskHolderRole taskHolder) return false;
+        return taskHolder.TasksApplyToTotal() && taskHolder.HasTasks();
     }
 
     public static void Teleport(CustomNetworkTransform nt, Vector2 location)
@@ -170,4 +177,31 @@ public static class Utils
 
     public static string GetOnOffColored(bool value) =>
         value ? Color.cyan.Colorize("ON") : Color.red.Colorize("OFF");
+
+
+    // code taken from https://github.com/All-Of-Us-Mods/MiraAPI/blob/eac442443bf85051210c8957605a524fb5136e8b/MiraAPI/Utilities/Helpers.cs#L43
+    public static MethodBase? GetStateMachineMoveNext<T>(string methodName)
+    {
+        var typeName = typeof(T).FullName;
+        var showRoleStateMachine =
+            typeof(T)
+                .GetNestedTypes()
+                .FirstOrDefault(x=>x.Name.Contains(methodName));
+
+        if (showRoleStateMachine == null)
+        {
+            StaticLogger.Exception($"Failed to find {methodName} state machine for {typeName}");
+            return null;
+        }
+
+        var moveNext = AccessTools.Method(showRoleStateMachine, "MoveNext");
+        if (moveNext == null)
+        {
+            StaticLogger.Exception($"Failed to find MoveNext method for {typeName}.{methodName}");
+            return null;
+        }
+
+        StaticLogger.Info($"Found {methodName}.MoveNext");
+        return moveNext;
+    }
 }

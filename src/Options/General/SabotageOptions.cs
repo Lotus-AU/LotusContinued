@@ -4,15 +4,17 @@ using Lotus.API.Vanilla.Sabotages;
 using Lotus.Extensions;
 using UnityEngine;
 using VentLib.Localization.Attributes;
+using VentLib.Options;
 using VentLib.Options.UI;
 
 namespace Lotus.Options.General;
 
 [Localized(ModConstants.Options)]
-public class SabotageOptions
+public class SabotageOptions: LotusOptionHolder
 {
+    public override OptionManager OptionManager => GeneralOptions.StandardOptionManager;
+
     private static Color _optionColor = new(1f, 0.94f, 0.63f);
-    private static List<GameOption> additionalOptions = new();
 
     public int SkeldReactorCountdown;
     public bool CustomSkeldReactorCountdown => SkeldReactorCountdown != -1;
@@ -35,8 +37,6 @@ public class SabotageOptions
     public SabotageType DisabledSabotages => disableSabotages ? 0 : disabledSabotageTypes;
     private bool disableSabotages;
     private SabotageType disabledSabotageTypes;
-
-    public List<GameOption> AllOptions = new();
 
     public SabotageOptions()
     {
@@ -121,17 +121,7 @@ public class SabotageOptions
             .BindInt(i => AirshipReactorCountdown = i)
             .Build());
 
-        AllOptions.AddRange(additionalOptions);
-    }
-
-    /// <summary>
-    /// Adds additional options to be registered when this group of options is loaded. This is mostly used for ordering
-    /// in the main menu, as options passed in here will be rendered along with this group.
-    /// </summary>
-    /// <param name="option">Option to render</param>
-    public static void AddAdditionalOption(GameOption option)
-    {
-        additionalOptions.Add(option);
+        PostInitialize();
     }
 
     private Action<bool> FlagSetter(SabotageType map)

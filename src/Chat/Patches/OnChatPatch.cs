@@ -22,7 +22,7 @@ public static class OnChatPatch
     private static readonly StandardLogger log = LoggerFactory.GetLogger<StandardLogger>(typeof(OnChatPatch));
 
     internal static List<byte> UtilsSentList = new();
-    public static bool EatMessage;
+    // public static bool EatMessage; // now that all commands use /cmd, we no longer have to manually denote when to eat messages. they won't even be sent anyway.
 
     [SuppressMessage("ReSharper", "InconsistentNaming")]
     internal static bool Prefix(ChatController __instance, PlayerControl sourcePlayer, string chatText, bool censor)
@@ -37,15 +37,13 @@ public static class OnChatPatch
         Hooks.PlayerHooks.PlayerMessageHook.Propagate(new PlayerMessageHookEvent(sourcePlayer, chatText));
         if (!UseWordList() || !PluginDataManager.ChatManager.HasBannedWord(chatText) || sourcePlayer.IsHost())
         {
-            if (PluginDataManager.TemplateManager.CheckAndRunCommand(sourcePlayer, chatText)) return true;
-            bool eat = EatMessage;
-            EatMessage = false;
-            if (Game.State is GameState.InLobby) return !eat;
+            if (PluginDataManager.TemplateManager.CheckAndRunCommand(sourcePlayer, chatText)) return false;
+            if (Game.State is GameState.InLobby) return !chatText.StartsWith("/cmd");
             ActionHandle handle = ActionHandle.NoInit();
             RoleOperations.Current.TriggerForAll(LotusActionType.Chat, sourcePlayer, handle, chatText, Game.State, sourcePlayer.IsAlive());
-            return !eat;
+            return !chatText.StartsWith("/cmd");
         }
-        AmongUsClient.Instance.KickPlayer(sourcePlayer.GetClientId(), false);
+        AmongUsClient.Instance.KickPlayerWithMessage(sourcePlayer, $"{sourcePlayer.name}: was kicked by Chat AutoKick.");
         ChatHandler.Send($"{sourcePlayer.name} was kicked by AutoKick.");
         return true;
     }

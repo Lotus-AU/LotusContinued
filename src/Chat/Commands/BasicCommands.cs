@@ -112,8 +112,6 @@ public class BasicCommands : CommandTranslations
             return;
         }
 
-        OnChatPatch.EatMessage = true;
-
         source.RpcSetName(name);
     }
 
@@ -169,7 +167,6 @@ public class BasicCommands : CommandTranslations
     [Command(CommandFlag.HostOnly, "dump")]
     public static void Dump(PlayerControl _, CommandContext context)
     {
-        RpcSendChatPatch.EatCommand = true;
         LogManager.WriteSessionLog(context.Join());
     }
 
@@ -216,7 +213,6 @@ public class BasicCommands : CommandTranslations
     [Command(CommandFlag.HostOnly, "tload")]
     public static void ReloadTitles(PlayerControl source)
     {
-        OnChatPatch.EatMessage = true;
         PluginDataManager.TitleManager.Reload();
         ChatHandler.Of("Successfully reloaded titles.").Send(source);
     }

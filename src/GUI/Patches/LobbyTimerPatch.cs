@@ -15,8 +15,9 @@ public static class SendTimerToOtherPlayers
 {
     static SendTimerToOtherPlayers()
     {
-        const string sendTimerHookKey = nameof(sendTimerHookKey);
-        Hooks.PlayerHooks.PlayerJoinHook.Bind(sendTimerHookKey, SendTimer);
+        // this code currently kicks host
+        // const string sendTimerHookKey = nameof(sendTimerHookKey);
+        // Hooks.PlayerHooks.PlayerJoinHook.Bind(sendTimerHookKey, SendTimer);
     }
 
     public static void SendTimer(PlayerHookEvent hookEvent)
@@ -34,9 +35,9 @@ public class LobbyTimerPatch
     public static DateTime lobbyStart;
     public static void Postfix(GameStartManager __instance)
     {
-        if (!AmongUsClient.Instance.AmHost || !GameData.Instance || !ConnectionManager.IsVanillaServer) return; // Not host or no instance or LocalGame
+        if (!GameData.Instance || !ConnectionManager.IsVanillaServer) return; // Not host or no instance or LocalGame
         lobbyStart = DateTime.Now;
-        HudManager.Instance.ShowLobbyTimer(600);
+        if (AmongUsClient.Instance.AmHost) HudManager.Instance.ShowLobbyTimer(600);
         HudManager.Instance.LobbyTimerExtensionUI.timerText.transform.parent.transform.Find("LabelBackground").gameObject.SetActive(false);
         HudManager.Instance.LobbyTimerExtensionUI.timerText.transform.parent.transform.Find("Icon").gameObject.SetActive(false);
     }

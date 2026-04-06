@@ -25,7 +25,7 @@ public class CastVotePatch
         if (!AmongUsClient.Instance.AmHost) return true;
         PlayerControl voter = Utils.GetPlayerById(srcPlayerId)!;
         Optional<PlayerControl> voted = Utils.PlayerById(suspectPlayerId);
-        log.Trace($"{voter.GetNameWithRole()} voted for {voted.Map(v => v.name)}");
+        log.Trace($"{voter.GetNameWithRole()} voted for {voted.Transform(v => v.name, () => "No one")}");
 
         ActionHandle handle = RoleOperations.Current.Trigger(LotusActionType.Vote, voter, voted, MeetingDelegate.Instance);
 
@@ -36,7 +36,11 @@ public class CastVotePatch
             return true;
         }
 
-        if (handle.Cancellation is ActionHandle.CancelType.Soft) return true;
+        if (handle.Cancellation is ActionHandle.CancelType.Soft)
+        {
+            MeetingDelegate.Instance.CastVote(voter.PlayerId, Optional<byte>.NonNull(254));
+            return false;
+        }
 
         __instance.playerStates.ToArray().FirstOrDefault(state => state.TargetPlayerId == srcPlayerId)?.UnsetVote();
 
@@ -48,6 +52,7 @@ public class CastVotePatch
 
     public static void ClearVote(MeetingHud hud, PlayerControl target)
     {
+        if (MeetingDelegate.Instance.AlreadyCompleted) return;
         log.Trace($"Clearing vote for: {target.GetNameWithRole()}");
         hud.playerStates.Where(ps => ps.TargetPlayerId == target.PlayerId).ForEach(ps => ps.VotedFor = byte.MaxValue);
         RpcV3.Immediate(hud.NetId, RpcCalls.ClearVote).Send(target.OwnerId);

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using HarmonyLib;
 using Lotus.API;
@@ -34,11 +35,12 @@ public class CheckForEndVotingPatch
     {
         if (!AmongUsClient.Instance.AmHost) return true;
         MeetingDelegate meetingDelegate = MeetingDelegate.Instance;
-        if (!meetingDelegate.IsForceEnd() && __instance.playerStates.Any(ps => !ps.AmDead && !ps.DidVote)) return false;
+        // log.Debug($"{meetingDelegate.IsForceEnd()} - {meetingDelegate.GetPlayersRemainingToVote()}");
+        if (!meetingDelegate.IsForceEnd() && meetingDelegate.GetPlayersRemainingToVote() > 0) return false;
         if (meetingDelegate.AlreadyCompleted)
         {
-            log.Exception($"{Mirror.GetCaller()?.FullDescription() ?? "No description."}");
-            log.Exception("The above function tried to call 'MeetingHud.CheckForEndVoting' when we have already completed voting.");
+            // log.Exception($"{Mirror.GetCaller()?.FullDescription() ?? "No description."}");
+            // log.Exception("The above function tried to call 'MeetingHud.CheckForEndVoting' when we have already completed voting.");
             return false;
         }
         meetingDelegate.AlreadyCompleted = true;

@@ -4,6 +4,7 @@ using System.Data;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using BepInEx;
 using HarmonyLib;
 using Lotus.RPC;
 using Lotus.Extensions;
@@ -15,6 +16,7 @@ using VentLib.Utilities.Extensions;
 using Lotus.API.Player;
 using VentLib.Networking.RPC;
 using Rewired;
+using UnityEngine;
 
 namespace Lotus.Addons;
 
@@ -26,11 +28,19 @@ public class AddonManager
     public static List<LotusAddon> Addons = new();
     public static Dictionary<byte, List<AddonInfo>> PlayerAddons = new();
 
+    public static readonly List<string> FailedAddons = [];
+
     internal static void ImportAddons()
     {
-        DirectoryInfo addonDirectory = new("./addons/");
+        DirectoryInfo addonDirectory = new(Path.Combine(Vents.BasePath,
+            OperatingSystem.IsAndroid() ? AssemblyUtils.GetAssemblyRefName(Assembly.GetExecutingAssembly()) : string.Empty,
+            "addons")
+        );
         if (!addonDirectory.Exists)
             addonDirectory.Create();
+        #if RELEASE
+            if (OperatingSystem.IsAndroid()) return; // xtra wants to disable this on android for now.
+        #endif
         addonDirectory.EnumerateFiles().Do(LoadAddon);
         Addons.ForEach(addon =>
         {
@@ -48,7 +58,7 @@ public class AddonManager
             Type? lotusType = assembly.GetTypes().FirstOrDefault(t => t.IsAssignableTo(typeof(LotusAddon)));
             if (lotusType == null)
                 throw new ConstraintException($"Lotus Addons requires ONE class file that extends {nameof(LotusAddon)}");
-            LotusAddon addon = (LotusAddon)AccessTools.Constructor(lotusType).Invoke(Array.Empty<object>());
+            LotusAddon addon = (LotusAddon)AccessTools.Constructor(lotusType).Invoke([]);
 
             log.Log(AddonLL, $"Loading Addon [{addon.Name} {addon.Version}]", "AddonManager");
             Vents.Register(assembly);
@@ -60,6 +70,7 @@ public class AddonManager
         {
             log.Exception($"Error occured while loading addon. Addon File Name: {file.Name}", e);
             log.Exception(e);
+            FailedAddons.Add(file.Name + ".");
         }
     }
 

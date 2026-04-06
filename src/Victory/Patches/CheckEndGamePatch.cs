@@ -61,6 +61,7 @@ public class CheckEndGamePatch
             Profilers.Global.Sampler.Stop(id, "CheckEndGamePatch-NotGameWin");
             return false;
         }
+        GameManager.Instance.ShouldCheckForGameEnd = false;
 
 
         List<PlayerControl> winners = winDelegate.GetWinners().DistinctBy(p => p.PlayerId).ToList();
@@ -113,6 +114,12 @@ public class CheckEndGamePatch
         Deferred = wasDeferred;
         return BeginWin;
     }
+}
+
+[HarmonyPatch(typeof(LogicGameFlowHnS), nameof(LogicGameFlowHnS.CheckEndCriteria))]
+public class CheckEndGamePatchHNS
+{
+    public static bool Prefix() => CheckEndGamePatch.Prefix();
 }
 
 [HarmonyPatch(typeof(GameManager), nameof(GameManager.RpcEndGame))]

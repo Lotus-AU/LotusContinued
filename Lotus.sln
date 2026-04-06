@@ -5,6 +5,8 @@ Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
+		Debug|Android = Debug|Android
+		Release|Android = Release|Android
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{FD4B69B4-E6C0-458E-8C66-6B00AC4399B6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU

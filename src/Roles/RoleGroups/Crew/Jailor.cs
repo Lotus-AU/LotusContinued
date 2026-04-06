@@ -81,7 +81,7 @@ public class Jailor: Crewmate, IRoleUI
     {
         jailedPlayer = byte.MaxValue;
         jailedText?.Delete();
-        if (!useKillButton)
+        if (!useKillButton && MyPlayer.IsAlive())
         {
             jailCooldown.Start(isRoundOne ? 10 : float.MinValue);
             if (MyPlayer.IsModded()) Vents.FindRPC((uint)ModCalls.UpdateJailor)?.Send([MyPlayer.OwnerId], isRoundOne);
@@ -147,6 +147,7 @@ public class Jailor: Crewmate, IRoleUI
                         MyPlayer.InteractWith(MyPlayer,
                             new UnblockedInteraction(new FatalIntent(true, () => new MisfiredEvent(MyPlayer)), this));
                 }
+                handle.Cancel();
 
                 if (jailedShownToAll) ChatHandler.Of(Translations.PublicExecuteMessage.Formatted(jailed.name), RoleColor.Colorize(RoleName)).Send();
                 return;
@@ -201,6 +202,14 @@ public class Jailor: Crewmate, IRoleUI
 
         ChatHandler.Of(Translations.JailorMessage, RoleColor.Colorize(RoleName)).Send(MyPlayer);
         jailed.IfPresent(p => ChatHandler.Of(Translations.JailedMessage, RoleColor.Colorize(RoleName)).Send(p));
+    }
+
+    [RoleAction(LotusActionType.PlayerDeath)]
+    private void MyDeath()
+    {
+        if (Game.State is not GameState.Roaming) return;
+        jailedPlayer = byte.MaxValue;
+        jailedText?.Delete();
     }
 
     [ModRPC((uint)ModCalls.UpdateJailor, RpcActors.Host, RpcActors.NonHosts)]

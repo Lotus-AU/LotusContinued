@@ -39,6 +39,10 @@ public abstract class GameMode : IGameMode
 
     public abstract string Name { get; set; }
 
+    public abstract string Description { get; set; }
+
+    public virtual BaseGameMode BaseGameMode => BaseGameMode.Standard;
+
     public CoroutineManager CoroutineManager { get; } = new();
     public abstract MatchData MatchData { get; set; }
     public abstract RoleOperations RoleOperations { get; }

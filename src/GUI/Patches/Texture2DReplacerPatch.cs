@@ -35,19 +35,48 @@ public class Texture2DReplacerPatch
                 Sprite spriteTexture = LotusAssets.LoadAsset<Sprite>(StartPath + texture.name + ".png");
                 if (spriteTexture == null || spriteTexture.texture == null) return;
                 DevLogger.Log($"Replacing {texture.name}.");
-                try
-                {
-                    Graphics.CopyTexture(spriteTexture.texture, texture);
-                    texture.filterMode = FilterMode.Bilinear;
 
-                    texture.name += "_Replaced"; // Makes it so we don't override the same texture twice
-                }
-                catch (Exception)
-                {
-                    DevLogger.Log("Error replacing texture.");
-                    throw;
-                }
+                if (OperatingSystem.IsAndroid()) ReplaceTextureAndroid(spriteTexture, texture);
+                else ReplaceTextureWindows(spriteTexture, texture);
             });
+    }
+
+    private static void ReplaceTextureAndroid(Sprite spriteTexture, Texture2D texture)
+    {
+        try
+        {
+            Texture2D src = spriteTexture.texture;
+
+            RenderTexture rt = RenderTexture.GetTemporary(
+                texture.width, texture.height, 0, RenderTextureFormat.ARGB32);
+            Graphics.Blit(src, rt);
+            Graphics.CopyTexture(rt, 0, 0, texture, 0, 0);
+            RenderTexture.ReleaseTemporary(rt);
+
+            texture.filterMode = FilterMode.Bilinear;
+            texture.name += "_Replaced";
+        }
+        catch (Exception e)
+        {
+            DevLogger.Log($"Error replacing texture: {e.Message}");
+            throw;
+        }
+    }
+
+    private static void ReplaceTextureWindows(Sprite spriteTexture, Texture2D texture)
+    {
+        try
+        {
+            Graphics.CopyTexture(spriteTexture.texture, texture);
+            texture.filterMode = FilterMode.Bilinear;
+
+            texture.name += "_Replaced"; // Makes it so we don't override the same texture twice
+        }
+        catch (Exception)
+        {
+            DevLogger.Log("Error replacing texture.");
+            throw;
+        }
     }
 
     [QuickPostfix(typeof(GameSettingMenu), nameof(GameSettingMenu.Start))]

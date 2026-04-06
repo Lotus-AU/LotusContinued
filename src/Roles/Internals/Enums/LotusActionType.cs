@@ -83,7 +83,7 @@ public enum LotusActionType
     RoundStart,
     RoundEnd,
     /// <summary>
-    /// Triggers when any player reports a body or calls a meeting. <br></br>Parameters: (Optional<NetworkedPlayerInfo>)
+    /// Triggers when any player reports a body or calls a meeting. <br></br>Parameters: (<see cref="Optional{NetworkedPlayerInfo}"/>)
     /// </summary>
     /// <param name="reporter"><b>(GLOBAL ONLY)</b><see cref="PlayerControl"/> the player reporting the body.</param>
     /// <param name="target"><see cref="Optional"/> an optional of <see cref="NetworkedPlayerInfo"/>, containing the player being reported. Null if meeting.</param>
@@ -116,7 +116,7 @@ public enum LotusActionType
     /// <param name="interaction"><see cref="Interaction"/> the interaction</param>
     Interaction,
     /// <summary>
-    /// Triggers whenever a player sends a chat message. This action cannot be canceled.
+    /// Triggers whenever a player sends a chat message. This action cannot be canceled. Messages starting with "/cmd" are hidden from everyone.
     /// </summary>
     /// <param name="sender"><b>(GLOBAL ONLY)</b><see cref="PlayerControl"/> the player who sent the chat message</param>
     /// <param name="message"><see cref="string"/> the message sent</param>

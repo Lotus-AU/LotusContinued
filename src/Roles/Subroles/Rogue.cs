@@ -19,7 +19,7 @@ using Lotus.Roles.Internals.Attributes;
 using Lotus.Extensions;
 using Lotus.Factions.Interfaces;
 using Lotus.Factions.Neutrals;
-using Lotus.GameModes.Standard;
+using Lotus.GameModes.Normal.Standard;
 using Lotus.Managers;
 using Lotus.Roles.RoleGroups.Crew;
 using Lotus.Roles.RoleGroups.Neutral;
@@ -69,7 +69,7 @@ public class Rogue : Subrole
 
     public Rogue()
     {
-        StandardRoles.Callbacks.Add(AddFactionSettings);
+        NormalStandardRoles.Callbacks.Add(AddFactionSettings);
     }
 
     [RoleAction(LotusActionType.Attack)]
