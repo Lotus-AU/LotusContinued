@@ -71,6 +71,7 @@ public class Copycat : CustomRole
     [RoleAction(LotusActionType.Interaction)]
     protected void CopycatAttacked(PlayerControl actor, Interaction interaction, ActionHandle handle)
     {
+        if (interaction.IsPromised || interaction is IUnblockedInteraction) return;
         if (turned || interaction.Intent is not (IFatalIntent or Unstoppable.UnstoppableIntent)) return;
         turned = true;
         AssignRole(actor);

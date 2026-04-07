@@ -22,6 +22,7 @@ using Lotus.Utilities;
 using Lotus.API.Player;
 using Lotus.Managers.History;
 using Lotus.Managers.History.Events;
+using Lotus.Roles.Subroles;
 using VentLib.Utilities;
 using VentLib.Utilities.Optionals;
 
@@ -41,7 +42,8 @@ public class SchrodingersCat : CustomRole
     [RoleAction(LotusActionType.Interaction)]
     private void SchrodingerCatAttacked(PlayerControl actor, Interaction interaction, ActionHandle handle)
     {
-        if (interaction.Intent is not IFatalIntent) return;
+        if (interaction.IsPromised || interaction is IUnblockedInteraction) return;
+        if (interaction.Intent is not (IFatalIntent or Unstoppable.UnstoppableIntent)) return;
         if (numberOfLives <= 0) return;
         numberOfLives--;
         AssignFaction(actor);

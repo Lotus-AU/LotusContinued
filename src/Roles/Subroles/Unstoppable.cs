@@ -49,7 +49,7 @@ public class Unstoppable : Subrole
     protected override GameOptionBuilder RegisterOptions(GameOptionBuilder optionStream) =>
         base.RegisterOptions(optionStream)
             .SubOption(sub => sub.KeyName("Can Kill Untargetable Players", Translations.Options.CanKillUntargetable)
-                .AddOnOffValues(false)
+                .AddBoolean(false)
                 .BindBool(b => canKillUntargetable = b)
                 .Build());
 
