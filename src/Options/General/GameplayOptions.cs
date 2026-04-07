@@ -15,7 +15,7 @@ public class GameplayOptions: LotusOptionHolder
 {
     public override OptionManager OptionManager => GeneralOptions.StandardOptionManager;
 
-    private static Color _optionColor = new(0.81f, 1f, 0.75f);
+    private static readonly Color _optionColor = new(0.81f, 1f, 0.75f);
 
     public bool OptimizeRoleAssignment;
 

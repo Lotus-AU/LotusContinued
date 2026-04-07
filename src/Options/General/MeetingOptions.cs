@@ -11,7 +11,7 @@ public class MeetingOptions: LotusOptionHolder
 {
     public override OptionManager OptionManager => GeneralOptions.StandardOptionManager;
 
-    private static Color _optionColor = new(0.27f, 0.75f, 1f);
+    private static readonly Color _optionColor = new(0.27f, 0.75f, 1f);
 
     public int MeetingButtonPool = -1;
     public bool SyncMeetingButtons => MeetingButtonPool != -1;
