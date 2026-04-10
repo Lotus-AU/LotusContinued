@@ -15,16 +15,16 @@ public class MonoToggleButton : MonoBehaviour
     private SpriteRenderer enabledRender;
     private PassiveButton disabledButton;
     private SpriteRenderer disabledRender;
+    private TextMeshPro enabledTextTMP;
+    private TextMeshPro disabledTextTMP;
 
     private string enabledText = "On";
     private string disabledText = "Off";
-
-    private TextMeshPro enabledTextTMP;
-    private TextMeshPro disabledTextTMP;
-    public bool state;
-
     private Action toggleOnAction = () => { };
     private Action toggleOffAction = () => { };
+
+    public bool state;
+    public bool runActionOnStart = true;
 
     public MonoToggleButton()
     {
@@ -70,7 +70,7 @@ public class MonoToggleButton : MonoBehaviour
         transform.localScale = new Vector3(0.765f, 1.417f, 1f);
     }
 
-    private void Start() => SetState(state);
+    private void Start() => SetState(state, !runActionOnStart);
 
     public void Toggle() => SetState(state = !state);
 
@@ -80,6 +80,17 @@ public class MonoToggleButton : MonoBehaviour
         if (state) SetOnState(noAction);
         else SetOffState(noAction);
     }
+
+    public void SetTransparency(float transparency)
+    {
+        if (enabledRender != null)  enabledRender.color  = WithAlpha(enabledRender.color,  transparency);
+        if (disabledRender != null) disabledRender.color = WithAlpha(disabledRender.color, transparency);
+
+        if (enabledTextTMP != null)  enabledTextTMP.alpha  = transparency;
+        if (disabledTextTMP != null) disabledTextTMP.alpha = transparency;
+    }
+
+    private Color WithAlpha(Color c, float a) => new Color(c.r, c.g, c.b, a);
 
     private void SetOnState(bool noAction = false)
     {

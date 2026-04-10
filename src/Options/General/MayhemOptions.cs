@@ -16,7 +16,7 @@ public class MayhemOptions: LotusOptionHolder
 {
     public override OptionManager OptionManager => GeneralOptions.StandardOptionManager;
 
-    private static Color _optionColor = new(0.84f, 0.8f, 1f);
+    private static readonly Color _optionColor = new(0.84f, 0.8f, 1f);
 
     public bool AllRolesCanVent;
     public bool CamoComms;

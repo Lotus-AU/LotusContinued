@@ -29,6 +29,8 @@ public class GeneralMenu : MonoBehaviour, IBaseOptionMenuComponent
     private MonoToggleButton mouseMovementButton;
     private MonoToggleButton changeKeyBindingButton;
     private MonoToggleButton languageButton;
+    private SlideBar mobileJoystickSize;
+    private TextMeshPro joystickText;
 
     private TiledToggleButton controlScheme;
     private LanguageSetter languageSetter;
@@ -44,6 +46,8 @@ public class GeneralMenu : MonoBehaviour, IBaseOptionMenuComponent
 
     private GameObject anchorObject;
     private bool languageSetterExists;
+
+    private FloatRange joystickSizes;
 
     public GeneralMenu(IntPtr intPtr) : base(intPtr)
     {
@@ -139,8 +143,8 @@ public class GeneralMenu : MonoBehaviour, IBaseOptionMenuComponent
         controlGameObject.transform.localScale = new Vector3(1f, 1f, 1f);
 
         controlScheme = controlGameObject.AddComponent<TiledToggleButton>();
-        controlScheme.SetLeftButtonText("Mouse");
-        controlScheme.SetRightButtonText("Mouse & Keyboard");
+        controlScheme.SetLeftButtonText(OperatingSystem.IsWindows() ? "Mouse" : "Joystick");
+        controlScheme.SetRightButtonText(OperatingSystem.IsWindows() ? "Mouse & Keyboard" : "Tap to Move");
         controlScheme.SetState(DataManager.Settings.input.inputMode is ControlTypes.Keyboard);
 
         PassiveButton joystickModeButton = optionsMenuBehaviour.gameObject.transform.Find("GeneralTab/ControlGroup/JoystickModeButton").GetComponent<PassiveButton>();
@@ -167,6 +171,7 @@ public class GeneralMenu : MonoBehaviour, IBaseOptionMenuComponent
         mouseMovementButton.SetToggleOffAction(() => optionsMenuBehaviour.DisableMouseMovement.UpdateText(false));
         mouseMovementButton.SetState(optionsMenuBehaviour.DisableMouseMovement.onState);
         mouseMovementObject.transform.localPosition = new Vector3(-0.983f, -0.328f, -1f);
+        mouseMovementObject.SetActive(OperatingSystem.IsWindows());
 
         optionsMenuBehaviour.DisableMouseMovement.gameObject.SetActive(false);
 
@@ -177,17 +182,53 @@ public class GeneralMenu : MonoBehaviour, IBaseOptionMenuComponent
         keybindingObject.transform.SetParent(anchorObject.transform);
         keybindingObject.transform.localScale = new Vector3(1f, 1f, 1f);
         changeKeyBindingButton = keybindingObject.AddComponent<MonoToggleButton>();
-        changeKeyBindingButton.SetOnText("Change Keybindings");
-        changeKeyBindingButton.SetOffText("Change Keybindings");
-        changeKeyBindingButton.SetToggleOnAction(() =>
+        changeKeyBindingButton.runActionOnStart = false;
+        changeKeyBindingButton.ConfigureAsPressButton("Change Keybindings", () =>
         {
             optionsMenuBehaviour.KeyboardOptions.GetComponentInChildren<PassiveButton>(true).ReceiveClickDown();
-            changeKeyBindingButton.SetState(false, true);
         });
+        keybindingObject.SetActive(OperatingSystem.IsWindows());
         keybindingObject.transform.localPosition = new Vector3(1.04f, -0.328f, -1f);
 
         optionsMenuBehaviour.KeyboardOptions.SetActive(false);
         optionsMenuBehaviour.MouseAndKeyboardOptions.GetComponentsInChildren<Component>().ForEach(c => c.gameObject.SetActive(false));
+
+        // ==========================================
+        //     Joystick Button
+        // ==========================================
+
+        mobileJoystickSize = Instantiate(optionsMenuBehaviour.JoystickSizeSlider, anchorObject.transform);
+        mobileJoystickSize.transform.localPosition = new Vector3(-3.85f, -1.2f, 1f);
+        mobileJoystickSize.transform.localScale = new Vector3(1.1f, 1.1f, 1f);
+        mobileJoystickSize.gameObject.GetChildren(true).ForEach(go => go.SetActive(true));
+
+        var joystickTitleText = mobileJoystickSize.GetComponentInChildren<TextMeshPro>();
+        joystickTitleText.transform.localPosition += new Vector3(0.7f, 0.25f);
+
+        joystickText = Instantiate(joystickTitleText, mobileJoystickSize.transform);
+        joystickText.transform.localPosition += new Vector3(4f, 0.25f);
+        mobileJoystickSize.OnValueChange.AddListener((Action)(() =>
+        {
+            joystickText.text = CalculateJoystickSizePercent(mobileJoystickSize.Value);
+            optionsMenuBehaviour.JoystickSizeSlider.SetValue(mobileJoystickSize.Value);
+            optionsMenuBehaviour.JoystickSizeSlider.OnValidate();
+        }));
+        if (OperatingSystem.IsAndroid())
+        {
+            mobileJoystickSize.enabled = true;
+            mobileJoystickSize.SetEnabledColors();
+            mobileJoystickSize.Value = optionsMenuBehaviour.JoystickSizes.ReverseLerp(DataManager.Settings.Input.TouchJoystickSize);
+
+            joystickText.gameObject.SetActive(true);
+            mobileJoystickSize.gameObject.SetActive(true);
+        }
+        else
+        {
+            joystickText.gameObject.SetActive(false);
+            mobileJoystickSize.gameObject.SetActive(false);
+        }
+
+        joystickSizes = optionsMenuBehaviour.JoystickSizes;
 
         // ==========================================
         //              SOUND STUFF
@@ -279,6 +320,7 @@ public class GeneralMenu : MonoBehaviour, IBaseOptionMenuComponent
         anchorObject.SetActive(true);
         Async.Schedule(() =>
         {
+            joystickText.text = CalculateJoystickSizePercent(mobileJoystickSize.Value);
             musicText.text = CalculateVolPercent(musicSlider.Value);
             sfxText.text = CalculateVolPercent(sfxSlider.Value);
         }, 0.000001f);
@@ -298,5 +340,9 @@ public class GeneralMenu : MonoBehaviour, IBaseOptionMenuComponent
     private static string CalculateVolPercent(float value)
     {
         return Math.Round(value * 100, 0).ToString(CultureInfo.InvariantCulture) + "%";
+    }
+    private string CalculateJoystickSizePercent(float value)
+    {
+        return Math.Round(joystickSizes.Lerp(value) * 100, 0).ToString(CultureInfo.InvariantCulture) + "%";
     }
 }

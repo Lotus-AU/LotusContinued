@@ -20,7 +20,7 @@ public class AdminOptions: LotusOptionHolder
 {
     public override OptionManager OptionManager => GeneralOptions.StandardOptionManager;
 
-    private static Color _optionColor = GameMaster.GMColor;
+    private static readonly Color _optionColor = GameMaster.GMColor;
 
     // ReSharper disable once InconsistentNaming
     public bool HostGM;

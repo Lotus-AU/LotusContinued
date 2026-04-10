@@ -32,7 +32,7 @@ public class ModKeybindings
     {
         // Dump Log
         // Bind(KeyCode.F, KeyCode.LeftControl, KeyCode.Return).Do(DumpLog);  // crashes the game and ultimately causes some issues.
-        Bind(KeyCode.D, KeyCode.LeftControl, KeyCode.Return).Do(() => LogManager.WriteSessionLog(""));
+        Bind(KeyCode.D, KeyCode.LeftControl, KeyCode.Return).Name("Dump Log").Do(() => LogManager.WriteSessionLog(""));
 
         // Profile All
         Bind(KeyCode.F2).Do(ProfileAll);
@@ -40,16 +40,19 @@ public class ModKeybindings
         // Kill Player (Suicide)
         Bind(KeyCode.LeftShift, KeyCode.D, KeyCode.Return)
             .If(p => p.HostOnly().State(Game.InGameStates))
+            .Name("Suicide")
             .Do(Suicide);
 
         // Close Meeting
         Bind(KeyCode.LeftShift, KeyCode.M, KeyCode.Return)
             .If(p => p.HostOnly().State(GameState.InMeeting))
+            .Name("End Meeting")
             .Do(() => MeetingHud.Instance.RpcClose());
 
         // Instant begin game
         Bind(KeyCode.LeftShift)
             .If(p => p.HostOnly().Predicate(() => MatchState.IsCountDown && !HudManager.Instance.Chat.IsOpenOrOpening))
+            .Name("Begin Game")
             .Do(() =>
             {
                 SoundManager.Instance.StopSound(GameStartManager.Instance.gameStartSound);
@@ -59,6 +62,7 @@ public class ModKeybindings
         // Restart countdown timer
         Bind(KeyCode.C)
             .If(p => p.HostOnly().Predicate(() => MatchState.IsCountDown && !HudManager.Instance.Chat.IsOpenOrOpening))
+            .Name("End Start Countdown")
             .Do(() =>
             {
                 GeneralOptions.AdminOptions.AutoStartMaxTime = -1;
@@ -72,49 +76,58 @@ public class ModKeybindings
         // Reset Game Options
         Bind(KeyCode.LeftControl, KeyCode.Delete)
             .If(p => p.Predicate(() => Object.FindObjectOfType<GameOptionsMenu>()))
+            .Name("Reset Game Options")
             .Do(ResetGameOptions);
 
         // Instant call meeting
         Bind(KeyCode.RightShift, KeyCode.M, KeyCode.Return)
             .If(p => p.HostOnly().State(GameState.Roaming))
             .Do(() => MeetingPrep.PrepMeeting(PlayerControl.LocalPlayer))
+            .Name("Call Meeting")
             .DevOnly();
 
         // Sets kill cooldown to 0
         Bind(KeyCode.X)
             .If(p => p.HostOnly().State(GameState.Roaming))
+            .Name("End Kill Cooldown")
             .Do(InstantReduceTimer)
             .DevOnly();
 
         // Reload All Files in LOTUS_DATA
         Bind(KeyCode.LeftControl, KeyCode.T)
             .If(p => p.State(GameState.InLobby))
+            .Name("Reload Lotus Files")
             .Do(ReloadAllFiles);
 
         // Change Hud Active
         Bind(KeyCode.F7)
             .If(p => p.State(GameState.InLobby, GameState.Roaming).Predicate(() => MeetingHud.Instance == null))
-            .Do(() => HudManager.Instance.gameObject.SetActive(hudActive = !hudActive));
+            .Do(() => HudManager.Instance.gameObject.SetActive(hudActive = !hudActive))
+            .Name("Toggle Hud Visibility");
 
         // Close Options I think.
         Bind(KeyCode.Escape)
             .If(p => p.Predicate(() => GameOptionMenuOpenPatch.MenuBehaviour != null && GameOptionMenuOpenPatch.MenuBehaviour.IsOpen))
-            .Do(() => GameOptionMenuOpenPatch.MenuBehaviour.Close());
+            .Do(() => GameOptionMenuOpenPatch.MenuBehaviour.Close())
+            .Name("Close Options");
 
         // Unblackscreen Everyone
         Bind(KeyCode.LeftShift, KeyCode.Z, KeyCode.Return)
             .If(p => p.HostOnly().State(GameState.Roaming))
             .If(() => ProjectLotus.AdvancedRoleAssignment)
-            .Do(() => Players.GetPlayers().Where(player => !player.IsModded() && !player.IsHost()).ForEach(player => player.ResetPlayerCam()));
+            .Do(() => Players.GetPlayers().Where(player => !player.IsModded() && !player.IsHost()).ForEach(player => player.ResetPlayerCam()))
+            .Name("Unblackscreen Everyone");
 
         // Toggle History Menu
         Bind(KeyCode.H)
             .If(p => p.State(GameState.InLobby))
+            .Name("Toggle History Menu")
             .Do(ToggleHistoryButton);
 
         // Toggle Chat
         Bind(KeyCode.LeftShift, KeyCode.LeftControl, KeyCode.C)
             .If(p => p.HostOnly().State(GameState.Roaming, GameState.InMeeting))
+            .Name("Toggle Chat")
             .Do(ToggleChat);
     }
 

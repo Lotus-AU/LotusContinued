@@ -14,7 +14,7 @@ public class SabotageOptions: LotusOptionHolder
 {
     public override OptionManager OptionManager => GeneralOptions.StandardOptionManager;
 
-    private static Color _optionColor = new(1f, 0.94f, 0.63f);
+    private static readonly Color _optionColor = new(1f, 0.94f, 0.63f);
 
     public int SkeldReactorCountdown;
     public bool CustomSkeldReactorCountdown => SkeldReactorCountdown != -1;

@@ -67,12 +67,11 @@ public class Pestilence : NeutralKillingBase, IRoleUI
     private void PestilenceAttacked(PlayerControl actor, Interaction interaction, ActionHandle handle)
     {
         Intent intent = interaction.Intent;
-        if (intent is not IFatalIntent) return;
+        if (intent is not IFatalIntent || interaction.IsPromised) return;
 
         bool canceled = false;
         switch (interaction)
         {
-
             case IUnblockedInteraction: return;
             case IDelayedInteraction when immuneToDelayedAttacks:
             case IRangedInteraction when immuneToRangedAttacks:

@@ -39,8 +39,8 @@ public class ResolutionUtils
 
     static ResolutionUtils()
     {
-        HotkeyManager.Bind(KeyCode.LeftControl, KeyCode.Minus).Do(ShrinkScreen);
-        HotkeyManager.Bind(KeyCode.LeftControl, KeyCode.Equals).Do(GrowScreen);
+        HotkeyManager.Bind(KeyCode.LeftControl, KeyCode.Minus).Name("Shrink Screen").Do(ShrinkScreen);
+        HotkeyManager.Bind(KeyCode.LeftControl, KeyCode.Equals).Name("Grow Screen").Do(GrowScreen);
     }
 
     public static void SetResolution(int width, int height, bool fullscreen = false) => ResolutionManager.SetResolution(width, height, fullscreen);

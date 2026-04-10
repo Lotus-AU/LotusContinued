@@ -55,7 +55,7 @@ namespace Lotus;
 public class ProjectLotus : BasePlugin, IGitVersionEmitter
 {
     private static readonly StandardLogger log = LoggerFactory.GetLogger<StandardLogger>(typeof(ProjectLotus));
-    private const string Id = "com.discussions.LotusContinued";
+    public const string Id = "com.discussions.LotusContinued";
     public const string VisibleVersion = $"{MajorVersion}.{MinorVersion}.{PatchVersion}";
     public const string CompileVersion = $"{MajorVersion}.{MinorVersion}.{PatchVersion}.{BuildNumber}";
 
@@ -70,7 +70,7 @@ public class ProjectLotus : BasePlugin, IGitVersionEmitter
 
     public static readonly string ModName = "Project Lotus";
     public static readonly string ModColor = "#4FF918";
-    public static readonly string DevVersionStr = "Dev April 1 2026";
+    public static readonly string DevVersionStr = "Dev April 10 2026";
 
     public static bool DevVersion;
 

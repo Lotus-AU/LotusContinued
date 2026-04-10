@@ -1,3 +1,5 @@
+using System;
+using System.Collections;
 using HarmonyLib;
 using Lotus.Factions.Crew;
 using Lotus.Extensions;
@@ -8,7 +10,13 @@ using Lotus.API.Odyssey;
 using Lotus.Roles.Managers.Interfaces;
 using Lotus.API.Player;
 using System.Linq;
+using System.Reflection;
+using BepInEx.Unity.IL2CPP.Utils.Collections;
+using Il2CppInterop.Runtime.InteropTypes;
+using Il2CppSystem.Collections.Generic;
 using Lotus.Factions;
+using Lotus.Utilities;
+using UnityEngine;
 using VentLib.Utilities.Extensions;
 
 namespace Lotus.Patches.Intro;
@@ -16,6 +24,7 @@ namespace Lotus.Patches.Intro;
 [HarmonyPatch(typeof(IntroCutscene), nameof(IntroCutscene.BeginImpostor))]
 class BeginImpostorPatch
 {
+
     public static bool Prefix(IntroCutscene __instance, ref Il2CppSystem.Collections.Generic.List<PlayerControl> yourTeam)
     {
         DevLogger.Log("Begin Impostor");
@@ -33,18 +42,21 @@ class BeginImpostorPatch
             else PlayerControl.LocalPlayer.Data.Role.IntroSound = BeginCrewmatePatch.GetIntroSound(role.RealRole);
             return true;
         }
-
-        yourTeam = new Il2CppSystem.Collections.Generic.List<PlayerControl>();
-        yourTeam.Add(PlayerControl.LocalPlayer);
-        foreach (var pc in PlayerControl.AllPlayerControls)
+        // somehow fixes the crash ???
+        if (role.Faction is Crewmates && role.GetType() != IRoleManager.Current.FallbackRole().GetType())
         {
-            if (!pc.AmOwner) yourTeam.Add(pc);
-        }
+            yourTeam = new Il2CppSystem.Collections.Generic.List<PlayerControl>();
+            yourTeam.Add(PlayerControl.LocalPlayer);
+            foreach (var pc in PlayerControl.AllPlayerControls)
+            {
+                if (!pc.AmOwner) yourTeam.Add(pc);
+            }
 
-        __instance.BeginCrewmate(yourTeam);
-        #if PC
-        __instance.overlayHandle.color = Palette.CrewmateBlue;
-        #endif
+            __instance.BeginCrewmate(yourTeam);
+            // if (!OperatingSystem.IsAndroid()) __instance.overlayHandle.color = Palette.CrewmateBlue;
+        }
+        else return true;
+        if (role.Faction is not Crewmates || role.GetType() == IRoleManager.Current.FallbackRole().GetType()) return true;
         return false;
     }
 
