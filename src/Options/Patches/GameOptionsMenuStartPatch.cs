@@ -1,3 +1,4 @@
+using System;
 using HarmonyLib;
 using UnityEngine;
 using Lotus.GUI;
@@ -13,7 +14,7 @@ public static class GameSettingsStartPatch
         Transform background = __instance.transform.Find("Background");
         SpriteRenderer plBackground = background.parent.gameObject.QuickComponent<SpriteRenderer>("PLBackground",
             background.localPosition + new Vector3(0f, 0.2f, 0f));
-        plBackground.sprite = LotusAssets.LoadSprite("PLBackground-Upscale.png", 190);
+        plBackground.sprite = LotusAssets.LoadSprite("PLBackground-Upscale.png", OperatingSystem.IsWindows() ? 190 : 155);
         plBackground.gameObject.layer = LayerMask.NameToLayer("UI");
         background.gameObject.SetActive(false);
     }
