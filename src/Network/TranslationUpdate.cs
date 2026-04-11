@@ -54,6 +54,7 @@ public static class TranslationUpdate
         {
             string fallbackEnglishLanguage = LotusAssets.LoadAsset<TextAsset>("Fallback/lang_English.yaml").text;
             string destPath = Path.Combine(lotusLanguageFiles.FullName, "lang_English.yaml");
+            bool fileAlreadyExists = File.Exists(destPath);
             File.WriteAllText(destPath, fallbackEnglishLanguage);
 
             Localizer.Reload(Assembly.GetExecutingAssembly());
@@ -68,6 +69,7 @@ public static class TranslationUpdate
             warningScreen.titleTexxt.text = Localizer.Translate("TranslationUpdate.ErrorTitle", "Translation Update Error");
             warningScreen.bodyText.text = Localizer.Translate("TranslationUpdate.ErrorMessage", "An error occurred while downloading the translation files. A fallback file has been used. It will try to redownload the files again on next launch.");
             warningScreen.button1Text.text = DestroyableSingleton<TranslationController>.Instance.GetString(StringNames.Okay, new Il2CppReferenceArray<Il2CppSystem.Object>(0));
+            warningScreen.button1Text.gameObject.SetActive(fileAlreadyExists);
             warningScreen.gameObject.SetActive(true);
             while (warningScreen.gameObject.activeSelf) yield return null;
         }
