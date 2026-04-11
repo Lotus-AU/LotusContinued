@@ -246,6 +246,8 @@ public abstract class CustomRole : AbstractBaseRole, IRpcSendable<CustomRole>
 
     public virtual CustomRole ChangeRoleTo(CustomRole newRole, bool getCleanRole = true, bool revertUI = true)
     {
+        if (Game.MatchData.Roles.GetMainRole(MyPlayer.PlayerId) != this)
+            throw new NotSupportedException("Cannot call 'ChangeRoleTo' when the current role is not the player's main role.");
         log.Debug($"Changing {MyPlayer.name}'s role from {EnglishRoleName} to {newRole.EnglishRoleName}. (a role called this method.)");
         if (getCleanRole) newRole = IRoleManager.Current.GetCleanRole(newRole);
 
@@ -277,6 +279,8 @@ public abstract class CustomRole : AbstractBaseRole, IRpcSendable<CustomRole>
             .Select(p => p.PlayerId)
             .ToHashSet();
 
+        var teamInfo = Game.MatchData.VanillaRoleTracker.GetInfo(MyPlayer.PlayerId);
+
         RoleTypes crewRole = MyPlayer.IsAlive() ? RoleTypes.Crewmate : RoleTypes.CrewmateGhost;
         RoleTypes impRole = MyPlayer.IsAlive() ? newRole.RealRole : newRole.RealRole.GhostEquivalent();
 
@@ -284,15 +288,60 @@ public abstract class CustomRole : AbstractBaseRole, IRpcSendable<CustomRole>
         oldAllies.ForEach(id =>
         {
             if (newAllies.Contains(id) || id == MyPlayer.PlayerId) return;
-            Game.MatchData.VanillaRoleTracker.GetInfo(id).AddVanillaCrewmate(MyPlayer.PlayerId);
+            teamInfo.AddVanillaCrewmate(id);
             PlayerControl? player = Utils.GetPlayerById(id);
             if (player == null) return;
             MyPlayer.RpcSetRoleDesync(crewRole, player);
         });
+        Players.GetAllRoles().ForEach(role =>
+        {
+            if (role.Faction.GetType() != typeof(ImpostorFaction)) return;
+            PlayerControl player = role.MyPlayer;
+            byte id = player.PlayerId;
+            if (newAllies.Contains(id)) return;
+
+            if (newRole.RealRole.IsCrewmate())
+            {
+                if (this.RealRole.IsCrewmate()) return;
+                // we turned from an imp role/NK to crew
+                // now we must see these players as an Impostor.
+                teamInfo.AddVanillaImpostor(id);
+                MyPlayer.RpcSetRoleDesync(newRole.RealRole, player);
+                player.RpcSetRoleDesync(role.RealRole, MyPlayer);
+                return;
+            }
+
+            // we are imp.
+            // we must now see these players as crew
+            teamInfo.AddVanillaCrewmate(id);
+            MyPlayer.RpcSetRoleDesync(crewRole, player);
+
+            // set them as crewmate for us so we can interact with them.
+            player.RpcSetRoleDesync(RoleTypes.Crewmate, MyPlayer);
+        });
+        teamInfo.Impostors.ForEach(id =>
+        {
+            if (newAllies.Contains(id)) return;
+            PlayerControl? player = Utils.GetPlayerById(id);
+            if (player == null) return;
+            if (player.PrimaryRole().Faction.GetType() == typeof(ImpostorFaction) && newRole.RealRole.IsCrewmate())
+                // if they are imp, and we are crew
+                // its fine that they are impostors for us.
+                return;
+
+            // they are imp and our role is impostor.
+            // set them to crew and make sure they see us as crew
+            teamInfo.AddVanillaCrewmate(MyPlayer.PlayerId);
+            if (player == null) return;
+            MyPlayer.RpcSetRoleDesync(crewRole, player);
+
+            // set them as crewmate for us so we can interact with them.
+            player.RpcSetRoleDesync(RoleTypes.Crewmate, MyPlayer);
+        });
         newAllies.ForEach(id =>
         {
             if (id == MyPlayer.PlayerId) return;
-            Game.MatchData.VanillaRoleTracker.GetInfo(id).AddVanillaImpostor(MyPlayer.PlayerId);
+            teamInfo.AddVanillaImpostor(id);
             PlayerControl? player = Utils.GetPlayerById(id);
             if (player == null) return;
             MyPlayer.RpcSetRoleDesync(impRole, player);
