@@ -24,7 +24,11 @@ public class ServerAuthPatch
             log.Debug($"Updating to match new queued lobby type.");
         }
         if (IsLocal) return;
-        __result += Constants.MODDED_REVISION_MODIFIER_VALUE;
+        var revision = __result % 50;
+        if (revision < Constants.MODDED_REVISION_MODIFIER_VALUE)
+        {
+            __result += Constants.MODDED_REVISION_MODIFIER_VALUE;
+        }
     }
 
     [QuickPostfix(typeof(Constants), nameof(Constants.IsVersionModded))]
