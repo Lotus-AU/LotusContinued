@@ -87,6 +87,8 @@ public class ProjectLotus : BasePlugin, IGitVersionEmitter
     public static bool FinishedLoading;
     public const bool AdvancedRoleAssignment = true;
 
+    public static bool HasReactorPlugin;
+
     internal Func<MeetingDelegate, IBlackscreenResolver> GetNewBlackscreenResolver = new(md => new BlackscreenResolver(md));
 
     public ProjectLotus()
@@ -139,6 +141,8 @@ public class ProjectLotus : BasePlugin, IGitVersionEmitter
         GameModeManager = new GameModeManager();
 
         log.Info("GitVersion - " + CurrentVersion);
+
+        HasReactorPlugin = IL2CPPChainloader.Instance.Plugins.ContainsKey("gg.reactor.api");
 
         // Setup, order matters here
 

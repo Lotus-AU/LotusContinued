@@ -83,6 +83,7 @@ public static class ReactorHandshakePatch
     public static void Postfix(ref Il2CppStructArray<byte> __result)
     {
         if (ConnectionManager.IsVanillaServer) return;
+        if (ProjectLotus.HasReactorPlugin) return;
         var handshake = new MessageWriter(1000);
 
         // Original data
