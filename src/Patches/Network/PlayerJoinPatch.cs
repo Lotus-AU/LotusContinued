@@ -1,15 +1,20 @@
 using System;
+using System.Reflection;
 using HarmonyLib;
 using InnerNet;
 using Lotus.API.Odyssey;
 using Lotus.API.Reactive;
 using Lotus.API.Reactive.HookEvents;
+using Lotus.Extensions;
 using Lotus.Logging;
 using Lotus.Managers;
+using Lotus.Network;
 using Lotus.Utilities;
 using Lotus.Options;
+using VentLib.Localization;
 using VentLib.Utilities;
 using VentLib.Utilities.Attributes;
+using VentLib.Utilities.Extensions;
 using VentLib.Utilities.Harmony.Attributes;
 using xCloud;
 using static Platforms;
@@ -54,14 +59,19 @@ public class PlayerJoinPatch
 
         client.PlayerName = playerName;
         player.name = playerName;
-        bool kickPlayer = false;
-        kickPlayer = kickPlayer || GeneralOptions.AdminOptions.KickPlayersWithoutFriendcodes && client.FriendCode == "" && AmongUsClient.Instance.NetworkMode is not NetworkModes.LocalGame;
-        kickPlayer = kickPlayer || client.PlatformData.Platform is Android or IPhone && GeneralOptions.AdminOptions.KickMobilePlayers;
 
-        if (kickPlayer)
+        if (GeneralOptions.AdminOptions.KickPlayersWithoutFriendcodes && client.FriendCode == "" &&
+            AmongUsClient.Instance.NetworkMode is not NetworkModes.LocalGame && ConnectionManager.IsVanillaServer)
         {
-            log.Trace($"{playerName} was kicked because one of the kick options are on in the Admin Settings area.");
-            AmongUsClient.Instance.KickPlayer(client.Id, false);
+            log.Trace($"{playerName} was kicked because they do not have a friendcode.");
+            AmongUsClient.Instance.KickPlayerWithMessage(player, string.Format(Localizer.Translate("ModerationActions.NoFriendCode"), playerName));
+            return;
+        }
+
+        if (client.PlatformData.Platform is Android or IPhone && GeneralOptions.AdminOptions.KickMobilePlayers)
+        {
+            log.Trace($"{playerName} was kicked because they are on a mobile platform.");
+            AmongUsClient.Instance.KickPlayerWithMessage(player, string.Format(Localizer.Translate("ModerationActions.MobileDevice"), playerName));
             return;
         }
 
