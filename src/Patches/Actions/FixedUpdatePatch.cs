@@ -5,14 +5,8 @@ using Lotus.Extensions;
 using Lotus.Roles.Internals.Enums;
 using Lotus.Roles.Operations;
 using Lotus.Options;
-using VentLib.Utilities;
 using VentLib.Utilities.Debug.Profiling;
-using VentLib.Utilities.Extensions;
 using Lotus.RPC.CustomObjects;
-using System.Linq;
-using System.Reflection;
-using Lotus.Utilities;
-using VentLib.Localization;
 
 namespace Lotus.Patches.Actions;
 
@@ -21,7 +15,6 @@ static class FixedUpdatePatch
 {
     private static readonly StandardLogger log = LoggerFactory.GetLogger<StandardLogger>(typeof(FixedUpdatePatch));
     private static readonly ActionHandle FixedUpdateHandle = ActionHandle.NoInit();
-    private static FixedUpdateLock _levelKickLock = new(1f); // needed to stop excessively long name if kicking player
     private static void Postfix(PlayerControl __instance)
     {
         if (__instance is {PlayerId: 254, notRealPlayer: true}) return;
@@ -29,14 +22,6 @@ static class FixedUpdatePatch
         // DisplayModVersion(__instance);
 
         if (!AmongUsClient.Instance.AmHost) return;
-
-        if (!__instance.IsHost() && Game.State is GameState.InLobby &&
-            __instance.Data.PlayerLevel < GeneralOptions.AdminOptions.KickPlayersUnderLevel &&
-            _levelKickLock.AcquireLock())
-        {
-            AmongUsClient.Instance.KickPlayerWithMessage(__instance, string.Format(Localizer.Translate("ModerationActions.LevelKick", assembly: Assembly.GetExecutingAssembly()), __instance.name));
-            log.Trace($"{__instance.name} was kicked because they are below the minimum level set by the host. ({GeneralOptions.AdminOptions.KickPlayersUnderLevel})");
-        }
 
         if (Game.State is not GameState.Roaming) return;
         bool isLocalPlayer = __instance.PlayerId == PlayerControl.LocalPlayer.PlayerId;

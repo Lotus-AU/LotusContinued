@@ -37,11 +37,6 @@ public class PlayerJoinPatch
     public static void Postfix(AmongUsClient __instance, [HarmonyArgument(0)] ClientData client)
     {
         log.Trace($"{client.PlayerName} (ClientID={client.Id}) (Platform={client.PlatformData.Platform}) (FriendCode={client.FriendCode}) joined the game.", "Session");
-        if (DestroyableSingleton<FriendsListManager>.Instance.IsPlayerBlockedUsername(client.FriendCode) && AmongUsClient.Instance.AmHost)
-        {
-            AmongUsClient.Instance.KickPlayer(client.Id, true);
-            log.Info($"ブロック済みのプレイヤー{client.PlayerName}({client.FriendCode})をBANしました。", "BAN");
-        }
 
         string playerName = client.PlayerName;
 
@@ -72,6 +67,21 @@ public class PlayerJoinPatch
         {
             log.Trace($"{playerName} was kicked because they are on a mobile platform.");
             AmongUsClient.Instance.KickPlayerWithMessage(player, string.Format(Localizer.Translate("ModerationActions.MobileDevice"), playerName));
+            return;
+        }
+
+        if (!player.IsHost() && Game.State is GameState.InLobby &&
+            client.PlayerLevel < GeneralOptions.AdminOptions.KickPlayersUnderLevel)
+        {
+            AmongUsClient.Instance.KickPlayerWithMessage(player, string.Format(Localizer.Translate("ModerationActions.LevelKick"), playerName));
+            log.Trace($"{playerName} was kicked because they are below the minimum level set by the host. ({GeneralOptions.AdminOptions.KickPlayersUnderLevel})");
+            return;
+        }
+
+        if (DestroyableSingleton<FriendsListManager>.Instance.IsPlayerBlockedUsername(client.FriendCode) && AmongUsClient.Instance.AmHost)
+        {
+            PluginDataManager.BanManager.BanWithReason(player, "Blocked by host in vanilla Among Us friends list.", string.Format(Localizer.Translate("ModerationActions.BlockedPlayer")));
+            log.Trace($"{client.PlayerName} ({client.FriendCode}) was banned because they are blocked by the host in the vanilla Among Us friends list.");
             return;
         }
 
