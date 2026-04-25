@@ -5,11 +5,8 @@ using Lotus.Extensions;
 using Lotus.Roles.Internals.Enums;
 using Lotus.Roles.Operations;
 using Lotus.Options;
-using VentLib.Utilities;
 using VentLib.Utilities.Debug.Profiling;
-using VentLib.Utilities.Extensions;
 using Lotus.RPC.CustomObjects;
-using System.Linq;
 
 namespace Lotus.Patches.Actions;
 
@@ -25,9 +22,6 @@ static class FixedUpdatePatch
         // DisplayModVersion(__instance);
 
         if (!AmongUsClient.Instance.AmHost) return;
-
-        if (!__instance.IsHost() && Game.State is GameState.InLobby && __instance.Data.PlayerLevel < GeneralOptions.AdminOptions.KickPlayersUnderLevel)
-            AmongUsClient.Instance.KickPlayer(__instance.GetClientId(), false);
 
         if (Game.State is not GameState.Roaming) return;
         bool isLocalPlayer = __instance.PlayerId == PlayerControl.LocalPlayer.PlayerId;

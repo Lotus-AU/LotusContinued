@@ -1,15 +1,20 @@
 using System;
+using System.Reflection;
 using HarmonyLib;
 using InnerNet;
 using Lotus.API.Odyssey;
 using Lotus.API.Reactive;
 using Lotus.API.Reactive.HookEvents;
+using Lotus.Extensions;
 using Lotus.Logging;
 using Lotus.Managers;
+using Lotus.Network;
 using Lotus.Utilities;
 using Lotus.Options;
+using VentLib.Localization;
 using VentLib.Utilities;
 using VentLib.Utilities.Attributes;
+using VentLib.Utilities.Extensions;
 using VentLib.Utilities.Harmony.Attributes;
 using xCloud;
 using static Platforms;
@@ -32,11 +37,6 @@ public class PlayerJoinPatch
     public static void Postfix(AmongUsClient __instance, [HarmonyArgument(0)] ClientData client)
     {
         log.Trace($"{client.PlayerName} (ClientID={client.Id}) (Platform={client.PlatformData.Platform}) (FriendCode={client.FriendCode}) joined the game.", "Session");
-        if (DestroyableSingleton<FriendsListManager>.Instance.IsPlayerBlockedUsername(client.FriendCode) && AmongUsClient.Instance.AmHost)
-        {
-            AmongUsClient.Instance.KickPlayer(client.Id, true);
-            log.Info($"ブロック済みのプレイヤー{client.PlayerName}({client.FriendCode})をBANしました。", "BAN");
-        }
 
         string playerName = client.PlayerName;
 
@@ -54,14 +54,34 @@ public class PlayerJoinPatch
 
         client.PlayerName = playerName;
         player.name = playerName;
-        bool kickPlayer = false;
-        kickPlayer = kickPlayer || GeneralOptions.AdminOptions.KickPlayersWithoutFriendcodes && client.FriendCode == "" && AmongUsClient.Instance.NetworkMode is not NetworkModes.LocalGame;
-        kickPlayer = kickPlayer || client.PlatformData.Platform is Android or IPhone && GeneralOptions.AdminOptions.KickMobilePlayers;
 
-        if (kickPlayer)
+        if (GeneralOptions.AdminOptions.KickPlayersWithoutFriendcodes && client.FriendCode == "" &&
+            AmongUsClient.Instance.NetworkMode is not NetworkModes.LocalGame && ConnectionManager.IsVanillaServer)
         {
-            log.Trace($"{playerName} was kicked because one of the kick options are on in the Admin Settings area.");
-            AmongUsClient.Instance.KickPlayer(client.Id, false);
+            log.Trace($"{playerName} was kicked because they do not have a friendcode.");
+            AmongUsClient.Instance.KickPlayerWithMessage(player, string.Format(Localizer.Translate("ModerationActions.NoFriendCode"), playerName));
+            return;
+        }
+
+        if (client.PlatformData.Platform is Android or IPhone && GeneralOptions.AdminOptions.KickMobilePlayers)
+        {
+            log.Trace($"{playerName} was kicked because they are on a mobile platform.");
+            AmongUsClient.Instance.KickPlayerWithMessage(player, string.Format(Localizer.Translate("ModerationActions.MobileDevice"), playerName));
+            return;
+        }
+
+        if (!player.IsHost() && Game.State is GameState.InLobby &&
+            client.PlayerLevel < GeneralOptions.AdminOptions.KickPlayersUnderLevel)
+        {
+            AmongUsClient.Instance.KickPlayerWithMessage(player, string.Format(Localizer.Translate("ModerationActions.LevelKick"), playerName));
+            log.Trace($"{playerName} was kicked because they are below the minimum level set by the host. ({GeneralOptions.AdminOptions.KickPlayersUnderLevel})");
+            return;
+        }
+
+        if (DestroyableSingleton<FriendsListManager>.Instance.IsPlayerBlockedUsername(client.FriendCode) && AmongUsClient.Instance.AmHost)
+        {
+            PluginDataManager.BanManager.BanWithReason(player, "Blocked by host in vanilla Among Us friends list.", string.Format(Localizer.Translate("ModerationActions.BlockedPlayer")));
+            log.Trace($"{client.PlayerName} ({client.FriendCode}) was banned because they are blocked by the host in the vanilla Among Us friends list.");
             return;
         }
 

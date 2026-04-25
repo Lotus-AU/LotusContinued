@@ -60,7 +60,7 @@ public class BanManager
         if (!AmongUsClient.Instance.AmHost) return false;
         if (!CheckBanList(client)) return false;
 
-        string message = string.Format(Localizer.Translate("Messages.BanedByBanList", assembly: Assembly.GetExecutingAssembly()), client.PlayerName);
+        string message = string.Format(Localizer.Translate("ModerationActions.BannedByBanList", assembly: Assembly.GetExecutingAssembly()), client.PlayerName);
 
         LogManager.SendInGame(message);
         AmongUsClient.Instance.KickPlayerWithMessage(player, message, true);
