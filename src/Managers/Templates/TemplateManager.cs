@@ -6,9 +6,11 @@ using System.Text;
 using Lotus.API.Player;
 using Lotus.API.Reactive;
 using Lotus.API.Reactive.HookEvents;
+using Lotus.GUI;
 using Lotus.Managers.Hotkeys;
 using Lotus.Managers.Templates.Models;
 using Lotus.Managers.Templates.Models.Units;
+using UnityEngine;
 using VentLib.Utilities.Extensions;
 using YamlDotNet.Serialization;
 using YamlDotNet.Serialization.NamingConventions;
@@ -50,6 +52,12 @@ public class TemplateManager
     internal TemplateManager(FileInfo templateFileInfo)
     {
         this.templateFileInfo = templateFileInfo;
+        if (!templateFileInfo.Exists)
+        {
+            string defaultTemplate = LotusAssets.LoadAsset<TextAsset>("Fallback/Templates.yaml").text;
+            using StreamWriter writer = templateFileInfo.CreateText();
+            writer.Write(defaultTemplate);
+        }
         LoadTemplates();
     }
 

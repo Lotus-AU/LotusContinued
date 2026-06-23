@@ -4,6 +4,7 @@ using System.Linq;
 using AmongUs.GameOptions;
 using BepInEx.Unity.IL2CPP.Utils.Collections;
 using Lotus.Extensions;
+using Lotus.GUI.Keybinds;
 using Lotus.GUI.Menus.ComboMenu.Areas;
 using Lotus.GUI.Menus.HistoryMenu2;
 using Lotus.Utilities;
@@ -84,6 +85,7 @@ public class ComboMenu : MonoBehaviour
         comboButton.DisableButton();
         HM2 historyButton = FindObjectOfType<HM2>();
         if (historyButton != null && historyButton.Opened()) historyButton.Close();
+        if (KeybindHud.Instance?.KeybindMenu.active == true) KeybindHud.Instance.KeybindButton.GetComponent<PassiveButton>().OnClick.Invoke();
         HudManager.Instance.IsIntroDisplayed = true;
         PlayerControl.LocalPlayer.NetTransform.Halt();
 
