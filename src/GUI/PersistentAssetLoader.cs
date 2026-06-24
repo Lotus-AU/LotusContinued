@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Reflection;
+using InnerNet;
 using Lotus.Utilities;
 using UnityEngine;
 using VentLib.Utilities.Attributes;
@@ -21,8 +22,14 @@ internal class PersistentAssetLoader : MonoBehaviour
     private static PersistentAssetLoader _instance = null!;
     private List<GameObject> anchors = new();
 
+    private void Awake()
+    {
+        DontDestroyOnLoad(gameObject);
+    }
+
     public PersistentAssetLoader(IntPtr intPtr) : base(intPtr)
     {
+        if (_instance != null) return;
         if (!_initialized) LoadAssets();
 
         _initialized = true;
@@ -55,8 +62,8 @@ internal class PersistentAssetLoader : MonoBehaviour
 
     public static Sprite GetSprite(string key) => _spriteRenderers[key].sprite;
 
-    [QuickPostfix(typeof(DiscordManager), nameof(DiscordManager.Start))]
-    public static void HookToDiscordManager(DiscordManager __instance)
+    [QuickPostfix(typeof(InnerNetClient), nameof(InnerNetClient.Start))]
+    public static void HookToInnerNetClient(InnerNetClient __instance)
     {
         __instance.gameObject.AddComponent<PersistentAssetLoader>();
     }
