@@ -90,6 +90,13 @@ public class PlayerJoinPatch
         if (PluginDataManager.BanManager.CheckBanPlayer(player, client))
             log.Trace($"{playerName} was banned because they are on the host's banlist.");
 
+        if (PluginDataManager.ChatManager.IsBannedName(player.name) && GeneralOptions.AdminOptions.AutoKick)
+        {
+            log.Trace($"{playerName} was kicked because they have name which is on the host's banned names list.");
+            AmongUsClient.Instance.KickPlayerWithMessage(player, string.Format(Localizer.Translate("ModerationActions.BannedName"), playerName));
+            return;
+        }
+
         Hooks.PlayerHooks.PlayerJoinHook.Propagate(new PlayerHookEvent(player));
         CheckAutostart();
     }
