@@ -29,9 +29,9 @@ public class UpdateComponent : MonoBehaviour
         UpdateProgressBar.transform.localScale -= new Vector3(0.4f, 0.3f);
         UpdateProgressBar.gameObject.SetActive(false);
 
-        GameObject updateButtonObject = gameObject.CreateChild("Update Button", new Vector3(0.32f, 1.8f));
+        GameObject updateButtonObject = gameObject.CreateChild("Update Button", new Vector3(1.1f, 1.9f));
         UpdateButton = updateButtonObject.AddComponent<MonoToggleButton>();
-        UpdateButton.transform.localScale -= new Vector3(0.5f, 0.5f);
+        UpdateButton.transform.localScale -= new Vector3(0.4f, 0.7f);
         UpdateButton.SetOffText("V1.30.218");
         UpdateButton.SetToggleOnAction(DoUpdate);
     }
