@@ -3,26 +3,38 @@
 </p>
 <h1 align="center">Project: Lotus</h1>
 
-<h2 align="center"><a href="https://discord.gg/projectlotus"> <img src=".github/discord_badge.png" width="175" height="30" alt="Discord Badge"></a> <a href="https://lotusau.top/"><img src=".github/website_badge.png" width="175" height="30" alt="Website Badge"></a> <a href="https://github.com/Lotus-AU/LotusContinued/releases/latest"><img src=".github/latest_release_badge.png" width="175" height="30" alt="Latest Release Badge"></a> <a href="https://lotusau.top/android"><img src=".github/starlight_badge2.png" width="175" height="30" alt="Starlight Badge"></a></h2>
+<h2 align="center"><a href="https://discord.gg/projectlotus"> <img src=".github/readme.discord_badge.alt.png" width="175" height="30" alt="Discord Badge"></a> <a href="https://lotusau.top/"><img src=".github/readme.website_badge.alt.png" width="175" height="30" alt="Website Badge"></a> <a href="https://github.com/Lotus-AU/LotusContinued/releases/latest"><img src=".github/readme.release_badge.alt.png" width="175" height="30" alt="Latest Release Badge"></a> <a href="https://lotusau.top/android"><img src=".github/readme.starlight_badge.alt.png" width="175" height="30" alt="Starlight Badge"></a></h2>
 
 <h3 align="center">This is a continuation of the <a href="https://github.com/ImaMapleTree/Lotus">original Project Lotus mod</a> due to the original creator passing the project. </h3>
 <i align="center">This mod is not affiliated with Among Us or Innersloth LLC, and the content contained therein is not endorsed or otherwise sponsored by Innersloth LLC. Portions of the materials contained herein are the property of Innersloth LLC.</i>
 
 ---
-|        <img align="center" src="./.github/main_menu.png">            |
-| :----------------------------------------------------------------:   |
+|          <img align="center" src="./.github/main_menu.png">          |
+|:--------------------------------------------------------------------:|
 | <u>**A screenshot of the Main Menu of Project: Lotus. (v1.1.1)**</u> |
 
 ---
 
 ## Regarding This Mod
-
 #### ⭐Please consider starring our repo if you enjoy the mod!⭐
 
 This Mod only needs to be installed on the **Host**, which needs to be on a PC. Once the mod is installed, anyone on any device may join the lobby to enjoy the mod. <br>
 
 - Anyone with a PC may also install the mod to join the **Host** to unlock extra features (See Below), but this is not required.
 - Please note though, that if the **Host** of the modded lobby leaves, the modded lobby will end and the game will go back to being vanilla. This is the case unless another modded player becomes **Host** of the lobby.
+
+Although this mod is supported on unmodded (Vanilla) regions, it's highly recommended to use Modded Regions, as Innersloth has historically been known to push server-side updates which cause all host-only mods to break. In situations like these, modded regions are unaffected.
+> You can install modded regions on both PC and Mobile [**here**](https://lotusau.top/regions), though it is not possible on consoles.
+
+#### Limitations of Host-Only
+This mod can be played on all devices, however this comes with some downsides. Playing on an unmodded client makes it so that you will see your role's base role as your actual role, instead of your modded role. 
+<br>*<sup>Ex: Sheriff shows up as Impostor-sided on the role reveal screen, but you are actually a crewmate.*</sup>
+
+Not only this, but it is also impossible to show certain things to unmodded clients, such as custom ability buttons, so you will instead see the vanilla buttons. This also applies to things such as custom cosmetics which the mod adds.
+<br>*<sup>Ex: As Witch, you will see the vanilla Kill button, instead of Witches' <b>Hex</b> button. 
+<br>You will also see any player wearing a custom cosmetic as wearing the default for that group (ex: No hat).</sup>*
+<br><br>
+It is highly recommended to use a modded client, as it is the only way to get the full experience of the mod. The mod is available on both PC (with a legitimate copy of the game), and Android (using Starlight)
 
 #### Benefits Of Being A Modded Client.<br>
 
@@ -33,6 +45,7 @@ This Mod only needs to be installed on the **Host**, which needs to be on a PC. 
 - Usable Hotkeys.
 - Custom Cosmetics with the [**LotusCosmetics**](https://lotusau.top/en/features/cosmetics) addon!
 - Better compatibility.
+
 
 ---
 
@@ -112,6 +125,15 @@ The cause of this is usually ping. We do a lot to try to prevent blackscreens bu
 - You may fix blackscreens by telling the host of the lobby to use the `/fix` command on you.
   - Usage: (If you blackscreen on game start): `/fix (player_id) start` | (If you blackscreen after meeting): `/fix (player_id)`
   - (Player ID's can be obtained with the `/ids` command.)
+
+## Translating the Mod
+
+|                                                                Translation Status                                                                 |
+|:-------------------------------------------------------------------------------------------------------------------------------------------------:|
+| [![Translation status](https://translate.lotusau.top/widget/lotuscontinued/multi-auto.svg)](https://translate.lotusau.top/engage/lotuscontinued/) |
+
+If you are interested in helping us localize Project: Lotus into more languages, please reach out to us on our [Discord Server](https://discord.gg/projectlotus).
+
 ---
 # Legal Stuff
 ### License
