@@ -21,6 +21,8 @@ using YamlDotNet.Serialization.NamingConventions;
 using System.Text;
 using Lotus.Addons;
 using VentLib.Localization;
+using System.Net.Http;
+using System.Threading.Tasks;
 
 namespace Lotus.Network.PrivacyPolicy.Patches;
 public class PrivacyPolicyPatch
@@ -103,6 +105,7 @@ public class PrivacyPolicyPatch
         }
         if (__instance.hasRunLoginFlow)
         {
+            yield return TranslationUpdate.CheckIfCanDownloadTranslations();
             yield return CustomPrivacyPolicy();
             DestroyableSingleton<AccountManager>.Instance.privacyPolicyBg.gameObject.SetActive(false);
             DestroyableSingleton<AccountManager>.Instance.waitingText.gameObject.SetActive(false);
@@ -129,6 +132,7 @@ public class PrivacyPolicyPatch
         __instance.loginFlowFinished = false;
         yield return DestroyableSingleton<AccountManager>.Instance.PrivacyPolicy.Show();
         DestroyableSingleton<AccountManager>.Instance.privacyPolicyBg.gameObject.SetActive(false);
+        yield return TranslationUpdate.CheckIfCanDownloadTranslations();
         yield return CustomPrivacyPolicy();
         if (__instance.platformInitialized)
         {
@@ -387,45 +391,39 @@ public class PrivacyPolicyPatch
         {
             if (!_privacyInfo.ConnectWithAPI) yield break;
         }
-        UnityWebRequest webRequest = new(ModConstants.WebsiteLink + "api/privacypolicy", UnityWebRequest.kHttpVerbGET)
-        {
-            downloadHandler = new DownloadHandlerBuffer()
-        };
 
-        yield return webRequest.SendWebRequest();
+        using HttpClient httpClient = new();
 
-        switch (webRequest.result)
+        Task<string> downloadTask = httpClient.GetStringAsync(
+            ModConstants.WebsiteLink + "api/privacypolicy"
+        );
+
+        yield return new WaitUntil((Func<bool>)(() => downloadTask.IsCompleted));
+
+        if (downloadTask.IsFaulted) yield break;
+
+        long unixTimestamp;
+        if (long.TryParse(downloadTask.Result, out unixTimestamp))
         {
-            case UnityWebRequest.Result.Success:
-                long unixTimestamp;
-                if (long.TryParse(webRequest.downloadHandler.text, out unixTimestamp))
-                {
-                    // Convert Unix timestamp to DateTime
-                    DateTimeOffset dateTime;
-                    try
-                    {
-                        dateTime = DateTimeOffset.FromUnixTimeSeconds(unixTimestamp);
-                        log.Info("Server returned Unix timestamp converted to DateTime: " + dateTime.DateTime);
-                    }
-                    catch (Exception e)
-                    {
-                        dateTime = DateTimeOffset.MinValue;
-                        log.Exception($"Error occured while parsing server response. Resposnse: {webRequest.downloadHandler.text}", e);
-                        log.Exception(e);
-                    }
-                    LatestPrivacyPolicy = dateTime;
-                }
-                else
-                {
-                    log.Exception($"Failed to parse the server response as Unix timestamp. Response: {webRequest.downloadHandler.text}");
-                    LatestPrivacyPolicy = DateTimeOffset.MinValue;
-                }
-                break;
-            default:
-                LatestPrivacyPolicy = DateTimeOffset.MinValue;
-                log.Info("Result: {0} - Error: {1} - ResponseCode: {2} - Server Response: {3}".Formatted(webRequest.result.ToString(),
-                    webRequest.error, webRequest.responseCode, webRequest.downloadHandler.text));
-                break;
+            // Convert Unix timestamp to DateTime
+            DateTimeOffset dateTime;
+            try
+            {
+                dateTime = DateTimeOffset.FromUnixTimeSeconds(unixTimestamp);
+                log.Info("Server returned Unix timestamp converted to DateTime: " + dateTime.DateTime);
+            }
+            catch (Exception e)
+            {
+                dateTime = DateTimeOffset.MinValue;
+                log.Exception($"Error occured while parsing server response. Resposnse: {downloadTask.Result}", e);
+                log.Exception(e);
+            }
+            LatestPrivacyPolicy = dateTime;
+        }
+        else
+        {
+            log.Exception($"Failed to parse the server response as Unix timestamp. Response: {downloadTask.Result}");
+            LatestPrivacyPolicy = DateTimeOffset.MinValue;
         }
         yield break;
     }

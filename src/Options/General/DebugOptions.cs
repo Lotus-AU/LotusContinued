@@ -14,7 +14,7 @@ public class DebugOptions: LotusOptionHolder
 {
     public override OptionManager OptionManager => GeneralOptions.StandardOptionManager;
 
-    private static Color _optionColor = new(1f, 0.59f, 0.38f);
+    private static readonly Color _optionColor = new(1f, 0.59f, 0.38f);
 
     public bool NoGameEnd;
     public bool NameBasedRoleAssignment;

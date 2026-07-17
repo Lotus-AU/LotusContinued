@@ -4,6 +4,8 @@ using System.Linq;
 using Lotus.API.Odyssey;
 using Lotus.API.Reactive;
 using Lotus.Extensions;
+using Lotus.GUI.Keybinds;
+using Lotus.GUI.Menus.ComboMenu;
 using Lotus.Logging;
 using Lotus.Utilities;
 using UnityEngine;
@@ -91,6 +93,8 @@ public class HM2 : MonoBehaviour
         else GameStartManager.Instance.StartButtonClient.gameObject.SetActive(false);
 
         // HudManager.Instance.gameObject.transform.Find("LobbyInfoPane/AspectSize").gameObject.SetActive(false);
+        if (KeybindHud.Instance?.KeybindMenu.active == true) KeybindHud.Instance.KeybindButton.GetComponent<PassiveButton>().OnClick.Invoke();
+        HudManager.Instance.GetComponent<ComboMenuHandler>().ComboMenu.CloseMenu();
         historyButton.SetDisabled();
 
         HudManager.Instance.IsIntroDisplayed = true;

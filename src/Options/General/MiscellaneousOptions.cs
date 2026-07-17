@@ -21,7 +21,7 @@ public class MiscellaneousOptions: LotusOptionHolder
 {
     public override OptionManager OptionManager => GeneralOptions.StandardOptionManager;
 
-    private static Color _optionColor = new(1f, 0.75f, 0.81f);
+    private static readonly Color _optionColor = new(1f, 0.75f, 0.81f);
     private static Dictionary<string, Action> BlackscreenResolvers = new()
     {
         {"Legacy", () => ProjectLotus.Instance.SetBlackscreenResolver(md => new LegacyResolver(md))},

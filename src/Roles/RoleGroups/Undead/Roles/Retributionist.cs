@@ -68,6 +68,7 @@ public class Retributionist : NeutralKillingBase
         if (retributionLimit != -1 && remainingRevenges == 0) return;
         if (revengeDuration.NotReady()) return;
         if (interaction.Intent is not (IFatalIntent or Unstoppable.UnstoppableIntent)) return;
+        if (interaction.IsPromised) return;
 
         remainingRevenges--;
         switch (interaction)

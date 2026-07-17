@@ -26,6 +26,7 @@ using Lotus.Roles.GUI;
 using Lotus.Roles.GUI.Interfaces;
 using Lotus.RPC;
 using VentLib;
+using VentLib.Commands;
 using VentLib.Networking.RPC.Attributes;
 using VentLib.Utilities.Extensions;
 
@@ -129,10 +130,11 @@ public class Blackmailer : Shapeshifter, IRoleUI
     }
 
     [RoleAction(LotusActionType.Chat, ActionFlag.GlobalDetector | ActionFlag.WorksAfterDeath)]
-    public void InterceptChat(PlayerControl speaker, GameState state, bool isAlive)
+    public void InterceptChat(PlayerControl speaker, string message, GameState state, bool isAlive)
     {
         if (!isAlive || state is not GameState.InMeeting) return;
         if (!blackmailedPlayer.Exists() || speaker.PlayerId != blackmailedPlayer.Get().PlayerId) return;
+        if (message.StartsWith(CommandRunner.Prefix)) return;
         if (currentWarnings++ < warnsUntilKick)
         {
             ChatHandler.Of(WarningMessage, RoleColor.Colorize(RoleName)).Send(speaker);

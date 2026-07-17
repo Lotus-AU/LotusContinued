@@ -22,6 +22,7 @@ public class LotusMenu : MonoBehaviour, IBaseOptionMenuComponent
     private MonoToggleButton anonymousBugReports;
 
     private MonoToggleButton chatDarkMode;
+    private MonoToggleButton keybindsGuiToggle;
 
     public LotusMenu(IntPtr intPtr) : base(intPtr)
     {
@@ -104,6 +105,18 @@ public class LotusMenu : MonoBehaviour, IBaseOptionMenuComponent
         chatDarkMode.SetToggleOffAction(() => ClientOptions.VideoOptions.ChatDarkMode = false);
         chatDarkMode.SetState(ClientOptions.VideoOptions.ChatDarkMode);
         chatDarkMode.transform.localPosition = new Vector3(-1.995f, -0.328f, -1f);
+
+
+        GameObject keybindsGuiObject = new("Keybinds GUI Button Toggle");
+        keybindsGuiObject.transform.SetParent(anchorObject.transform);
+        keybindsGuiObject.transform.localScale = Vector3.one;
+        keybindsGuiToggle = keybindsGuiObject.AddComponent<MonoToggleButton>();
+        keybindsGuiToggle.SetOnText("Keybinds Menu: ON");
+        keybindsGuiToggle.SetOffText("Keybinds Menu: OFF");
+        keybindsGuiToggle.SetToggleOnAction(() => ClientOptions.AdvancedOptions.KeybindGuiToggleVisible = true);
+        keybindsGuiToggle.SetToggleOffAction(() => ClientOptions.AdvancedOptions.KeybindGuiToggleVisible = false);
+        keybindsGuiToggle.SetState(ClientOptions.AdvancedOptions.KeybindGuiToggleVisible);
+        keybindsGuiToggle.transform.localPosition = new Vector3(0.029f, -0.328f, -1f);
 
         /// Done
         anchorObject.SetActive(false);
