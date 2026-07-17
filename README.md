@@ -3,7 +3,7 @@
 </p>
 <h1 align="center">Project: Lotus</h1>
 
-<h2 align="center"><a href="https://discord.gg/projectlotus"> <img src=".github/readme.discord_badge.alt.png" width="175" height="30" alt="Discord Badge"></a> <a href="https://lotusau.top/"><img src=".github/readme.website_badge.alt.png" width="175" height="30" alt="Website Badge"></a> <a href="https://github.com/Lotus-AU/LotusContinued/releases/latest"><img src=".github/readme.release_badge.alt.png" width="175" height="30" alt="Latest Release Badge"></a> <a href="https://lotusau.top/android"><img src=".github/readme.starlight_badge.alt.png" width="175" height="30" alt="Starlight Badge"></a></h2>
+<h2 align="center"><a href="https://discord.gg/projectlotus"> <img src=".github/readme.discord_badge.alt.png?raw=true" width="200" height="35" alt="Discord Badge"></a> <a href="https://lotusau.top/"><img src=".github/readme.website_badge.alt.png?raw=true" width="200" height="35" alt="Website Badge"></a> <a href="https://github.com/Lotus-AU/LotusContinued/releases/latest"><img src=".github/readme.release_badge.alt.png?raw=true" width="200" height="35" alt="Latest Release Badge"></a> <a href="https://lotusau.top/android"><img src=".github/readme.starlight_badge.alt.png?raw=true" width="200" height="35" alt="Starlight Badge"></a></h2>
 
 <h3 align="center">This is a continuation of the <a href="https://github.com/ImaMapleTree/Lotus">original Project Lotus mod</a> due to the original creator passing the project. </h3>
 <i align="center">This mod is not affiliated with Among Us or Innersloth LLC, and the content contained therein is not endorsed or otherwise sponsored by Innersloth LLC. Portions of the materials contained herein are the property of Innersloth LLC.</i>
@@ -27,11 +27,11 @@ Although this mod is supported on unmodded (Vanilla) regions, it's highly recomm
 > You can install modded regions on both PC and Mobile [**here**](https://lotusau.top/regions), though it is not possible on consoles.
 
 #### Limitations of Host-Only
-This mod can be played on all devices, however this comes with some downsides. Playing on an unmodded client makes it so that you will see your role's base role as your actual role, instead of your modded role. 
+This mod can be played on all devices, however this comes with some downsides. Playing on an unmodded client makes it so that you will see your role's base role as your actual role, instead of your modded role.
 <br>*<sup>Ex: Sheriff shows up as Impostor-sided on the role reveal screen, but you are actually a crewmate.*</sup>
 
 Not only this, but it is also impossible to show certain things to unmodded clients, such as custom ability buttons, so you will instead see the vanilla buttons. This also applies to things such as custom cosmetics which the mod adds.
-<br>*<sup>Ex: As Witch, you will see the vanilla Kill button, instead of Witches' <b>Hex</b> button. 
+<br>*<sup>Ex: As Witch, you will see the vanilla Kill button, instead of Witches' <b>Hex</b> button.
 <br>You will also see any player wearing a custom cosmetic as wearing the default for that group (ex: No hat).</sup>*
 <br><br>
 It is highly recommended to use a modded client, as it is the only way to get the full experience of the mod. The mod is available on both PC (with a legitimate copy of the game), and Android (using Starlight)
@@ -90,14 +90,14 @@ Here's a Quick Explanation -
 - **HatUpdate.zip** means that new Custom Hats were added in that update, these go in your `AmongUs/BepInEx/plugins` folder and will replace the `lotushats.bundle` and `lotushats.catalog` files.
 
 - **Lotus.dll & VentFrameworkContinued.dll** mean there was an update to the mod itself, these go into your `AmongUs/BepInEx/plugins` folder and will replace the previous ones.
-  - Note, **VentFrameworkContinued** is required, but a new release may not include it, this means that the previous version can still be used.
-  - If either of these are not included in the release, that means there was a mod-breaking update, and you need to install the `Lotus[Version]-[Platform].zip` update. Please make sure to install the correct platform that you are on.
+    - Note, **VentFrameworkContinued** is required, but a new release may not include it, this means that the previous version can still be used.
+    - If either of these are not included in the release, that means there was a mod-breaking update, and you need to install the `Lotus[Version]-[Platform].zip` update. Please make sure to install the correct platform that you are on.
 
 
 - **lang_[Language].yaml** or **TranslationUpdate.zip** means that there was an update to the mod's translations, these files will go into `AmongUs/Languages/Lotus`
 
-- **Lotus-[Version]-Epic+MicrosoftStore.zip & Lotus-[Version]-Steam.zip** are included in every release, these are the files to install the mod if you haven't already. 
-  - Occasionally a release may not have a .dll file, which means you'll need to download one of these & [reinstall](#how-do-i-install-the-mod) the mod.
+- **Lotus-[Version]-Epic+MicrosoftStore.zip & Lotus-[Version]-Steam.zip** are included in every release, these are the files to install the mod if you haven't already.
+    - Occasionally a release may not have a .dll file, which means you'll need to download one of these & [reinstall](#how-do-i-install-the-mod) the mod.
 
 ### Updating when there's no .dll file.
 - Back up your `AmongUs/BepInEx/config` folder, as that's where your settings are stored. Also back up your `LOTUS_DATA` folder if you've made any changes to your Templates, or have given people titles.
@@ -116,15 +116,15 @@ You can also view Active Public Lobbies in [**our lobby viewer.**](https://lotus
 Nothing else can be done, as Innersloth needs to make the change.
 
 ## Why do I get randomly kicked?
-As of April 4th, 2025: Innersloth, the developers of Among Us, have made changes to their server-side anti-cheat which may cause players to be kicked. 
+As of April 4th, 2025: Innersloth, the developers of Among Us, have made changes to their server-side anti-cheat which may cause players to be kicked.
 - Please try to report any instances of this happening in our [Discord Server](https://discord.gg/projectlotus)
 - If you're constantly being kicked, then try using [Modded Regions](https://lotusau.top/regions), as these regions are not subjected to the same changes.
 
 ## Why do I keep getting black-screened?
 The cause of this is usually ping. We do a lot to try to prevent blackscreens but in the end they may sometimes happen.
 - You may fix blackscreens by telling the host of the lobby to use the `/fix` command on you.
-  - Usage: (If you blackscreen on game start): `/fix (player_id) start` | (If you blackscreen after meeting): `/fix (player_id)`
-  - (Player ID's can be obtained with the `/ids` command.)
+    - Usage: (If you blackscreen on game start): `/fix (player_id) start` | (If you blackscreen after meeting): `/fix (player_id)`
+    - (Player ID's can be obtained with the `/ids` command.)
 
 ## Translating the Mod
 
