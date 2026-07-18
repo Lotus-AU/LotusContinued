@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using Hazel;
 using Hazel.Udp;
 using InnerNet;
@@ -47,5 +49,40 @@ public class ConnectionManager
                    regionInfo.PingServer.EndsWith(Domain, System.StringComparison.Ordinal) &&
                    regionInfo.Servers.All(serverInfo => serverInfo.Ip.EndsWith(Domain, System.StringComparison.Ordinal));
         }
+    }
+
+
+    public static string GetRegionAbbreviation(string region) // everyone ships different names for the same regions
+    {
+        if (string.IsNullOrEmpty(region)) return region;
+
+        Regex NikoRegionRegex = new(@"(?:\(|-)([^)-]+)\)?$", RegexOptions.Compiled);
+
+        if (region.StartsWith("Modded ", StringComparison.OrdinalIgnoreCase)) // normal modded regions
+        {
+            var idx = region.IndexOf("(M", StringComparison.OrdinalIgnoreCase);
+            if (idx >= 0 && region.EndsWith(')'))
+                return region[(idx + 1)..^1];
+
+            if (region.Contains("North America", StringComparison.OrdinalIgnoreCase) || region.EndsWith("NA", StringComparison.OrdinalIgnoreCase)) return "MNA";
+            if (region.Contains("Europe", StringComparison.OrdinalIgnoreCase) || region.EndsWith("EU", StringComparison.OrdinalIgnoreCase)) return "MEU";
+            if (region.Contains("Asia", StringComparison.OrdinalIgnoreCase) || region.EndsWith("AS", StringComparison.OrdinalIgnoreCase)) return "MAS";
+
+            return region;
+        }
+
+        if (region.StartsWith("Niko", StringComparison.OrdinalIgnoreCase)) // niko regions
+        {
+            var match = NikoRegionRegex.Match(region);
+            return match.Success ? $"Niko{match.Groups[1].Value}" : region;
+        }
+
+        return region switch // vanilla/innersloth regions
+        {
+            "North America" => "NA",
+            "Europe" => "EU",
+            "Asia" => "AS",
+            _ => region
+        };
     }
 }
