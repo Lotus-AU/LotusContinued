@@ -112,6 +112,12 @@ public class BasicCommands : CommandTranslations
             return;
         }
 
+        if (GeneralOptions.AdminOptions.AutoKick && PluginDataManager.ChatManager.IsBannedName(name))
+        {
+            ChatHandlers.NotPermitted($"The name you tried to use ({name}) is banned by the host.").Send(source);
+            return;
+        }
+
         source.RpcSetName(name);
     }
 

@@ -30,6 +30,7 @@ public class ChatManager
 
     private List<string> globalBannedWords;
     private List<string> lobbyBannedWords;
+    private List<string> bannedNames;
 
 
     public ChatManager(FileInfo filterFile)
@@ -40,12 +41,14 @@ public class ChatManager
             BannedWordFile wordFile = Load();
             globalBannedWords = wordFile.GlobalBannedWords;
             lobbyBannedWords = wordFile.LobbyBannedWords;
+            bannedNames = wordFile.BannedNames;
         }
         catch (Exception e)
         {
             log.Exception("Error loading banned words list: ", e);
             globalBannedWords = new List<string>();
             lobbyBannedWords = new List<string>();
+            bannedNames = new List<string>();
         }
     }
 
@@ -56,6 +59,8 @@ public class ChatManager
         return globalBannedWords.Any(CheckBannedWord);
     }
 
+    public bool IsBannedName(string name) => bannedNames.Contains(name, StringComparer.OrdinalIgnoreCase);
+
     public string? Reload()
     {
         try
@@ -63,6 +68,7 @@ public class ChatManager
             BannedWordFile wordFile = Load();
             globalBannedWords = wordFile.GlobalBannedWords;
             lobbyBannedWords = wordFile.LobbyBannedWords;
+            bannedNames = wordFile.BannedNames;
             return null;
         }
         catch (Exception exception)
@@ -88,6 +94,21 @@ public class ChatManager
         string content;
         using (StreamReader reader = new(this.filterFile.Open(FileMode.Open))) content = reader.ReadToEnd();
         DevLogger.Log($"Content: {content}");
-        return deserializer.Deserialize<BannedWordFile>(content);
+        wordFile = deserializer.Deserialize<BannedWordFile>(content);
+
+        // old files won't have the BannedNames list
+        if (!Regex.IsMatch(content, @"^BannedNames\s*:", RegexOptions.Multiline))
+        {
+            string separator = content.EndsWith("\n") ? "" : "\n";
+            string appended = serializer.Serialize(new Dictionary<string, object?>
+            {
+                ["BannedNames"] = wordFile.BannedNames
+            });
+
+            using (FileStream writer = filterFile.Open(FileMode.Create))
+                writer.Write(Encoding.UTF8.GetBytes(content + separator + appended));
+        }
+
+        return wordFile;
     }
 }
