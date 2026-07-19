@@ -2,7 +2,6 @@ using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using HarmonyLib;
-using Lotus.Utilities;
 using Lotus.Extensions;
 using Lotus.GUI.Menus;
 using Lotus.Logging;
@@ -13,8 +12,9 @@ using VentLib.Utilities.Extensions;
 using VentLib.Utilities.Harmony.Attributes;
 using VentLib.Utilities.Optionals;
 using Object = UnityEngine.Object;
-using System.Collections;
-using BepInEx.Unity.IL2CPP.Utils.Collections;
+using UnityEngine.Events;
+using UnityEngine.UI;
+using VentLib.Localization;
 
 namespace Lotus.GUI.Patches;
 
@@ -414,32 +414,30 @@ class SplashPatch
         PlayerParticles particles = Object.FindObjectOfType<PlayerParticles>();
         particles.gameObject.SetActive(false);
 
-        DevLogger.Log("Skipping mod update menu as it breaks the game.");
-
-        // ModUpdateMenu = __instance.gameObject.AddComponent<ModUpdateMenu>();
-        // ModUpdateMenu.AnchorObject.transform.localPosition += new Vector3(0f, 0f, -9f);
+        ModUpdateMenu = __instance.gameObject.AddComponent<ModUpdateMenu>();
+        ModUpdateMenu.AnchorObject.transform.localPosition += new Vector3(0f, 0f, -9f);
 
         DevLogger.Log("?????c");
 
 
-        /*GameObject updateButton = Object.Instantiate(playLocalButton, __instance.transform);*/
-        /*Async.Schedule(() =>
+        GameObject updateButton = Object.Instantiate(playLocalButton, playLocalButton.transform.parent).gameObject;
+        updateButton.name = "UpdateButton";
+        Async.Schedule(() =>
         {
             TextMeshPro tmp = updateButton.GetComponentInChildren<TextMeshPro>();
-            tmp.text = "Update Found!";
+            tmp.text = Localizer.Translate("GUI.ModUpdateMenu.UpdatesFoundText");
             tmp.enableWordWrapping = true;
         }, 0.1f);
-        updateButton.transform.localPosition += new Vector3(0f, 1.85f);
-        updateButton.transform.localScale -= new Vector3(0f, 0.25f);
-        updateButton.GetComponentInChildren<ButtonRolloverHandler>().OutColor = ModConstants.Palette.GeneralColor5;
+        updateButton.transform.localPosition = new Vector3(3.2f, -1.05f);
+        updateButton.transform.localScale = new Vector3(0.7f, 0.8f);
         updateButton.GetComponentInChildren<SpriteRenderer>().color = ModConstants.Palette.GeneralColor5;
         Button.ButtonClickedEvent buttonClickedEvent = new();
         updateButton.GetComponentInChildren<PassiveButton>().OnClick = buttonClickedEvent;
-        buttonClickedEvent.AddListener((UnityAction)(Action)(() => ModUpdateMenu.Open()));*/
+        buttonClickedEvent.AddListener((UnityAction)(Action)(() => ModUpdateMenu.Open()));
 
-        /*UpdateButton = UnityOptional<GameObject>.Of(updateButton);
+        UpdateButton = UnityOptional<GameObject>.Of(updateButton);
 
-        if (!ProjectLotus.ModUpdater.HasUpdate) updateButton.gameObject.SetActive(false);*/
+        if (!ProjectLotus.ModUpdater.HasUpdate) updateButton.gameObject.SetActive(false);
         FriendsListManager.Instance.StopPolling();
         FriendsListManager.Instance.OnSignOut();
     }

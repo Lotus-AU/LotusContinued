@@ -7,6 +7,7 @@ using Lotus.GUI.Menus.OptionsMenu.Components;
 using Lotus.GUI.Patches;
 using Lotus.Utilities;
 using TMPro;
+using Twitch;
 using UnityEngine;
 using VentLib.Localization.Attributes;
 using VentLib.Utilities.Attributes;
@@ -24,6 +25,7 @@ public class ModUpdateMenu : MonoBehaviour
 
     public SpriteRenderer background;
     public TextMeshPro Header;
+    public GameObject ClickBlocker;
 
     public MonoToggleButton ContinueButton;
     public GameObject AnchorObject;
@@ -33,21 +35,31 @@ public class ModUpdateMenu : MonoBehaviour
 
     public ModUpdateMenu(IntPtr intPtr) : base(intPtr)
     {
-        AnchorObject = gameObject.CreateChild("Anchor");
+        AnchorObject = gameObject.CreateChild("ModUpdateMenu");
         AnchorObject.transform.localPosition = new Vector3(0f, 0f, -2f);
-        background = AnchorObject.AddComponent<SpriteRenderer>();
+        background = AnchorObject.CreateChild("Background").AddComponent<SpriteRenderer>();
         background.sprite = OptionMenuResources.ModUpdaterBackgroundSprite;
+        background.transform.localScale = new Vector3(2f, 2f);
 
-        GameObject headerGameObject = AnchorObject.CreateChild("Header", new Vector3(8.7f, -0.2f));
+        GameObject headerGameObject = AnchorObject.CreateChild("Header", new Vector3(8.7f, -0.6f));
         Header = headerGameObject.AddComponent<TextMeshPro>();
         Header.font = CustomOptionContainer.GetGeneralFont();
         Header.fontSize = 3f;
 
-        GameObject continueObject = AnchorObject.CreateChild("Continue", new Vector3(1.22f, -1.5f));
+        GameObject continueObject = AnchorObject.CreateChild("Continue", new Vector3(2.12f, -0.9f));
         ContinueButton = continueObject.AddComponent<MonoToggleButton>();
         ContinueButton.SetOffText(ModUpdateMenuTranslations.CloseText);
         ContinueButton.SetToggleOnAction(ProcessClose);
         ContinueButton.gameObject.SetActive(false);
+
+        if (TwitchManager.InstanceExists) // should always exist on main menu but just in case
+        {
+            GameObject blockerOriginal = TwitchManager.Instance.TwitchPopup.gameObject.transform.Find("BackroundIgnore").gameObject;
+
+            ClickBlocker = Instantiate(blockerOriginal, AnchorObject.transform);
+            ClickBlocker.transform.localPosition = new Vector3(0f, 0f, 1f);
+        }
+
         AnchorObject.SetActive(false);
 
         log.Trace($"Update ready during Mod Menu Creation: {SplashPatch.UpdateReady}", "ModUpdateMenu");
@@ -109,7 +121,7 @@ public class ModUpdateMenu : MonoBehaviour
         component.UpdateText.text = item.Name;
         component.UpdateButton.SetOffText(item.Version ?? ModUpdateMenuTranslations.UpdateText);
         component.UpdateAction = item.UpdateFunction;
-        component.transform.localPosition -= new Vector3(0f, 0.3f * offset);
+        component.transform.localPosition += new Vector3(0.5f, -0.6f * (offset + 1));
         item.Loaded = true;
         item.UpdateComponent = component;
         if (item.AutoStartUpdate) component.UpdateButton.SetState(true);
@@ -181,6 +193,9 @@ public class ModUpdateMenu : MonoBehaviour
 
         [Localized(nameof(UpdateAvailableText))]
         public static string UpdateAvailableText = "Updates Available!";
+
+        [Localized(nameof(UpdatesFoundText))]
+        public static string UpdatesFoundText = "Updates Found!";
     }
 }
 
