@@ -1,10 +1,16 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Lotus.API.Odyssey;
+using Lotus.GameModes;
+using Lotus.Logging;
+using Lotus.Managers;
 using VentLib.Commands;
 using VentLib.Commands.Attributes;
 using VentLib.Commands.Interfaces;
+using VentLib.Localization;
 using VentLib.Localization.Attributes;
 using VentLib.Utilities;
 using VentLib.Utilities.Extensions;
@@ -15,15 +21,19 @@ namespace Lotus.Chat.Commands;
 [Command(CommandFlag.LobbyOnly, "gmpoll", "gamemodepoll")]
 public class GamemodePollCommand : ICommandReceiver
 {
-    private static bool _isPollActive;
-    private static int _pollDuration = 60;
+    private bool _isPollActive;
+    private int _pollDuration = 60;
+    private int _pollGameId = int.MaxValue;
 
+    private Dictionary<int, int> gamemodeIds = []; // sorted gamemode index: actual gamemode id
     private Dictionary<int, int> gamemodeVotes = [];
     private Dictionary<byte, int> playerVotes = [];
     private DateTime startTime = DateTime.Now;
 
+    private GameModeManager GamemodeManager => ProjectLotus.GameModeManager;
+
     [Localized("PollStarted")] private static string _pollStarted =
-        "A poll to change the current gamemode has started!\n\nPlease vote for your desired game mode using the command /gmpoll vote (id)\n\nThis poll will expire in {0}s";
+        "A poll to change the current gamemode has started!\n\nPlease vote for your desired game mode using the command /cmd gmpoll vote (id)\n\nThis poll will expire in {0}s";
 
     [Localized("PollEnded")]
     private static string _pollEnded = "The poll has ended! The winning gamemode is {0} with {1} votes.";
@@ -36,7 +46,6 @@ public class GamemodePollCommand : ICommandReceiver
     [Localized("NoPollActive")] private static string _noPollActive = "No poll is currently in progress.";
     [Localized("PollActive")] private static string _pollActive = "There is already an active poll.";
     [Localized("InvalidID")] private static string _invalidID = "Invalid gamemode ID. Here are the available ones:";
-    [Localized("NoIdInCommand")] private static string _noIDInCommand = "Please provide the ID of the gamemode you wish to vote. Here are the available ones:";
     [Localized("CurrentStandings")] private static string _currentStandings = "{0}\nThere are {1} seconds left.";
     [Localized("Hint")] private static string _helperMessage = "There is currently an active poll, you can vote using <b>/gmpoll vote</b>.";
 
@@ -46,6 +55,18 @@ public class GamemodePollCommand : ICommandReceiver
     [Command("start")]
     private void PollStartCommand(PlayerControl source, CommandContext context)
     {
+        if (!PluginDataManager.ModManager.IsPlayerModded(source) || !source.IsHost())
+        {
+            ChatHandlers.NotPermitted(Localizer.Translate("Commands.NotPermittedText")).Send(source);
+            return;
+        }
+
+        if (AmongUsClient.Instance.GameId != _pollGameId) // fixes an issue where poll state is corrupted if you leave the lobby while poll is active.
+        {
+            _pollGameId = int.MaxValue;
+            ResetPoll();
+        }
+
         if (_isPollActive)
         {
             ChatHandlers.NotPermitted(_pollActive).Send(source);
@@ -70,13 +91,7 @@ public class GamemodePollCommand : ICommandReceiver
             return;
         }
 
-        if (context.Args.Length == 0 || !int.TryParse(context.Args[0], out int gamemode))
-        {
-            ChatHandlers.InvalidCmdUsage(_noIDInCommand + "\n" + GetGamemodeOptions()).Send(source);
-            return;
-        }
-
-        if (gamemode < 0 || gamemode >= ProjectLotus.GameModeManager.GetGameModes().Count())
+        if (context.Args.Length == 0 || !int.TryParse(context.Args[0], out int votingId) || !gamemodeIds.TryGetValue(votingId, out int trueId))
         {
             ChatHandlers.InvalidCmdUsage(_invalidID + "\n" + GetGamemodeOptions()).Send(source);
             return;
@@ -84,13 +99,13 @@ public class GamemodePollCommand : ICommandReceiver
 
         if (playerVotes.TryGetValue(source.PlayerId, out int votedId)) gamemodeVotes[votedId]--;
 
-        playerVotes[source.PlayerId] = gamemode;
-        gamemodeVotes[gamemode] = gamemodeVotes.ContainsKey(gamemode) ? gamemodeVotes[gamemode] + 1 : 1;
-        ChatHandler.Of(_voteMessage.Formatted(ProjectLotus.GameModeManager.GetGameMode(gamemode).Name)).Send(source);
+        playerVotes[source.PlayerId] = trueId;
+        gamemodeVotes[trueId] = gamemodeVotes.ContainsKey(trueId) ? gamemodeVotes[trueId] + 1 : 1;
+        ChatHandler.Of(_voteMessage.Formatted(GamemodeManager.GetGameMode(trueId).Name)).Send(source);
     }
 
     [Command("view")]
-    private void ViewStandsings(PlayerControl source, CommandContext context)
+    private void ViewStandings(PlayerControl source, CommandContext context)
     {
         if (!_isPollActive)
         {
@@ -98,8 +113,7 @@ public class GamemodePollCommand : ICommandReceiver
             return;
         }
 
-        int timeRemaining = (DateTime.Now - startTime).Seconds;
-        ChatHandler.Of(_currentStandings.Formatted(GetStandingsList(), 0), _currentStandingsTitle).Send(source);
+        ChatHandler.Of(_currentStandings.Formatted(GetStandingsList(), (DateTime.Now - startTime).Seconds), _currentStandingsTitle).Send(source);
     }
 
     private void StartPoll()
@@ -107,6 +121,17 @@ public class GamemodePollCommand : ICommandReceiver
         gamemodeVotes.Clear();
         playerVotes.Clear();
         startTime = DateTime.Now;
+        _pollGameId = AmongUsClient.Instance.GameId;
+
+        var allGamemodes = GamemodeManager.GetGameModes().ToList();
+        int votingIndex = 0;
+        for (int trueId = 0; trueId < allGamemodes.Count; trueId++)
+        {
+            if (allGamemodes[trueId].BaseGameMode != GamemodeManager.CurrentGameMode.BaseGameMode) continue;
+            gamemodeIds[votingIndex] = trueId;
+            votingIndex++;
+        }
+
         ChatHandler.Of(GetGamemodeOptions(), _availableModesTitle).Send();
         Async.Schedule(EndPoll, _pollDuration);
     }
@@ -127,37 +152,34 @@ public class GamemodePollCommand : ICommandReceiver
             .ToList();
         bool isTie = topGamemodes.Count > 1;
 
-
         int winningGamemodeId = topGamemodes.GetRandom();
         int highestVotes = gamemodeVotes[winningGamemodeId];
-
-        ProjectLotus.GameModeManager.SetGameMode(winningGamemodeId);
-        if (isTie) ChatHandler.Of(_pollEndedTie.Formatted(ProjectLotus.GameModeManager.GetGameMode(winningGamemodeId).Name, highestVotes)).Send();
-        else ChatHandler.Of(_pollEnded.Formatted(ProjectLotus.GameModeManager.GetGameMode(winningGamemodeId).Name, highestVotes)).Send();
+        if (isTie) ChatHandler.Of(_pollEndedTie.Formatted(GamemodeManager.GetGameMode(winningGamemodeId).Name, highestVotes)).Send();
+        else ChatHandler.Of(_pollEnded.Formatted(GamemodeManager.GetGameMode(winningGamemodeId).Name, highestVotes)).Send();
 
         ResetPoll();
+        Async.Execute(FinishPoll(winningGamemodeId));
+    }
+
+    private IEnumerator FinishPoll(int winner)
+    {
+        while (Game.State is not GameState.InLobby) yield return null;
+        GamemodeManager.SetGameMode(winner);
     }
 
     private string GetGamemodeOptions()
     {
-        var gamemodeManager = ProjectLotus.GameModeManager;
         StringBuilder gamemodeOptions = new();
-        for (int i = 0; i < gamemodeManager.GetGameModes().Count(); i++)
-        {
-            var gamemode = gamemodeManager.GetGameMode(i);
-            gamemodeOptions.AppendLine($"{i}: {gamemode.Name}");
-        }
-
+        gamemodeIds.OrderBy(kvp => kvp.Key).ForEach(kvp => gamemodeOptions.AppendLine($"{kvp.Key}: {GamemodeManager.GetGameMode(kvp.Value).Name}"));
         return gamemodeOptions.ToString();
     }
 
     private string GetStandingsList()
     {
-        var gamemodeManager = ProjectLotus.GameModeManager;
         StringBuilder standings = new();
         foreach (var kvp in gamemodeVotes.OrderByDescending(kvp => kvp.Value))
         {
-            var gamemode = gamemodeManager.GetGameMode(kvp.Key);
+            var gamemode = GamemodeManager.GetGameMode(kvp.Key);
             standings.AppendLine($"{gamemode.Name} ({kvp.Key}): {kvp.Value}");
         }
         return standings.ToString();
@@ -167,6 +189,7 @@ public class GamemodePollCommand : ICommandReceiver
     {
         gamemodeVotes.Clear();
         playerVotes.Clear();
+        gamemodeIds.Clear();
         _pollDuration = 60;
         _isPollActive = false;
     }
