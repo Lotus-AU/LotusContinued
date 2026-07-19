@@ -15,6 +15,7 @@ using static Lotus.Managers.Hotkeys.HotkeyManager;
 using Lotus.API.Player;
 using VentLib.Utilities.Extensions;
 using System.Linq;
+using Lotus.GUI.Keybinds;
 using Lotus.GUI.Menus.ComboMenu;
 using Lotus.GUI.Menus.HistoryMenu2;
 using VentLib.Localization;
@@ -105,11 +106,10 @@ public class ModKeybindings
             .Do(() => HudManager.Instance.gameObject.SetActive(hudActive = !hudActive))
             .Name("Toggle Hud Visibility");
 
-        // Close Options I think.
+        // Close all open menus
         Bind(KeyCode.Escape)
-            .If(p => p.Predicate(() => GameOptionMenuOpenPatch.MenuBehaviour != null && GameOptionMenuOpenPatch.MenuBehaviour.IsOpen))
-            .Do(() => GameOptionMenuOpenPatch.MenuBehaviour.Close())
-            .Name("Close Options");
+            .Do(TryCloseAllMenus)
+            .Name("Close Open Menus");
 
         // Unblackscreen Everyone
         Bind(KeyCode.LeftShift, KeyCode.Z, KeyCode.Return)
@@ -206,5 +206,24 @@ public class ModKeybindings
     {
         if (!DestroyableSingleton<HudManager>.InstanceExists) return;
         DestroyableSingleton<HudManager>.Instance.Chat.gameObject.SetActive(!DestroyableSingleton<HudManager>.Instance.Chat.gameObject.activeSelf);
+    }
+
+    private static void TryCloseAllMenus()
+    {
+        if (GameOptionMenuOpenPatch.MenuBehaviour != null && GameOptionMenuOpenPatch.MenuBehaviour.IsOpen)
+        {
+            GameOptionMenuOpenPatch.MenuBehaviour.Close();
+        }
+
+        if (KeybindHud.Instance != null && KeybindHud.Instance.KeybindMenu.activeSelf)
+        {
+            KeybindHud.Instance.KeybindButton.GetComponentInChildren<PassiveButton>().OnClick.Invoke();
+        }
+
+        if (HudManager.InstanceExists)
+        {
+            HudManager.Instance.GetComponent<ComboMenuHandler>().ComboMenu.CloseMenu();
+            HudManager.Instance.GetComponent<HM2>().Close();
+        }
     }
 }
