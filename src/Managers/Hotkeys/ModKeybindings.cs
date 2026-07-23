@@ -220,10 +220,13 @@ public class ModKeybindings
             KeybindHud.Instance.KeybindButton.GetComponentInChildren<PassiveButton>().OnClick.Invoke();
         }
 
-        if (HudManager.InstanceExists)
+        if (HudManager.InstanceExists && Game.State is GameState.InLobby)
         {
-            HudManager.Instance.GetComponent<ComboMenuHandler>().ComboMenu.CloseMenu();
-            HudManager.Instance.GetComponent<HM2>().Close();
+            var combo = HudManager.Instance.GetComponent<ComboMenuHandler>();
+            var hm2 = HudManager.Instance.GetComponent<HM2>();
+
+            if (combo != null) combo.ComboMenu.CloseMenu();
+            if (hm2 != null) hm2.Close();
         }
     }
 }
