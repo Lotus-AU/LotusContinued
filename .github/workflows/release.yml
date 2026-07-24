@@ -76,17 +76,15 @@ jobs:
           name: ventframework-unsigned
           path: signing
 
-      - name: Create SignPath ZIP
-        run: |
-          cd signing
-          zip ../signpath-input.zip Lotus.dll VentFrameworkContinued.dll
-
       - name: Upload unsigned artifact
         id: upload-unsigned-artifact
         uses: actions/upload-artifact@v4
         with:
           name: signpath-input
-          path: signpath-input.zip
+          path: |
+            signing/Lotus.dll
+            signing/VentFrameworkContinued.dll
+          if-no-files-found: error
 
       - name: Submit signing request
         uses: signpath/github-action-submit-signing-request@v2
