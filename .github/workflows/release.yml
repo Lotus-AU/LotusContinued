@@ -1,0 +1,117 @@
+name: "Build, Sign, and Release Lotus"
+
+permissions:
+  actions: read
+  contents: write
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version/Tag for this release'
+        required: true
+
+jobs:
+  # Building Lotus and VF
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Lotus
+        uses: actions/checkout@v4
+        with:
+          path: Lotus
+          fetch-depth: 0
+
+      - name: Checkout VentFramework-Continued
+        uses: actions/checkout@v4
+        with:
+          repository: Lotus-AU/VentFramework-Continued
+          path: VentFramework-Continued
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '9.0.x'
+
+      - name: Build VentFramework-Continued
+        working-directory: VentFramework-Continued
+        run: dotnet build -c Debug
+
+      - name: Restore Lotus
+        working-directory: Lotus
+        run: dotnet restore Lotus.csproj /p:Platform=AnyCPU
+
+      - name: Build Lotus
+        working-directory: Lotus
+        run: dotnet build Lotus.csproj -c Release /p:Platform=AnyCPU /p:Debug=true
+
+      - name: Upload unsigned Lotus artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: lotus-unsigned
+          path: Lotus/bin/Release/net6.0/Lotus.dll
+          if-no-files-found: error
+
+      - name: Upload unsigned VentFrameworkContinued artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ventframework-unsigned
+          path: VentFramework-Continued/bin/Debug/net6.0/VentFrameworkContinued.dll
+          if-no-files-found: error
+
+  # Sign w/ SignPath
+  sign:
+    runs-on: ubuntu-latest
+    needs: [build]
+    steps:
+      - name: Download unsigned Lotus artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: lotus-unsigned
+          path: signing
+
+      - name: Download unsigned VentFrameworkContinued artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: ventframework-unsigned
+          path: signing
+
+      - name: Create SignPath ZIP
+        run: |
+          cd signing
+          zip ../signpath-input.zip Lotus.dll VentFrameworkContinued.dll
+
+      - name: Upload unsigned artifact
+        id: upload-unsigned-artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: signpath-input
+          path: signpath-input.zip
+
+      - name: Submit signing request
+        uses: signpath/github-action-submit-signing-request@v2
+        with:
+          api-token: ${{ secrets.SIGNPATH_API_TOKEN }}
+          organization-id: 384cca6e-a42e-4b04-a3bf-cb751b4edc3f
+          project-slug: LotusContinued
+          signing-policy-slug: test-signing
+          artifact-configuration-slug: initial
+          github-artifact-id: ${{ steps.upload-unsigned-artifact.outputs.artifact-id }}
+          wait-for-completion: true
+          output-artifact-directory: signed
+
+      - name: Upload signed binaries
+        uses: actions/upload-artifact@v4
+        with:
+          name: signed-binaries
+          path: signed/*
+          
+          #package:
+          #runs-on: ubuntu-latest
+          #needs: [sign, build]
+          #steps:
+          #- name: Download signed binaries
+          #uses: actions/download-artifact@v4
+          #with:
+          #name: signed-binaries
+          #path: signed
