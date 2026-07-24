@@ -178,12 +178,12 @@ jobs:
       - name: Create Epic/MS Store ZIP
         run: |
           cd epic
-          zip -r "../Lotus.${{ inputs.version }}.Epic+MicrosoftStore.zip" .
+          zip -r "../Lotus.v${{ inputs.version }}.Epic+MicrosoftStore.zip" .
 
       - name: Create Steam ZIP
         run: |
           cd steam
-          zip -r "../Lotus.${{ inputs.version }}.Steam.zip" .
+          zip -r "../Lotus.v${{ inputs.version }}.Steam.zip" .
 
       - name: Upload release artifacts
         uses: actions/upload-artifact@v4
@@ -197,6 +197,8 @@ jobs:
     needs: [package]
     if: ${{ always() && needs.package.result == 'success' }}
     steps:
+      - uses: actions/checkout@v4
+        
       - name: Download Release Zip Files
         uses: actions/download-artifact@v4
         with:
