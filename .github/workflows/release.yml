@@ -10,6 +10,10 @@ on:
       version:
         description: 'Version/Tag for this release'
         required: true
+      skip_signing:
+        description: 'Skip SignPath signing (for testing)'
+        type: boolean
+        default: false
 
 jobs:
   # Building Lotus and VF
@@ -63,6 +67,7 @@ jobs:
   sign:
     runs-on: ubuntu-latest
     needs: [build]
+    if: ${{ inputs.skip_signing != true }}
     steps:
       - name: Download unsigned Lotus artifact
         uses: actions/download-artifact@v4
@@ -104,12 +109,85 @@ jobs:
           name: signed-binaries
           path: signed/*
           
-          #package:
-          #runs-on: ubuntu-latest
-          #needs: [sign, build]
-          #steps:
-          #- name: Download signed binaries
-          #uses: actions/download-artifact@v4
-          #with:
-          #name: signed-binaries
-          #path: signed
+  skip-sign:
+    runs-on: ubuntu-latest
+    needs: [ build ]
+    if: ${{ inputs.skip_signing == true }}
+    steps:
+      - name: Download unsigned Lotus artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: lotus-unsigned
+          path: signed
+
+      - name: Download unsigned VentFrameworkContinued artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: ventframework-unsigned
+          path: signed
+
+      - name: Upload unsigned binaries
+        uses: actions/upload-artifact@v4
+        with:
+          name: signed-binaries
+          path: signed/*
+          if-no-files-found: error
+
+# Package for release
+  package:
+    runs-on: ubuntu-latest
+    needs: [ sign, skip-sign ]
+    if: ${{ always() && (needs.sign.result == 'success' || needs.skip-sign.result == 'success') }}
+    steps:
+      - name: Download signed binaries
+        uses: actions/download-artifact@v4
+        with:
+          name: signed-binaries
+          path: artifacts/signed
+
+      - name: Prepare release folders
+        run: |
+          mkdir -p epic steam
+
+      - name: Download BepInEx Zip Files
+        run: |
+          curl -L https://raw.githubusercontent.com/Lotus-AU/BepInExZips/refs/heads/main/x64.zip -o x64.zip
+          curl -L https://raw.githubusercontent.com/Lotus-AU/BepInExZips/refs/heads/main/x86.zip -o x86.zip
+          unzip x64.zip -d epic
+          unzip x86.zip -d steam
+
+      - name: Copy signed DLLs to plugins
+        run: |
+          mkdir -p epic/BepInEx/plugins steam/BepInEx/plugins
+          cp artifacts/signed/Lotus.dll epic/BepInEx/plugins/
+          cp artifacts/signed/VentFrameworkContinued.dll epic/BepInEx/plugins/
+          cp artifacts/signed/Lotus.dll steam/BepInEx/plugins/
+          cp artifacts/signed/VentFrameworkContinued.dll steam/BepInEx/plugins/
+
+      - name: Download Translation Files
+        run: |
+          curl -L https://github.com/Lotus-AU/Languages/archive/refs/heads/new_translations.zip -o translations.zip
+          unzip translations.zip
+
+      - name: Copy translations
+        run: |
+          mkdir -p epic/Languages/Lotus steam/Languages/Lotus
+          find Languages-new_translations -maxdepth 1 -type f \( -iname '*.yaml' \) -exec cp {} epic/Languages/Lotus/ \;
+          find Languages-new_translations -maxdepth 1 -type f \( -iname '*.yaml' \) -exec cp {} steam/Languages/Lotus/ \;
+
+      - name: Create Epic/MS Store ZIP
+        run: |
+          cd epic
+          zip -r "../Lotus.${{ inputs.version }}.Epic+MicrosoftStore.zip" .
+
+      - name: Create Steam ZIP
+        run: |
+          cd steam
+          zip -r "../Lotus.${{ inputs.version }}.Steam.zip" .
+
+      - name: Upload release artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: final-zips
+          path: ./Lotus*.zip
+          if-no-files-found: error

@@ -134,6 +134,9 @@ The cause of this is usually ping. We do a lot to try to prevent blackscreens bu
 
 If you are interested in helping us localize Project: Lotus into more languages, please reach out to us on our [Discord Server](https://discord.gg/projectlotus).
 
+# Sponsors
+| <img src="https://cdn.brandfetch.io/idXCVMKbd8/w/180/h/180/theme/dark/logo.png?c=1bxid64Mup7aczewSAYMX&t=1777121415987" alt="SignPath Logo" width="44"/> | This program uses free code signing provided by [SignPath.io](https://signpath.io?utm_source=foundation&utm_medium=github&utm_campaign=LotusContinued), and a certificate by the [SignPath Foundation](https://signpath.org?utm_source=foundation&utm_medium=github&utm_campaign=LotusContinued) |
+|----------------------------------------------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 ---
 # Legal Stuff
 ### License
