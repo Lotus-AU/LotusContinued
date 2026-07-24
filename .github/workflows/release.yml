@@ -222,6 +222,5 @@ jobs:
             release-artifacts/signed/VentFrameworkContinued.dll
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
 # partial credit to EHR for helping me figure out how to do this
 # https://github.com/Gurge44/EndlessHostRoles/blob/21310dc2dd861fbac2f7bcfd63c47d1c3c6e9764/.github/workflows/release.yml
