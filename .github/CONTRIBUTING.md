@@ -12,6 +12,11 @@ Starting off, Project Lotus works completely differently to any other host only 
 _Most_ host only mods are forked from [Town Of Host](https://github.com/tukasa0001/TownOfHost/), while this one is not.
 As a result, any knowledge about TOH's codebase will not help you here.
 
+## 1.5 - Before you start.
+
+Consider reaching out to us in our Discord server if you have any questions. We're always happy to help newcomers.
+You can find the link to our Discord server [here](https://discord.gg/projectlotus).
+
 ## 2 - Getting Started
 
 This guide assumes you already have everything required to build an Among Us Mod.
@@ -21,7 +26,7 @@ Stop when you get to the __Mod Template__.
 In order to compile the mod, you need to first compile or download [Vent Framework](https://github.com/Lotus-AU/VentFramework-Continued) if you are building Debug.
 If you are building release, the version on Nuget should be fine, but if it's not, you'll have to go through [Github](https://github.com/Lotus-AU/VentFramework-Continued).
 
-You'll also need to edit the `AmongUs` varible in the csproji file.
+You'll also need to edit the `AmongUs` varible in the csproj file.
 ```
 <AmongUs>E:\SteamLibrary\steamapps\common\Among Us</AmongUs>
 ```
@@ -31,7 +36,7 @@ Change this to your Among Us folder, or remove it if you have it set in your Env
 
 This section goes over how to add your own custom roles.
 The role code in Project Lotus is very easy once you get the hang of it.
-To start, check out somes roles at [src/Roles/RoleGroups](../src/Roles/RoleGroups/) to get a grasp at how to make your own role.
+To start, check out some roles at [src/Roles/RoleGroups](../src/Roles/RoleGroups/) to get a grasp at how to make your own role.
 
 Here are some keypoints of the Role Code:
 ```csharp
@@ -62,5 +67,5 @@ internal static class BastionTranslations
 ```
 
 In order to add your role to a GameMode, head over to [src/GameModes](../src/Gamemodes/).
-Each Gamemode should have a file associated with the roles of it's gamemodes.
+Each Gamemode should have a file associated with the roles of its gamemodes. <br />
 Create a new Instance of your role in the Role class of your target gamemode. This should add your role to the GameMode if done correctly.
