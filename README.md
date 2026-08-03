@@ -140,7 +140,7 @@ If you are interested in helping us localize Project: Lotus into more languages,
 ---
 # Legal Stuff
 ### License
-This mod is licenced under the **GNU General Public License v3**, you may read it [**here.**](https://github.com/Lotus-AU/LotusContinued/blob/main/LICENSE)
+This mod is licensed under the **GNU General Public License v3**, you may read it [**here.**](https://github.com/Lotus-AU/LotusContinued/blob/main/LICENSE)
 
 ### Privacy Policy
 Project Lotus has a few optional features that require sharing data with our API. Like bug reports and lobby information. Check our [Privacy Policy](https://lotusau.top/privacy#lotus) for more details. These can be disabled, and do not affect core gameplay in any way.
@@ -153,11 +153,12 @@ For things related to security vulnerabilities, please review our [Security Poli
 
 ### Code Signing Policy
 This program uses free code signing provided by [SignPath.io](https://signpath.io?utm_source=foundation&utm_medium=github&utm_campaign=LotusContinued), and a certificate by the [SignPath Foundation](https://signpath.org?utm_source=foundation&utm_medium=github&utm_campaign=LotusContinued). <br>
-**[List of Approved Code Signers Here](https://discord.com/channels/1017870413545607209/1347786434223935508)**
+**[List of Approved Code Signers Here](https://github.com/orgs/Lotus-AU/people?query=role%3Aowner)**
 
 ### Contact
 If you have any questions or concerns, please contact us on our [Discord Server](https://discord.gg/projectlotus).<br />
 You can also contact us by email at: `project@lotusau.top`
+
 ---
 <br><br><br><br><br><br><br>
 
