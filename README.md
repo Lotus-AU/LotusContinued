@@ -109,7 +109,7 @@ Here's a Quick Explanation -
 Vanilla (Non-Modded) players are unable to see your lobby in the in-game matchmaker as of June 2023.
 - This was due to a change Innersloth did to their anti-cheat, but Host-Only mods got caught in the crossfire.
 
-#### What can I do then?
+### What can I do then?
 We have a bot in our Discord, [**Lilypad**](https://lotusau.top/en/lilypad), which will automatically post your lobby in a channel once it is made public.
 You can also view Active Public Lobbies in [**our lobby viewer.**](https://lotusau.top/lobbies/)
 
@@ -145,6 +145,19 @@ This mod is licenced under the **GNU General Public License v3**, you may read i
 ### Privacy Policy
 Project Lotus has a few optional features that require sharing data with our API. Like bug reports and lobby information. Check our [Privacy Policy](https://lotusau.top/privacy#lotus) for more details. These can be disabled, and do not affect core gameplay in any way.
 
+### Code of Conduct
+By participating in Project: Lotus or associated platforms, you agree to abide by our [Code of Conduct](.github/CODE_OF_CONDUCT.md).
+
+### Security Policy
+For things related to security vulnerabilities, please review our [Security Policy](.github/SECURITY.md).
+
+### Code Signing Policy
+This program uses free code signing provided by [SignPath.io](https://signpath.io?utm_source=foundation&utm_medium=github&utm_campaign=LotusContinued), and a certificate by the [SignPath Foundation](https://signpath.org?utm_source=foundation&utm_medium=github&utm_campaign=LotusContinued). <br>
+**[List of Approved Code Signers Here](https://discord.com/channels/1017870413545607209/1347786434223935508)**
+
+### Contact
+If you have any questions or concerns, please contact us on our [Discord Server](https://discord.gg/projectlotus).<br />
+You can also contact us by email at: `project@lotusau.top`
 ---
 <br><br><br><br><br><br><br>
 
