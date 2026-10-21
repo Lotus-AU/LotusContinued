@@ -6,6 +6,8 @@ using Lotus.API.Reactive.HookEvents;
 using Lotus.Managers;
 using Lotus.Extensions;
 using Lotus.Factions.Impostors;
+using Lotus.Options;
+using Lotus.Options.General;
 using Lotus.Roles;
 using VentLib.Localization.Attributes;
 using VentLib.Utilities;
@@ -156,7 +158,11 @@ public class MeetingDelegate
         string mostVotedPlayer = this.ExiledPlayer?.Object != null ? this.ExiledPlayer.Object.name : "Unknown";
         log.Trace($"Calculated player votes. Player with most votes = {mostVotedPlayer}, isTie = {isTie}");
 
-        if (IsTie) this.ExiledPlayer = null;
+        if (!IsTie) return;
+        // Random tie mode picks now but leaves IsTie set, so roles that run afterwards (Tie Breaker, Dictator, Jailor) still win.
+        this.ExiledPlayer = GeneralOptions.MeetingOptions.ResolveTieMode is ResolveTieMode.Random
+            ? Players.PlayerById(TiedPlayers.ToList().GetRandom()).Map(p => p.Data).OrElse(null!)
+            : null;
     }
 
     public void CheckAndSetConfirmEjectText(PlayerControl player)

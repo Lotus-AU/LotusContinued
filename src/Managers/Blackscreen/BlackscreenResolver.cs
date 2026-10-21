@@ -62,11 +62,14 @@ internal class BlackscreenResolver : IBlackscreenResolver
         foreach (PlayerControl player in Players.GetPlayers())
         {
             if (player == null) continue;
-            if (playerStates[player.PlayerId].isDisconnected) continue;
+            if (!playerStates.TryGetValue(player.PlayerId, out var state) || state.isDisconnected) continue;
             if (player.IsHost() || player.IsModded()) continue;
             int clientId = player.GetClientId();
             if (clientId == -1) continue;
             Dictionary<byte, (bool isDead, bool isDisconnected)> myStates;
+            // Reset to the real states first, otherwise each player's patch leaks into every player after them
+            // (e.g. a dead player receiving data that says they are alive, which gets them kicked by anticheat).
+            ApplyStates(playerStates);
             try
             {
                 myStates = AntiBlackoutLogic.PatchedData(player, exiledPlayer);
@@ -79,22 +82,20 @@ internal class BlackscreenResolver : IBlackscreenResolver
             }
             if (myStates == null) continue;
 
-            GameData.Instance.AllPlayers.ToArray().Where(i => i != null).ForEach(info =>
-            {
-                if (!myStates.TryGetValue(info.PlayerId, out var val)) return;
-                info.IsDead = val.isDead;
-                info.Disconnected = val.isDisconnected;
-                try
-                {
-                    if (info.Object != null) info.PlayerName = info.Object.name;
-                }
-                catch { }
-            });
+            ApplyStates(myStates);
             GeneralRPC.SendGameData(clientId);
         }
+        ApplyStates(playerStates);
+        if (unpatchable.Count == 0) return;
+
+        log.Debug($"Un-patchable Players: {unpatchable.Filter(Utils.PlayerById).Select(p => p.name).Fuse()}");
+    }
+
+    private static void ApplyStates(Dictionary<byte, (bool isDead, bool isDisconnected)> states)
+    {
         GameData.Instance.AllPlayers.ToArray().Where(i => i != null).ForEach(info =>
         {
-            if (!playerStates.TryGetValue(info.PlayerId, out var val)) return;
+            if (!states.TryGetValue(info.PlayerId, out var val)) return;
             info.IsDead = val.isDead;
             info.Disconnected = val.isDisconnected;
             try
@@ -103,9 +104,6 @@ internal class BlackscreenResolver : IBlackscreenResolver
             }
             catch { }
         });
-        if (unpatchable.Count == 0) return;
-
-        log.Debug($"Un-patchable Players: {unpatchable.Filter(Utils.PlayerById).Select(p => p.name).Fuse()}");
     }
 
     public virtual void FixBlackscreens(Action runOnFinish)
@@ -136,8 +134,7 @@ internal class BlackscreenResolver : IBlackscreenResolver
         ChatHandler chatHandler = ChatHandler.Of("", "- Lava Chat Fix -");
         foreach (PlayerControl player in Players.GetPlayers())
         {
-            (bool isDead, bool isDisconnected) = playerStates[player.PlayerId];
-            if (isDead || isDisconnected) continue;
+            if (!playerStates.TryGetValue(player.PlayerId, out var state) || state.isDead || state.isDisconnected) continue;
             for (int i = 0; i < 20; i++) chatHandler.Send(player);
         }
     }

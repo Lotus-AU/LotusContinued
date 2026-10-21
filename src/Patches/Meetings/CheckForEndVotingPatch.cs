@@ -73,16 +73,17 @@ public class CheckForEndVotingPatch
         log.Trace($"End Vote Count: {meetingDelegate.CurrentVoteCount().Select(kv => $"{Utils.GetPlayerById(kv.Key).GetNameWithRole()}: {kv.Value}").Join()}");
         meetingDelegate.CalculateExiledPlayer();
 
-        byte exiledPlayer = meetingDelegate.ExiledPlayer?.PlayerId ?? 255;
-
         RoleOperations.Current.Trigger(LotusActionType.VotingComplete, null, meetingDelegate);
 
         // WE DO NOT RECALCULATE THE EXILED PLAYER!
         // This means its up to roles that modify the meeting delegate to properly update the exiled player
 
-        if (GeneralOptions.MeetingOptions.ResolveTieMode is ResolveTieMode.Random)
-            if (meetingDelegate.TiedPlayers.Count >= 2)
-                meetingDelegate.ExiledPlayer = Players.PlayerById(meetingDelegate.TiedPlayers.ToList().GetRandom()).Map(p => p.Data).OrElse(null!);
+        // Random tie resolution happens inside CalculateExiledPlayer (before roles) so role overrides take priority.
+        // Once someone is actually being exiled it is no longer a tie.
+        if (meetingDelegate.ExiledPlayer != null) meetingDelegate.IsTie = false;
+
+        // Read after roles so the voter list matches who is actually exiled
+        byte exiledPlayer = meetingDelegate.ExiledPlayer?.PlayerId ?? 255;
 
         // Generate voter states to reflect voting
         List<VoterState> votingStates = GenerateVoterStates(meetingDelegate);
