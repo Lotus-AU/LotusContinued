@@ -29,7 +29,8 @@ class CoStartGamePatch
         {
             if (player == null) return;
             SetRolePatch.RoleAssigned[player.PlayerId] = false;
-            if (!GeneralOptions.MiscellaneousOptions.ColoredNameMode) return;
+            // Renaming other players is the host's job; a client sending it is kicked for hacking.
+            if (!GeneralOptions.MiscellaneousOptions.ColoredNameMode || !AmongUsClient.Instance.AmHost) return;
             string colorName = player.Data.ColorName.Trim('(', ')');
             player.RpcSetName(colorName);
             Api.Local.SetName(player, colorName, true);

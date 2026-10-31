@@ -121,7 +121,8 @@ class ResetStartStatePatch
 {
     public static void Prefix()
     {
-        if (GameStartManager.InstanceExists && GameStartManager.Instance.startState == GameStartManager.StartingStates.Countdown)
+        // Only the host may sync settings; a client sending it is kicked for hacking.
+        if (AmongUsClient.Instance.AmHost && GameStartManager.InstanceExists && GameStartManager.Instance.startState == GameStartManager.StartingStates.Countdown)
         {
             PlayerControl.LocalPlayer.RpcSyncSettings(GameOptionsManager.Instance.gameOptionsFactory.ToBytes(GameOptionsManager.Instance.CurrentGameOptions, false));
         }
