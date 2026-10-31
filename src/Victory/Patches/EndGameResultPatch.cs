@@ -130,9 +130,11 @@ public class EndGameResultPatch
         // The code onwards is so inefficient...
         // but do I care? That's right, no. I do not.
 
+        // Hide the vanilla figures rather than destroying them: their hats and visors are still loading,
+        // and the load callbacks throw NullReferenceExceptions on destroyed objects. The end screen is unloaded afterwards anyway.
         Object.FindObjectsOfType<PoolablePlayer>()
             .Where(p => p.transform.parent == __instance.transform)
-            .Do(p => p.gameObject.Destroy());
+            .Do(p => p.gameObject.SetActive(false));
 
         bool flag = GameManager.Instance.DidHumansWin(EndGameResult.CachedGameOverReason);
         var cachedPlayerData = EndGameResult.CachedWinners;
