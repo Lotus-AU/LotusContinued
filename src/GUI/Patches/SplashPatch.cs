@@ -438,6 +438,7 @@ class SplashPatch
         UpdateButton = UnityOptional<GameObject>.Of(updateButton);
 
         if (!ProjectLotus.ModUpdater.HasUpdate) updateButton.gameObject.SetActive(false);
+        if (OperatingSystem.IsAndroid()) updateButton.SetActive(false);
         FriendsListManager.Instance.StopPolling();
         FriendsListManager.Instance.OnSignOut();
     }

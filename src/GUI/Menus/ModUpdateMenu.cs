@@ -32,7 +32,6 @@ public class ModUpdateMenu : MonoBehaviour
 
     private bool opened;
 
-
     public ModUpdateMenu(IntPtr intPtr) : base(intPtr)
     {
         AnchorObject = gameObject.CreateChild("ModUpdateMenu");
@@ -63,7 +62,7 @@ public class ModUpdateMenu : MonoBehaviour
         AnchorObject.SetActive(false);
 
         log.Trace($"Update ready during Mod Menu Creation: {SplashPatch.UpdateReady}", "ModUpdateMenu");
-        if (SplashPatch.UpdateReady) Open();
+        if (SplashPatch.UpdateReady && !OperatingSystem.IsAndroid()) Open();
     }
 
     private void Start()
@@ -73,6 +72,7 @@ public class ModUpdateMenu : MonoBehaviour
 
     public void Open()
     {
+        if (OperatingSystem.IsAndroid()) return;
         AnchorObject.SetActive(opened = true);
     }
 
