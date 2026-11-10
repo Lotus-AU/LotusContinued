@@ -35,7 +35,7 @@ public class LotusAction
 
         var executer = (ForcedExecutor ?? Executer) as CustomRole;
 
-        if (executer?.MyPlayer == null)
+        if (!(executer?.MyPlayer))
             throw new InvalidOperationException("MyPlayer is not set in the instance.");
         log.Trace($"RoleAction(type={ActionType}, executer={ForcedExecutor ?? Executer}, priority={Priority}, method={Method}))", "RoleAction::Execute");
         Profiler.Sample sample1 = Profilers.Global.Sampler.Sampled($"Action::{ActionType}");

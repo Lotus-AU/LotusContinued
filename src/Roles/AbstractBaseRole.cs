@@ -90,7 +90,7 @@ public abstract class AbstractBaseRole
                 return "\n"
                     + Localizer.Translate($"Roles.{EnglishRoleName.RemoveHtmlTags()}.Mutable.{opt.Key().Replace(" ", "")}", "", true, DeclaringAssembly, TranslationCreationOption.NothingIfNull)
                         .Formatted(opt.GetValueText())
-                    + opt.Children.GetConditionally(opt.GetValue()).Select(o => OptionText(o))
+                    + opt.Children.GetConditionally(opt.GetValue()).Select(OptionText)
                         .Fuse("");
             }
             return Localizer.Translate($"Roles.{EnglishRoleName.RemoveHtmlTags()}.Description", assembly: DeclaringAssembly) + "\n" + OptionText(RoleOptions).Trim();
@@ -191,7 +191,7 @@ public abstract class AbstractBaseRole
         RoleOptions.Color = RoleColor;
 
         if (RoleFlags.HasFlag(RoleFlag.DontRegisterOptions) || RoleOptions.GetValueText() == "N/A") goto finished;
-        Option? percentageOption = RoleOptions.Children.FirstOrDefault(child => child.Name() == "Percentage", null!);
+        Option? percentageOption = RoleOptions.Children.FirstOrDefault(child => child!.Name() == "Percentage", null);
         if (percentageOption != null) this.Chance = (int)percentageOption.GetValue();
         else
         {
@@ -251,7 +251,7 @@ public abstract class AbstractBaseRole
 
     private void SetupRoleActions()
     {
-        Enum.GetValues<LotusActionType>().Do(action => this.RoleActions.Add(action, new List<RoleAction>()));
+        // Enum.GetValues<LotusActionType>().Do(action => this.RoleActions.Add(action, []));
         this.GetType().GetMethods(AccessFlags.InstanceAccessFlags)
             .SelectMany(method => method.GetCustomAttributes<RoleActionAttribute>().Select(a => (a, method)))
             .Where(t => t.a.Subclassing || t.method.DeclaringType == this.GetType())
@@ -261,7 +261,7 @@ public abstract class AbstractBaseRole
 
     public void AddRoleAction(RoleAction action)
     {
-        List<RoleAction> currentActions = this.RoleActions.GetValueOrDefault(action.ActionType, new List<RoleAction>());
+        List<RoleAction> currentActions = this.RoleActions.GetValueOrDefault(action.ActionType, []);
 
         log.Log(LogLevel.All, $"Registering Action {action.ActionType} => {action.Method.Name} (from: \"{action.Method.DeclaringType}\")", "RegisterAction");
         if (action.ActionType is LotusActionType.FixedUpdate &&
@@ -278,17 +278,35 @@ public abstract class AbstractBaseRole
     protected void CreateInstanceBasedVariables()
     {
         this.UIManager.SetBaseRole(this);
-        this.GetType().GetFields(AccessFlags.InstanceAccessFlags | BindingFlags.FlattenHierarchy)
-            .Where(f => f.GetCustomAttribute<NewOnSetupAttribute>() != null)
-            .Select(f => new NewOnSetup(f, f.GetCustomAttribute<NewOnSetupAttribute>()!.UseCloneIfPresent))
-            .ForEach(CreateAnnotatedFields);
-        this.GetType().GetFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.FlattenHierarchy)
-            .Where(f => f.FieldType == typeof(Cooldown) || (f.FieldType.IsGenericType && typeof(Optional<>).IsAssignableFrom(f.FieldType.GetGenericTypeDefinition())))
+        // this.GetType().GetFields(AccessFlags.InstanceAccessFlags | BindingFlags.FlattenHierarchy)
+        //     .Where(f => f.GetCustomAttribute<NewOnSetupAttribute>() != null)
+        //     .Select(f => new NewOnSetup(f, f.GetCustomAttribute<NewOnSetupAttribute>()!.UseCloneIfPresent))
+        //     .ForEach(CreateAnnotatedFields);
+        GetAllFields(this.GetType())
             .Do(f =>
             {
-                if (f.FieldType.GetCustomAttribute<NewOnSetupAttribute>() != null) CreateAnnotatedFields(new NewOnSetup(f, f.FieldType.GetCustomAttribute<NewOnSetupAttribute>()!.UseCloneIfPresent));
-                else if (f.FieldType == typeof(Cooldown)) CreateCooldown(f);
-                else CreateOptional(f);
+                Type fieldType = f.FieldType;
+
+                bool implementsCloneSetup =
+                    typeof(ICloneOnSetup).IsAssignableFrom(fieldType) ||
+                    fieldType.GetInterfaces().Any(i =>
+                        i.IsConstructedGenericType &&
+                        i.GetGenericTypeDefinition() == typeof(ICloneOnSetup<>));
+
+                if (implementsCloneSetup && fieldType != typeof(Cooldown))
+                {
+                    ICloneOnSetup? currentValue = (ICloneOnSetup)f.GetValue(this);
+
+                    f.SetValue(this, currentValue != null ? currentValue.CloneIndiscriminate() : CreateInstance(fieldType));
+                    log.Debug($"Set new clone of {f.Name} from {f.DeclaringType}.");
+
+                    return;
+                }
+
+                if (f.GetCustomAttribute<NewOnSetupAttribute>() != null) CreateAnnotatedFields(new NewOnSetup(f, f.GetCustomAttribute<NewOnSetupAttribute>()!.UseCloneIfPresent));
+                else if (fieldType == typeof(Cooldown)) CreateCooldown(f);
+                else if (fieldType.IsGenericType &&
+                         fieldType.GetGenericTypeDefinition() == typeof(Optional<>)) CreateOptional(f);
             });
     }
 
@@ -300,24 +318,45 @@ public abstract class AbstractBaseRole
             ? EmptyActions : actions.Select(action => (action, this));
     }
 
-    private void CreateAnnotatedFields(NewOnSetup setupRules)
+    private static IEnumerable<FieldInfo> GetAllFields(Type? type, BindingFlags flags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic |
+        BindingFlags.DeclaredOnly)
     {
 
+        while (type != null)
+        {
+            foreach (FieldInfo field in type.GetFields(flags))
+                yield return field;
+
+            type = type.BaseType;
+        }
+    }
+
+    private static IEnumerable<MethodInfo> GetAllMethods(Type? type, BindingFlags flags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic |
+        BindingFlags.DeclaredOnly)
+    {
+
+        while (type != null)
+        {
+            foreach (MethodInfo method in type.GetMethods(flags))
+                yield return method;
+
+            type = type.BaseType;
+        }
+    }
+
+    private void CreateAnnotatedFields(NewOnSetup setupRules)
+    {
         FieldInfo field = setupRules.FieldInfo;
         object? currentValue = field.GetValue(this);
         object newValue;
 
-        if (setupRules.UseCloneIfPresent && currentValue is ICloneOnSetup cos)
-        {
-            field.SetValue(this, cos.CloneIndiscriminate());
-            return;
-        }
+        log.Debug($"Created new instance of {field.Name} from {field.DeclaringType}.");
 
         MethodInfo? cloneMethod = field.FieldType.GetMethod("Clone", AccessFlags.InstanceAccessFlags, Array.Empty<Type>());
         if (currentValue == null || cloneMethod == null || !setupRules.UseCloneIfPresent)
             try
             {
-                newValue = AccessTools.CreateInstance(field.FieldType);
+                newValue = CreateInstance(field.FieldType);
             }
             catch (Exception e)
             {
@@ -364,6 +403,34 @@ public abstract class AbstractBaseRole
         return info.FieldType.GetConstructors().First(c =>
             c.GetParameters().SelectWhere(p => p.ParameterType, t => t!.IsGenericType).Any(tt =>
                 tt!.GetGenericTypeDefinition().IsAssignableTo(typeof(Optional<>))));
+    }
+
+    private object CreateInstance(Type type)
+    {
+        ConstructorInfo ctor = GetCloneSetupConstructor(type);
+
+        ParameterInfo[] parameters = ctor.GetParameters();
+
+        object?[] args = parameters
+            .Select(p => p.IsOptional ? Type.Missing : GetDefault(p.ParameterType))
+            .ToArray();
+
+        return ctor.Invoke(args);
+    }
+
+    private ConstructorInfo GetCloneSetupConstructor(Type type)
+    {
+        return type
+            .GetConstructors(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
+            .OrderBy(c => c.GetParameters().Length)
+            .First(c => c.GetParameters().All(p => p.IsOptional));
+    }
+
+    private static object? GetDefault(Type type)
+    {
+        return type.IsValueType
+            ? Activator.CreateInstance(type)
+            : null;
     }
 
     /// <summary>
@@ -586,7 +653,7 @@ public abstract class AbstractBaseRole
 
     public override string ToString()
     {
-        return this.RoleName;
+        return this.EnglishRoleName;
     }
 
     public class RoleModifier

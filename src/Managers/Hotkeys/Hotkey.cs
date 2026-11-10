@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Lotus.API.Odyssey;
 using UnityEngine;
+using VentLib.Localization;
 using VentLib.Utilities.Extensions;
 
 namespace Lotus.Managers.Hotkeys;
@@ -17,6 +18,7 @@ public class Hotkey
     private readonly KeyCode[] keyCodes;
     private List<Func<bool>> predicates = new();
     private List<Action> actions = new();
+    private bool isLocale;
 
     private Hotkey(KeyCode[] keyCodes)
     {
@@ -54,9 +56,10 @@ public class Hotkey
         return this;
     }
 
-    public Hotkey Name(string name)
+    public Hotkey Name(string name, bool isLocale = false)
     {
         Text = name;
+        this.isLocale = isLocale;
         return this;
     }
 
@@ -82,6 +85,8 @@ public class Hotkey
         actions.ForEach(a => a());
         TimesUsed++;
     }
+
+    public string GetName() => isLocale ? Localizer.Translate(Text) : Text;
 
     public class PredicateBuilder
     {

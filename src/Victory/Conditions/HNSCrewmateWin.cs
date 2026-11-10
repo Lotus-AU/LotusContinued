@@ -28,19 +28,15 @@ public class HNSCrewmateWin: IFactionWinCondition
     {
         factions = CrewmateFaction;
 
-        if (Game.State is not (GameState.Roaming or GameState.InMeeting)) return false;
+        if (Game.State is not GameState.Roaming) return false;
 
-        int aliveImpostors = 0;
-        int aliveOthers = 0;
+        int aliveCrew = 0;
 
         foreach (CustomRole role in Players.GetAlivePlayers().Select(p => p.PrimaryRole()))
-        {
-            if (role.Faction.Relationship(FactionInstances.Impostors) is Relation.FullAllies or Relation.SharedWinners) aliveImpostors++;
-            else aliveOthers++;
+            if (role.Faction.Relationship(FactionInstances.Crewmates) is not Relation.None) aliveCrew++;
 
-        }
 
-        return aliveOthers > 0 && logicGameFlowHnS.AllTimersExpired();
+        return aliveCrew > 0 && logicGameFlowHnS.AllTimersExpired();
     }
 
     public WinReason GetWinReason() => new(ReasonType.FactionLastStanding);

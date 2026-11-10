@@ -22,7 +22,7 @@ public class Noisemaker : Crewmate
     protected bool ImpostorsGetAlert;
     protected float AlertDuration;
 
-    [RoleAction(Internals.Enums.LotusActionType.Interaction, priority: API.Priority.Last)]
+    [RoleAction(Internals.Enums.LotusActionType.Interaction, priority: API.Priority.Last, Subclassing =  false)]
     public virtual void SendGameOptionsOnDeath(Interaction interaction, ActionHandle handle)
     {
         if (interaction.Intent is not IKillingIntent || handle.IsCanceled) return;

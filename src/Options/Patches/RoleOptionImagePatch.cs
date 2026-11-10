@@ -1,4 +1,5 @@
-﻿using Lotus.GUI;
+﻿using System.IO;
+using Lotus.GUI;
 using Lotus.Logging;
 using Lotus.Roles;
 using Lotus.Utilities;
@@ -14,8 +15,8 @@ public class RoleOptionImagePatch
     private static UnityOptional<Sprite> _placeholderSprite = UnityOptional<Sprite>.Null();
     public static void TryAddImageToSetting(RoleOptionSetting roleOption, AbstractBaseRole role)
     {
-        string roleImagePath = role.GetRoleOutfitPath().Replace("roleoutfits", "roleimages");
-        if (!roleImagePath.EndsWith(".png")) roleImagePath += ".png";
+        string roleImagePath = role.GetRoleOutfitPath().ToLower().Replace("roleoutfits", "roleimages");
+        roleImagePath = Path.ChangeExtension(roleImagePath, "png");
         if (!LotusAssets.TryLoadSprite(roleImagePath, out Sprite? sprite))
             // Replace sprite with Missing one
             sprite = _placeholderSprite.OrElseSet(() => LotusAssets.LoadSprite("RoleImages/Missing.png"));

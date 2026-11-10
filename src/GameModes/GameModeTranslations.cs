@@ -28,7 +28,7 @@ public class GamemodeTranslations
     [Localized(nameof(HNSStandard))]
     public class HNSStandard
     {
-        [Localized(nameof(Name))] public static string Name = "Standard";
+        [Localized(nameof(Name))] public static string Name = "Hide n Seek";
 
         [Localized(nameof(GamemodeDescription))] public static string GamemodeDescription = "The standard Hide & Seek Gameplay. Hiders complete tasks to reduce time and hide in vents when necessary. The Seeker must kill all players before time runs out or the hiders win.";
     }
@@ -78,5 +78,49 @@ public class GamemodeTranslations
         [Localized(nameof(PlayerStartsTurn))] public static string PlayerStartsTurn = "Player {0} is now choosing their role. They have {1} seconds to make a decision before random is picked automatically.";
 
         [Localized(nameof(GamemodeDescription))] public static string GamemodeDescription = "This text is shown to players when they join to explain the current gamemode.";
+    }
+
+    [Localized(nameof(Speedrun))]
+    public class Speedrun
+    {
+        [Localized(nameof(Name))] public static string Name = "Speedrun";
+
+        [Localized(nameof(ButtonText))] public static string ButtonText = "Speedrun Settings";
+        [Localized(nameof(Description))] public static string Description = "Modify the Speedrun settings here!";
+
+        [Localized(nameof(GamemodeDescription))] public static string GamemodeDescription = "In Speedrun, there are only crewmates called Taskers.\nThe tasker must complete their tasks before everyone else does.\n\nOnce someone completes all of their tasks, they will gain the ability to kill, and must kill all other Taskers to win.";
+    }
+
+    [Localized(nameof(EscapeTheFacility))]
+    public class EscapeTheFacility
+    {
+        [Localized(nameof(Name))] public static string Name = "Escape The Facility";
+
+        [Localized(nameof(ButtonText))] public static string ButtonText = "ETF Settings";
+        [Localized(nameof(Description))] public static string Description = "Change any setting for ETF here!";
+
+        [Localized(nameof(GamemodeDescription))] public static string GamemodeDescription = "This text is shown to players when they join to explain the current gamemode.";
+
+        [Localized(nameof(WardenTab))] public static string WardenTab = "Warden Settings";
+
+        [Localized(nameof(PlayersRescued))] public static string PlayersRescued = "Players Rescued";
+        [Localized(nameof(PlayersIncinerated))] public static string PlayersIncinerated = "Players Incinerated";
+        [Localized(nameof(TerminalsCompleted))] public static string TerminalsCompleted = "Terminals Completed";
+
+        [Localized(nameof(FindExitText))] public static string FindExitText = "Find an Exit!";
+        [Localized(nameof(TerminalsRemainingText))] public static string TerminalsRemainingText = "Terminals Remaining: {0}";
+        [Localized(nameof(PlayersLeftText))] public static string PlayersLeftText = "{0}/{1} Players Left";
+
+        [Localized(nameof(FugitiveDied))] public static string FugitiveDied = "You Died! Enjoy the chaos.";
+        [Localized(nameof(FugitiveEscaped))] public static string FugitiveEscaped = "You Escaped! Enjoy the chaos.";
+        [Localized(nameof(FugitiveDowned))] public static string FugitiveDowned = "You were hit by the Warden! Your speed is much slower now.";
+        [Localized(nameof(FugitiveVanish))] public static string FugitiveVanish = "Press VANISH when the terminal turns PURPLE.";
+        [Localized(nameof(FugitiveInteractHint))] public static string FugitiveInteractHint = "Use the PET button to interact with this object.";
+        [Localized(nameof(FugitiveInvisible))] public static string FugitiveInvisible = "You are currently invisible to the Warden(s).\nUse this time to get away from the vent!";
+        [Localized(nameof(TerminalFailed))] public static string TerminalFailed = "At least one player failed the skillcheck.\nThe Warden now knows the location of the terminal.\nYou can still hack the computer.";
+
+        [Localized(nameof(WardenTooClose))] public static string WardenTooClose = "⚠ Too Close to Captured Fugitive ⚠";
+        [Localized(nameof(WardenStunned))] public static string WardenStunned = "You are currently stunned for 1.5s because you downed a player.";
+        [Localized(nameof(WardenDrag))] public static string WardenDrag = "Take the Fugitive to an empty Vent!";
     }
 }

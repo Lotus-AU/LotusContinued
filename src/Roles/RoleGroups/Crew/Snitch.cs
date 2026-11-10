@@ -48,6 +48,7 @@ public class Snitch : Crewmate
         {
             PlayerControl[] trackablePlayers = Players.GetAllPlayers().Where(IsTrackable).ToArray();
             MyPlayer.NameModel().GetComponentHolder<IndicatorHolder>().Add(new IndicatorComponent(new LiveString("⚠", RoleColor), Game.InGameStates, viewers: trackablePlayers.AddItem(MyPlayer).ToArray()));
+            MyPlayer.NameModel().GetComponentHolder<RoleHolder>().Components().ForEach(rc => trackablePlayers.ForEach(rc.AddViewer));
             if (EvilHaveArrow)
                 trackablePlayers.ForEach(p =>
                 {
@@ -88,21 +89,21 @@ public class Snitch : Crewmate
                 .BindInt(i => SnitchWarningTasks = i)
                 .Build())
             .SubOption(s => s.KeyName("Evil Have Arrow to Snitch", Colorize(EvilArrowToSnitch, RoleColor))
-                .AddOnOffValues()
+                .AddBoolean()
                 .BindBool(b => EvilHaveArrow = b)
                 .Build())
             .SubOption(s => s.KeyName("Enable Arrow for Snitch", Colorize(SnitchArrow, RoleColor))
                 .BindBool(v => SnitchHasArrow = v)
-                .AddOnOffValues()
+                .AddBoolean()
                 .ShowSubOptionPredicate(o => (bool)o)
                 .SubOption(arrow => arrow.KeyName("Colored Arrow", ColoredArrow)
                     .BindBool(v => ArrowIsColored = v)
-                    .AddOnOffValues()
+                    .AddBoolean()
                     .Build())
                 .Build())
             .SubOption(s => s.KeyName("Snitch Can Track Any Killing", Colorize(SnitchTracksAllKillers, RoleColor))
                 .BindBool(v => SnitchCanTrackNk = v)
-                .AddOnOffValues()
+                .AddBoolean()
                 .Build()));
 
 

@@ -98,9 +98,13 @@ public static class MurderPatches
     [QuickPostfix(typeof(PlayerControl), nameof(PlayerControl.MurderPlayer))]
     public static void MurderPlayer(PlayerControl __instance, PlayerControl target, MurderResultFlags resultFlags)
     {
-        if (!AmongUsClient.Instance.AmHost) return;
         if (!target.Data.IsDead) return;
         if (resultFlags.HasFlag(MurderResultFlags.FailedError)) return;
+        if (!AmongUsClient.Instance.AmHost)
+        {
+            if (MeetingHud.Instance) MeetingHud.Instance.HandleDisconnectedPlayerVoteArea(target, DisconnectReasons.Custom);
+            return;
+        }
         if (Game.MatchData.GetFrozenPlayer(target)?.Status is not PlayerStatus.Alive) return;
 
         MurderPatches.Lock(__instance.PlayerId);
@@ -125,9 +129,17 @@ public static class MurderPatches
         Hooks.PlayerHooks.PlayerMurderHook.Propagate(playerMurderHookEvent);
         Hooks.PlayerHooks.PlayerDeathHook.Propagate(playerMurderHookEvent);
 
+        if (MeetingHud.Instance) MeetingHud.Instance.HandleDisconnectedPlayerVoteArea(target, DisconnectReasons.Custom);
+
         Async.Schedule(() =>
         {
             if (target != null) target.SetChatName(target.name);
         }, 0.1f);
+    }
+
+    [QuickPostfix(typeof(PlayerControl), nameof(PlayerControl.Exiled))]
+    public static void ExiledPlayer(PlayerControl __instance)
+    {
+        if (MeetingHud.Instance) MeetingHud.Instance.HandleDisconnectedPlayerVoteArea(__instance, DisconnectReasons.Custom);
     }
 }

@@ -13,6 +13,7 @@ using VentLib.Utilities;
 using Priority = HarmonyLib.Priority;
 using Lotus.Roles;
 using Lotus.API.Player;
+using Lotus.Logging;
 using Lotus.RPC.CustomObjects;
 using Lotus.RPC.CustomObjects.Interfaces;
 using VentLib.Utilities.Extensions;

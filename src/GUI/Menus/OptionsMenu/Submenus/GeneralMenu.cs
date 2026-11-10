@@ -167,9 +167,9 @@ public class GeneralMenu : MonoBehaviour, IBaseOptionMenuComponent
         mouseMovementButton = mouseMovementObject.AddComponent<MonoToggleButton>();
         mouseMovementButton.SetOnText("Mouse Movement: ON");
         mouseMovementButton.SetOffText("Mouse Movement: OFF");
-        mouseMovementButton.SetToggleOnAction(() => optionsMenuBehaviour.DisableMouseMovement.UpdateText(true));
-        mouseMovementButton.SetToggleOffAction(() => optionsMenuBehaviour.DisableMouseMovement.UpdateText(false));
-        mouseMovementButton.SetState(optionsMenuBehaviour.DisableMouseMovement.onState);
+        mouseMovementButton.SetToggleOnAction(() => DataManager.Settings.Input.MouseMovementEnabled = true);
+        mouseMovementButton.SetToggleOffAction(() => DataManager.Settings.Input.MouseMovementEnabled = false);
+        mouseMovementButton.SetState(DataManager.Settings.Input.MouseMovementEnabled);
         mouseMovementObject.transform.localPosition = new Vector3(-0.983f, -0.328f, -1f);
         mouseMovementObject.SetActive(OperatingSystem.IsWindows());
 

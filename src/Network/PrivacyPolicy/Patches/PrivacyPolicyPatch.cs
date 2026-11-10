@@ -59,6 +59,7 @@ public class PrivacyPolicyPatch
     [QuickPostfix(typeof(EOSManager), nameof(EOSManager.RunLogin))]
     public static void EditLoginCoroutine(EOSManager __instance, ref Il2CppSystem.Collections.IEnumerator __result)
     {
+        log.Debug("Patching login.");
         __result = PatchedCoroutine(__instance).WrapToIl2Cpp();
     }
 
@@ -123,7 +124,7 @@ public class PrivacyPolicyPatch
             customScreen.titleTexxt.text = "⚠⚠⚠";
             customScreen.bodyText.text = Localizer
                 .Translate("PingDisplay.AddonsFailed", "{0} Addon(s) Failed to Load: {1}")
-                .Formatted(AddonManager.FailedAddons.Count, AddonManager.FailedAddons.StrJoin(string.Empty).Trim());
+                .Formatted(AddonManager.FailedAddons.Count, AddonManager.FailedAddons.Fuse().Trim());
             customScreen.button1Text.text = DestroyableSingleton<TranslationController>.Instance.GetString(StringNames.Okay, new Il2CppReferenceArray<Il2CppSystem.Object>(0));
             customScreen.gameObject.SetActive(true);
             yield break;
@@ -159,7 +160,7 @@ public class PrivacyPolicyPatch
         customScreen.titleTexxt.text = "⚠⚠⚠";
         customScreen.bodyText.text = Localizer
             .Translate("PingDisplay.AddonsFailed", "{0} Addon(s) Failed to Load: {1}")
-            .Formatted(AddonManager.FailedAddons.Count, AddonManager.FailedAddons.StrJoin(string.Empty).Trim());
+            .Formatted(AddonManager.FailedAddons.Count, AddonManager.FailedAddons.Fuse().Trim());
         customScreen.button1Text.text = DestroyableSingleton<TranslationController>.Instance.GetString(StringNames.Okay, new Il2CppReferenceArray<Il2CppSystem.Object>(0));
         customScreen.gameObject.SetActive(true);
         yield break;

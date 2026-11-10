@@ -12,28 +12,41 @@ namespace Lotus.Options;
 [LoadStatic]
 public class DefaultTabs
 {
-    public static MainSettingTab NormalStandardTab = new(GamemodeTranslations.Standard.ButtonText, GamemodeTranslations.Standard.Description);
-    public static MainSettingTab CaptureTab = new(GamemodeTranslations.CaptureTheFlag.ButtonText, GamemodeTranslations.CaptureTheFlag.Description);
-    public static MainSettingTab ColorwarsTab = new(GamemodeTranslations.Colorwars.ButtonText, GamemodeTranslations.Colorwars.Description);
-    public static MainSettingTab DraftTab = new(GamemodeTranslations.Draft.ButtonText, GamemodeTranslations.Draft.Description);
+    public static readonly MainSettingTab NormalStandardTab = new(GamemodeTranslations.Standard.ButtonText, GamemodeTranslations.Standard.Description);
+    public static readonly MainSettingTab CaptureTab = new(GamemodeTranslations.CaptureTheFlag.ButtonText, GamemodeTranslations.CaptureTheFlag.Description);
+    public static readonly MainSettingTab ColorwarsTab = new(GamemodeTranslations.Colorwars.ButtonText, GamemodeTranslations.Colorwars.Description);
+    public static readonly MainSettingTab DraftTab = new(GamemodeTranslations.Draft.ButtonText, GamemodeTranslations.Draft.Description);
+    public static readonly MainSettingTab SpeedrunTab = new(GamemodeTranslations.Speedrun.ButtonText, GamemodeTranslations.Speedrun.Description);
 
-    public static MainSettingTab HNSStandardTab = new(GamemodeTranslations.Standard.ButtonText, GamemodeTranslations.Standard.Description);
+    public static readonly MainSettingTab HNSStandardTab = new(GamemodeTranslations.Standard.ButtonText, GamemodeTranslations.Standard.Description);
+    public static readonly MainSettingTab EscapeTab = new(GamemodeTranslations.EscapeTheFacility.ButtonText, GamemodeTranslations.EscapeTheFacility.Description);
 
-    public static GameOptionTab ImpostorsTab = new(GamemodeTranslations.Standard.ImpostorTab, () => LotusAssets.LoadSprite("TabIcons/ImpostorsIconNew.png", 270));
+    // Standard Tabs
+    public static readonly GameOptionTab ImpostorsTab = new(GamemodeTranslations.Standard.ImpostorTab,
+        () => LotusAssets.LoadSprite("TabIcons/ImpostorsIconNew.png", 270));
+    public static readonly GameOptionTab CrewmateTab = new(GamemodeTranslations.Standard.CrewmateTab,
+        () => LotusAssets.LoadSprite("TabIcons/CrewmatesIconNew.png", 270));
+    public static readonly GameOptionTab NeutralTab = new(GamemodeTranslations.Standard.NeutralTab,
+        () => LotusAssets.LoadSprite("TabIcons/NeutralsIconNew.png", 270));
+    public static readonly GameOptionTab MiscTab = new(GamemodeTranslations.Standard.MiscTab,
+        () => LotusAssets.LoadSprite("TabIcons/MiscIconNew.png", 270));
 
-    public static GameOptionTab CrewmateTab = new(GamemodeTranslations.Standard.CrewmateTab, () => LotusAssets.LoadSprite("TabIcons/CrewmatesIconNew.png", 270));
+    // Escape The Facility Tabs
+    public static readonly GameOptionTab WardenTab = new(GamemodeTranslations.EscapeTheFacility.WardenTab,
+        () => LotusAssets.LoadSprite("TabIcons/ImpostorsIconNew.png", 270));
 
-    public static GameOptionTab NeutralTab = new(GamemodeTranslations.Standard.NeutralTab, () => LotusAssets.LoadSprite("TabIcons/NeutralsIconNew.png", 270));
+    // Extra Tabs
+    public static readonly GameOptionTab HiddenTab = new(GamemodeTranslations.Standard.HiddenTab,
+        () => LotusAssets.LoadSprite("TabIcons/GeneralIcon.png", 300));
 
-    public static GameOptionTab MiscTab = new(GamemodeTranslations.Standard.MiscTab, () => LotusAssets.LoadSprite("TabIcons/MiscIconNew.png", 270));
+    // Tab Groups
+    public static List<GameOptionTab> NormalStandardTabs = [ImpostorsTab, CrewmateTab, NeutralTab, MiscTab];
 
-    public static GameOptionTab HiddenTab = new(GamemodeTranslations.Standard.HiddenTab, () => LotusAssets.LoadSprite("TabIcons/GeneralIcon.png", 300));
+    public static List<GameOptionTab> HNSStandardTabs = [];
+    public static List<GameOptionTab> ETFTabs = [WardenTab];
 
-    public static List<GameOptionTab> NormalStandardTabs = new() { ImpostorsTab, CrewmateTab, NeutralTab, MiscTab };
-    public static List<GameOptionTab> CaptureTabs = new();
-    public static List<GameOptionTab> ColorwarsTabs = new();
-
-    public static List<GameOptionTab> HNSStandardTabs = new();
+    // Extra
+    public static List<GameOptionTab> EmptyTabs = [];
 
     static DefaultTabs()
     {

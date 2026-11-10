@@ -47,6 +47,7 @@ public class Painter : NeutralKillingBase
     [RoleAction(LotusActionType.RoundStart)]
     private void BeginGracePeriod()
     {
+        StaticLogger.Debug("starting grace period for");
         gracePeriod.Start(ExtraGamemodeOptions.ColorwarsOptions.GracePeriod);
         CheckForSuddenDeath(true);
     }

@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+using System.Linq;
+using InnerNet;
 using Lotus.API.Odyssey;
 using Lotus.API.Player;
 using Lotus.API.Vanilla.Meetings;
@@ -91,7 +93,7 @@ public class Swapper : Crewmate, IInfoResender
     }
 
     [RoleAction(LotusActionType.VotingComplete)]
-    private void SwapVotes(MeetingDelegate meetingDelegate)
+    private void SwapVotes(MeetingDelegate meetingDelegate, bool wasOverruled, ushort overruleNonce)
     {
         if (target1 == byte.MaxValue || target2 == byte.MaxValue) return;
         log.Trace($"Swapping Votes for {Utils.GetPlayerById(target1)?.name} <=> {Utils.GetPlayerById(target2)?.name}", "Swapper");
@@ -99,10 +101,10 @@ public class Swapper : Crewmate, IInfoResender
         ChatHandler handler = ChatHandler.Of(SwapperPublicMessage.Formatted(Utils.GetPlayerById(target1)?.name, Utils.GetPlayerById(target2)?.name))
             .Title(t => t.Text(SwapperAbility).Color(RoleColor).PrefixSuffix("↔").Build());
 
-        Async.Schedule(() => handler.Send(), 0.1f);
+        Async.Schedule(handler.Send, 0.1f);
 
-        List<byte> votesForPlayer1 = new();
-        List<byte> votesForPlayer2 = new();
+        List<byte> votesForPlayer1 = [];
+        List<byte> votesForPlayer2 = [];
         meetingDelegate.CurrentVotes().ForEach(kv =>
         {
             // For each vote that player has cast
@@ -133,10 +135,24 @@ public class Swapper : Crewmate, IInfoResender
             meetingDelegate.CastVote(player, player1Optional);
         });
 
+        if (wasOverruled)
+        {
+            var thisOverrule = meetingDelegate.CurrentOverrules().First(o => o.OverruleNonce == overruleNonce);
+            if (thisOverrule.OverruledPlayerId.Value == target1)
+            {
+                thisOverrule.OverruledPlayerId = new PlayerId(target1);
+                meetingDelegate.ExiledPlayer = GameData.Instance.GetPlayerById(target1);
+            } else if (thisOverrule.OverruledPlayerId.Value == target2)
+            {
+                thisOverrule.OverruledPlayerId = new PlayerId(target2);
+                meetingDelegate.ExiledPlayer = GameData.Instance.GetPlayerById(target2);
+            }
+            return;
+        }
         meetingDelegate.CalculateExiledPlayer();
     }
 
-    private ChatHandler CHandler() => Chat.ChatHandler.Of(title: RoleColor.Colorize(SwapperAbility)).LeftAlign();
+    private ChatHandler CHandler() => ChatHandler.Of(title: RoleColor.Colorize(SwapperAbility)).LeftAlign();
 
     protected override GameOptionBuilder RegisterOptions(GameOptionBuilder optionStream) =>
         base.RegisterOptions(optionStream)

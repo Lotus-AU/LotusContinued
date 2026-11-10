@@ -2,13 +2,13 @@ using AmongUs.Data;
 using HarmonyLib;
 using Discord;
 using InnerNet;
+using Lotus.API;
 using Lotus.API.Odyssey;
 using Lotus.Network;
 using UnityEngine;
 
 namespace Lotus.Discord.Patches;
 
-[HarmonyPatch(typeof(ActivityManager), nameof(ActivityManager.UpdateActivity))]
 public class DiscordPatch
 {
     private static string _details = "";
@@ -16,6 +16,13 @@ public class DiscordPatch
 
     private static string _gameCode = "";
     private static string _gameRegion = "";
+
+    public static void Apply(Harmony harmony)
+    {
+        var original = AccessTools.Method(typeof(ActivityManager), nameof(ActivityManager.UpdateActivity));
+        var prefix = new HarmonyMethod(typeof(DiscordPatch), nameof(Prefix));
+        harmony.Patch(original, prefix: prefix);
+    }
 
     public static void Prefix(ref Activity activity)
     {
@@ -57,8 +64,8 @@ public class DiscordPatch
     {
         return state switch
         {
-            GameState.Roaming => $"Roaming {(MapNames)ProjectLotus.NormalOptions.MapId}",
-            GameState.InIntro => $"Roaming {(MapNames)ProjectLotus.NormalOptions.MapId}",
+            GameState.Roaming => $"Roaming {(MapNames)AUSettings.MapId()}",
+            GameState.InIntro => $"Roaming {(MapNames)AUSettings.MapId()}",
             GameState.InLobby => "Waiting in Lobby",
             _ => "Idle"
         };

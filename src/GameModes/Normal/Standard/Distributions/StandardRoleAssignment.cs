@@ -235,9 +235,10 @@ public class StandardRoleAssignment
 
         bool CanAssignTo(PlayerControl player)
         {
+            if (RoleOptions.SubroleOptions.UncappedModifiers) return true;
             int count = player.GetSubroles().Count;
             if (count > evenDistribution) return false;
-            return RoleOptions.SubroleOptions.UncappedModifiers || count < RoleOptions.SubroleOptions.ModifierLimits;
+            return count < RoleOptions.SubroleOptions.ModifierLimits;
         }
 
         forcedRoles.ForEach(role =>
@@ -271,7 +272,10 @@ public class StandardRoleAssignment
             {
                 evenDistribution++;
                 if (!RoleOptions.SubroleOptions.UncappedModifiers && evenDistribution >= RoleOptions.SubroleOptions.ModifierLimits) break;
-                players = Players.GetAllPlayers().Where(p => p.GetSubroles().Count <= evenDistribution).ToList();
+                players = Players.GetAllPlayers().Where(p => p.GetSubroles().Count <=
+                                                             (RoleOptions.SubroleOptions.UncappedModifiers
+                                                                 ? int.MaxValue
+                                                                 : evenDistribution)).ToList();
                 if (players.Count == 0) break;
             }
             // log.Debug($"testing role {role.EnglishRoleName}");

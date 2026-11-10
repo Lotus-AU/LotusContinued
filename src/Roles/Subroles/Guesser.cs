@@ -295,14 +295,13 @@ public class Guesser : Subrole, IInfoResender
     protected virtual CancelGuessReason CanGuessPlayer(PlayerControl targetPlayer)
     {
         if (targetPlayer.PlayerId == MyPlayer.PlayerId) return CancelGuessReason.Teammate;
-        if (targetPlayer.PrimaryRole().Faction.GetType() == MyPlayer.PrimaryRole().Faction.GetType())
-        {
-            if (MyPlayer.PrimaryRole().Faction.CanSeeRole(MyPlayer)) return canGuessTeammates ? CancelGuessReason.None : CancelGuessReason.Teammate;
-            return CancelGuessReason.None;
-        }
         bool canSeeRole = false;
         RoleComponent? roleComponent = targetPlayer.NameModel().GetComponentHolder<RoleHolder>().LastOrDefault();
         if (roleComponent != null) canSeeRole = roleComponent.Viewers().Any(p => p.PlayerId == MyPlayer.PlayerId);
+
+        if (targetPlayer.PrimaryRole().Faction.GetType() == MyPlayer.PrimaryRole().Faction.GetType() && MyPlayer.PrimaryRole().Faction.CanSeeRole(MyPlayer))
+            return canGuessTeammates ? CancelGuessReason.None : CancelGuessReason.Teammate;
+
         return canSeeRole ? CancelGuessReason.CanSeeRole : CancelGuessReason.None;
     }
     protected virtual bool CanGuessRole(CustomRole role) => true;

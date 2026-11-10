@@ -15,6 +15,9 @@ public static class ExtraGamemodeOptions
 {
     public static ColorwarsOptions ColorwarsOptions;
     public static CaptureOptions CaptureOptions;
+    public static SpeedrunOptions SpeedrunOptions;
+
+    public static EscapeOptions EscapeOptions;
 
     static ExtraGamemodeOptions()
     {
@@ -33,5 +36,23 @@ public static class ExtraGamemodeOptions
             if (!o.Attributes.ContainsKey("Title")) GeneralOptions.CaptureOptionManager.Register(o, OptionLoadMode.LoadOrCreate);
         });
         CaptureOptions.AddTabListener(DefaultTabs.CaptureTab, 2);
+
+        SpeedrunOptions = new SpeedrunOptions();
+        SpeedrunOptions.AllOptions.ForEach(o =>
+        {
+            // DefaultTabs.SpeedrunTab.AddOption(o);
+            if (!o.Attributes.ContainsKey("Title")) GeneralOptions.SpeedrunOptionManager.Register(o, OptionLoadMode.LoadOrCreate);
+        });
+        SpeedrunOptions.AddTabListener(DefaultTabs.SpeedrunTab, 2);
+
+        //// ---- Hide & Seek Gamemodes
+
+        EscapeOptions = new EscapeOptions();
+        EscapeOptions.AllOptions.ForEach(o =>
+        {
+            // DefaultTabs.EscapeOptions.AddOption(o);
+            if (!o.Attributes.ContainsKey("Title")) GeneralOptions.EscapeOptionManager.Register(o, OptionLoadMode.LoadOrCreate);
+        });
+        EscapeOptions.AddTabListener(DefaultTabs.EscapeTab, 2);
     }
 }

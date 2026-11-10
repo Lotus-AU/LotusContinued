@@ -92,7 +92,7 @@ public class Retributionist : NeutralKillingBase
         if (vents.Count == 0) return;
         Vent randomVent = vents.GetRandom();
         Vector2 ventPosition = randomVent.transform.position;
-        Utils.Teleport(MyPlayer.NetTransform, new Vector2(ventPosition.x, ventPosition.y + 0.3636f));
+        Utils.Teleport(MyPlayer.NetTransform, new Vector2(ventPosition.x, ventPosition.y + 0.3636f), this);
 
         if (!invisibleRevenge) return;
 

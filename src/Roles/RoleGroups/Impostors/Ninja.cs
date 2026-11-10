@@ -121,7 +121,7 @@ public class Ninja : Vanilla.Impostor, IRoleUI
                 MyPlayer.InteractWith(target, LotusInteraction.FatalInteraction.Create(this));
             else
             {
-                Utils.Teleport(target.NetTransform, MyPlayer.transform.position);
+                Utils.Teleport(target.NetTransform, MyPlayer.transform.position, this);
                 Async.Schedule(() => MyPlayer.InteractWith(target, LotusInteraction.FatalInteraction.Create(this)), 0.25f);
             }
         }

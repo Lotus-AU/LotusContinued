@@ -71,12 +71,12 @@ public class HNSStandardRoleOperations : RoleOperations
         {
             foreach (CustomRole role in recipients)
             {
-                if (role.RoleActions.TryGetValue(action, out List<RoleAction>? actions) && actions.Count > 0)
-                {
-                    if (!actions[0].CanExecute(role.MyPlayer, null)) continue;
-                    actions[0].SetExecuter(role);
-                    actions[0].ExecuteFixed();
-                }
+                if (!role.RoleActions.TryGetValue(action, out List<RoleAction>? actions)) continue;
+                if (!actions.Any()) continue;
+                var mainAction = actions.First();
+                if (!mainAction.CanExecute(role.MyPlayer, source)) continue;
+                mainAction.SetExecuter(role);
+                mainAction.ExecuteFixed();
             }
             return handle;
         }
@@ -85,11 +85,11 @@ public class HNSStandardRoleOperations : RoleOperations
         List<object> parameterList = new(parameters) { handle };
         parameters = parameterList.ToArray();
         object[] globalActionParameters = parameters;
-        if (source != null)
+        if (source)
         {
             globalActionParameters = new object[parameters.Length + 1];
             Array.Copy(parameters, 0, globalActionParameters, 1, parameters.Length);
-            globalActionParameters[0] = source;
+            globalActionParameters[0] = source!;
         }
 
         IEnumerable<(RoleAction, AbstractBaseRole)> actionsAndDefinitions = recipients.SelectMany(cR => cR.GetActions(action)).OrderBy(t => t.Item1.Attribute.Priority);
@@ -97,7 +97,7 @@ public class HNSStandardRoleOperations : RoleOperations
         {
             PlayerControl myPlayer = roleDefinition.MyPlayer;
 
-            if (myPlayer == null)
+            if (!myPlayer)
             {
                 log.Exception($"MyPlayer is null for role {roleDefinition.GetType().Name} in action {roleAction.Attribute.ActionType}");
                 continue;

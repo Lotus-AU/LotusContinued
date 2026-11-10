@@ -1,10 +1,11 @@
+using System;
 using System.Linq;
 using Lotus.API.Player;
-using Lotus.Chat.Patches;
 using Lotus.Managers;
 using Lotus.Managers.Hotkeys;
 using Lotus.Managers.Templates;
 using Lotus.Managers.Templates.Models;
+using Lotus.Managers.Templates.Models.Units;
 using VentLib.Commands;
 using VentLib.Commands.Attributes;
 using VentLib.Commands.Interfaces;
@@ -34,12 +35,12 @@ public class TemplateCommands: CommandTranslations, ICommandReceiver
         SuccessMsg(tags).Send(source);
     }
 
-    /*[Command(CommandFlag.HostOnly, "variables", "v")]
+    [Command(CommandFlag.HostOnly, "variables", "v")]
     public static void ListVariables(PlayerControl source)
     {
-        string variables = Template.TemplateVariables.Select(t => $"<b>{t.Key}</b>: {t.Value}").Fuse("\n");
+        string variables = TemplateUnit.TemplateValues.Select(t => t.Key).Fuse("\n");
         SuccessMsg(variables).Send(source);
-    }*/
+    }
 
     [Command(CommandFlag.HostOnly, "reload")]
     public static void Reload(PlayerControl source)
@@ -69,6 +70,19 @@ public class TemplateCommands: CommandTranslations, ICommandReceiver
 
     private static ChatHandler SuccessMsg(string message) => ChatHandler.Of(message, title: TemplateTitle).LeftAlign();
     private static ChatHandler ErrorMsg(string message) => ChatHandler.Of(message, title: CommandError).LeftAlign();
+
+    private static string GetStringRepresentation(Func<object, string> value, string name)
+    {
+        try
+        {
+            return value(null);
+        }
+        catch
+        {
+            if (name.StartsWith("Role_")) return "Role Variable";
+            return "Player Variable";
+        }
+    }
 
     private static TemplateManager Templates => PluginDataManager.TemplateManager;
 

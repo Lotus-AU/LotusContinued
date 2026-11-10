@@ -1,3 +1,4 @@
+extern alias JBAnnotations;
 using System.Collections.Generic;
 using System.Reflection;
 using BepInEx.Unity.IL2CPP;
@@ -23,18 +24,17 @@ using VentLib.Version.Git;
 using VentLib.Version.Updater;
 using VentLib.Version.Updater.Github;
 using Version = VentLib.Version.Version;
-using Lotus.Extensions;
 using VentLib.Options.UI.Controllers;
-using Lotus.Roles.Internals.Attributes;
 using VentLib.Version.BuiltIn;
 using VentLib.Options.UI.Controllers.Search;
-using Lotus.Utilities;
 using System;
 using System.Linq;
+using JBAnnotations::JetBrains.Annotations;
 using Lotus.API.Player;
 using Lotus.Managers.Blackscreen.Interfaces;
 using Lotus.Managers.Blackscreen;
 using Lotus.API.Vanilla.Meetings;
+using Lotus.Discord.Patches;
 using Lotus.GUI;
 using Lotus.Logging;
 using VentLib.Lobbies;
@@ -59,25 +59,25 @@ public class ProjectLotus : BasePlugin, IGitVersionEmitter
     public const string VisibleVersion = $"{MajorVersion}.{MinorVersion}.{PatchVersion}";
     public const string CompileVersion = $"{MajorVersion}.{MinorVersion}.{PatchVersion}.{BuildNumber}";
 
-    public const string MajorVersion = "1";
-    public const string MinorVersion = "7"; // Update with each release
-    public const string PatchVersion = "2";
-    public const string BuildNumber = "0005";
+    public const bool DevVersion  =
+#if DEBUG
+        true;
+#else
+    false;
+#endif
+
+    [UsedImplicitly] public const string MajorVersion = "1";
+    [UsedImplicitly] public const string MinorVersion = "8"; // Update with each release
+    [UsedImplicitly] public const string PatchVersion = "0";
+    [UsedImplicitly] public const string BuildNumber = "0237";
 
     public static readonly string PluginVersion = typeof(ProjectLotus).Assembly.GetName().Version!.ToString();
 
-    public readonly GitVersion CurrentVersion = new(typeof(ProjectLotus).Assembly);
+    [UsedImplicitly] public readonly GitVersion CurrentVersion = new(typeof(ProjectLotus).Assembly);
 
     public static readonly string ModName = "Project Lotus";
     public static readonly string ModColor = "#4FF918";
-    public static readonly string DevVersionStr = "Dev April 11 2026";
-
-    public static bool DevVersion { get; } =
-#if DEBUG
-        true;
-    #else
-    false;
-    #endif
+    public static readonly string DevVersionStr = "Dev November 10 2026";
 
     private static Harmony _harmony = null!;
     public static string CredentialsText = null!;
@@ -86,8 +86,6 @@ public class ProjectLotus : BasePlugin, IGitVersionEmitter
 
     public static bool FinishedLoading;
     public const bool AdvancedRoleAssignment = true;
-
-    public static bool HasReactorPlugin;
 
     internal Func<MeetingDelegate, IBlackscreenResolver> GetNewBlackscreenResolver = new(md => new BlackscreenResolver(md));
 
@@ -119,8 +117,6 @@ public class ProjectLotus : BasePlugin, IGitVersionEmitter
             ModUpdateMenu.AddUpdateItem("VentFrameworkContinued", null, ex => ModUpdater.Update(ventAssembly, ex)!);
     }
 
-    public static NormalGameOptionsV10 NormalOptions => GameOptionsManager.Instance.currentNormalGameOptions;
-
     public static GameModeManager GameModeManager = null!;
     public static List<byte> ResetCamPlayerList = null!;
     public static ProjectLotus Instance = null!;
@@ -142,12 +138,11 @@ public class ProjectLotus : BasePlugin, IGitVersionEmitter
 
         log.Info("GitVersion - " + CurrentVersion);
 
-        HasReactorPlugin = IL2CPPChainloader.Instance.Plugins.ContainsKey("gg.reactor.api");
-
         // Setup, order matters here
 
-        CommandRunner.Prefix = "/cmd";
+        CommandRunner.Prefixes.Add("/cmd");
         _harmony.PatchAll(Assembly.GetExecutingAssembly());
+        if (!OperatingSystem.IsAndroid()) DiscordPatch.Apply(_harmony);
 
         new GlobalRoleManager();
         GameModeManager.AddGamemodes();
@@ -187,11 +182,21 @@ public class ProjectLotus : BasePlugin, IGitVersionEmitter
         if (player == null) return;
         if (version is AmongUsMenuVersion)
         {
+            if (PluginDataManager.BanManager == null!)
+            {
+                LogManager.SendInGame($"Couldn't ban {player.name} because BannedPlayers.yaml is corrupted.");
+                return;
+            }
             PluginDataManager.BanManager.BanWithReason(player, "Cheating - Among Us Menu Auto Ban", $"{player.name} was banned because of the AmongUsMenu detection.");
             return;
         }
         if (version is SickoMenuVersion)
         {
+            if (PluginDataManager.BanManager == null!)
+            {
+                LogManager.SendInGame($"Couldn't ban {player.name} because BannedPlayers.yaml is corrupted.");
+                return;
+            }
             PluginDataManager.BanManager.BanWithReason(player, "Cheating - SickoMenu Auto Ban", $"{player.name} was banned because of the SickoMenu detection.");
             return;
         }

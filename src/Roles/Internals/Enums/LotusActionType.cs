@@ -136,6 +136,8 @@ public enum LotusActionType
     /// the exiled player, as the votes WILL NOT be recalculated automatically at this point.
     /// </summary>
     /// <param name="meetingDelegate"><see cref="MeetingDelegate"/> the meeting delegate for the current meeting</param>
+    /// <param name="wasOverruled"><see cref="bool"/> a boolean representing whether the vote was overruled by a judge.</param>
+    /// <param name="overruleNonce"><see cref="ushort"/> the ID of this overrule.</param>
     VotingComplete,
     /// <summary>
     /// Triggers when the meeting ends, this does not pass the meeting delegate as at this point everything has been finalized.
@@ -160,7 +162,15 @@ public enum LotusActionType
     /// Triggers when a player uses the Zipline in the Fungle map.
     /// </summary>
     /// <param name="player"><b>(GLOBAL ONLY)</b><see cref="PlayerControl"/> the player who used the zipline</param>
-    /// <param name="ziplineBehaviour"><see cref="ZiplineBehaviour"/>The zipline the player is using.</param>
+    /// <param name="ziplineBehaviour">The <see cref="ZiplineBehaviour"/> the player is using.</param>
     /// <param name="fromTop">A boolean representing whether the player is coming from the top.</param>
-    Zipline
+    Zipline,
+    /// <summary>
+    /// Triggers when a player (usually Judge role) tries to overrule the vote.
+    /// </summary>
+    /// <param name="player"><b>(GLOBAL ONLY)</b><see cref="PlayerControl"/> the player is the judge.</param>
+    /// <param name="target"><see cref="PlayerControl"/> the player who is trying to be voted.</param>
+    /// <param name="overruleNonce"><see cref="ushort"/> the ID of this overrule.</param>
+    /// <param name="meetingDelegate"><see cref="MeetingDelegate"/> the meeting delegate for the current meeting</param>
+    Overrule
 }

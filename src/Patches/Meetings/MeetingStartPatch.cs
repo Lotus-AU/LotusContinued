@@ -40,13 +40,13 @@ public class MeetingStartPatch
     public static void SendTemplates(PlayerControl viewer)
     {
         PluginDataManager.TemplateManager.GetTemplates("meeting-start")
-            ?.ForEach(t => t.SendMessage(PlayerControl.LocalPlayer, viewer));
+            ?.ForEach(t => t.SendMessage(PlayerControl.LocalPlayer, viewer, viewer));
         if (Game.MatchData.MeetingsCalled == 0)
             PluginDataManager.TemplateManager.GetTemplates("meeting-first")
-                ?.ForEach(t => t.SendMessage(PlayerControl.LocalPlayer, viewer));
+                ?.ForEach(t => t.SendMessage(PlayerControl.LocalPlayer, viewer, viewer));
         else
             PluginDataManager.TemplateManager.GetTemplates("meeting-subsequent")
-                ?.ForEach(t => t.SendMessage(PlayerControl.LocalPlayer, viewer));
+                ?.ForEach(t => t.SendMessage(PlayerControl.LocalPlayer, viewer, viewer));
     }
 
     public static void Prefix(MeetingHud __instance)
@@ -79,7 +79,7 @@ public class MeetingStartPatch
 
         Game.SyncAll(); // This syncs up all the cooldowns to fix doubling after meeting
 
-        if (!GeneralOptions.MeetingOptions.SyncMeetingButtons || Game.CurrentGameMode is not NormalStandardGameMode) return;
+        if (!GeneralOptions.MeetingOptions.SyncMeetingButtons || !GeneralOptions.MeetingOptions.IsSubscribed(Game.CurrentGameMode.MainTab())) return;
 
         if (buttonsRemaining != Game.MatchData.EmergencyButtonsUsed) return;
         buttonsRemaining = Game.MatchData.EmergencyButtonsUsed;
@@ -95,7 +95,7 @@ public class MeetingStartPatch
     {
         /*SoundManager.Instance.ChangeMusicVolume(0f);*/
         if (AmongUsClient.Instance.AmHost) __instance.playerStates.ToArray()
-            .FirstOrOptional(ps => ps.TargetPlayerId == PlayerControl.LocalPlayer.PlayerId)
+            .FirstOrOptional(ps => ps.VotedForId.Value == PlayerControl.LocalPlayer.PlayerId)
             .IfPresent(voteArea => voteArea.NameText.text = PlayerControl.LocalPlayer.NameModel().Render(sendToPlayer: false, force: true));
     }
 }

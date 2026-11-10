@@ -74,7 +74,7 @@ public class Chameleon : Engineer, IRoleUI
             case ReturnLocation.Current:
                 Vector2 currentLocation = MyPlayer.GetTruePosition();
                 Async.Schedule(() => MyPlayer.MyPhysics.RpcBootFromVent(ventId), 0.4f);
-                Async.Schedule(() => Utils.Teleport(MyPlayer.NetTransform, currentLocation), NetUtils.DeriveDelay(0.8f));
+                Async.Schedule(() => Utils.Teleport(MyPlayer.NetTransform, currentLocation, this), NetUtils.DeriveDelay(0.8f));
                 break;
         }
     }

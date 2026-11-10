@@ -1,4 +1,6 @@
-﻿using Lotus.Extensions;
+﻿using System.IO;
+using BepInEx;
+using Lotus.Extensions;
 using Lotus.GUI.Menus.ComboMenu.Areas;
 using Lotus.GUI.Menus.OptionsMenu;
 using Lotus.Roles;
@@ -32,8 +34,8 @@ public class RoleAreaOption: MonoBehaviour
         this.isSelected = selected;
         this.myRole = searchedRole;
 
-        string roleImagePath = myRole.GetRoleOutfitPath().Replace("roleoutfits", "roleimages");
-        if (!roleImagePath.EndsWith(".png")) roleImagePath += ".png";
+        string roleImagePath = myRole.GetRoleOutfitPath().ToLower().Replace("roleoutfits", "roleimages");
+        roleImagePath = Path.ChangeExtension(roleImagePath, "png");
         if (!LotusAssets.TryLoadSprite(roleImagePath, out Sprite? sprite))
             // Replace sprite with Missing one
             sprite = LotusAssets.LoadSprite("RoleImages/Missing.png");

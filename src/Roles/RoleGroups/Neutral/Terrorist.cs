@@ -40,7 +40,7 @@ public class Terrorist : Engineer
         ManualWin.Activate(MyPlayer, ReasonType.TasksComplete, 900);
     }
 
-    protected override string ForceRoleImageDirectory() => "RoleOutfits/Neutral/terrorist.yaml";
+    protected override string ForceRoleImageDirectory() => "RoleOutfits/Neutral/terrorist";
 
     protected override GameOptionBuilder RegisterOptions(GameOptionBuilder optionStream) =>
         AddTaskOverrideOptions(base.RegisterOptions(optionStream)

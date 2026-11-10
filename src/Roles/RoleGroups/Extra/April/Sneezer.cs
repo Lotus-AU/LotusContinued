@@ -19,7 +19,7 @@ public class Sneezer: Subrole, IAprilFoolsRole
 
     public override string Identifier() => "☯";
 
-    public override string GetRoleOutfitPath() => "RoleOutfits/Neutral/Jester".ToLower();
+    public override string GetRoleOutfitPath() => $"RoleOutfits/April/{EnglishRoleName}".ToLower();
 
     [RoleAction(LotusActionType.RoundStart)]
     private void StartMeetingDelay(bool isRoundOne)

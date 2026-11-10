@@ -29,7 +29,7 @@ public class MatchData
 
     public GameHistory GameHistory = new();
     public DateTime StartTime = DateTime.Now;
-
+    public DateTime EndTime = DateTime.Now;
 
     public Dictionary<ulong, FrozenPlayer> FrozenPlayers = new();
     public VanillaRoleTracker VanillaRoleTracker = new();
@@ -42,18 +42,18 @@ public class MatchData
 
     public FrozenPlayer? GetFrozenPlayer(PlayerControl? player)
     {
-        return player == null || !FrozenPlayers.ContainsKey(player.GetGameID()) ? null : FrozenPlayers[player.GetGameID()];
+        return (player == null || !FrozenPlayers.ContainsKey(player.GetGameID())) ? null : FrozenPlayers[player.GetGameID()];
     }
 
     public void RegenerateFrozenPlayers(PlayerControl? specificPlayer = null)
     {
-        if (specificPlayer != null)
+        if (specificPlayer != null && specificPlayer.Data && !specificPlayer.Data.Disconnected)
         {
             FrozenPlayer frozenPlayer = new(specificPlayer);
             Game.MatchData.FrozenPlayers[frozenPlayer.GameID] = frozenPlayer;
             return;
         }
-        Players.GetAllPlayers().Where(p => p.Data != null && !p.Data.Disconnected).ForEach(p =>
+        Players.GetAllPlayers().Where(p => p.Data && !p.Data.Disconnected).ForEach(p =>
         {
             FrozenPlayer frozenPlayer = new(p);
             Game.MatchData.FrozenPlayers[frozenPlayer.GameID] = frozenPlayer;

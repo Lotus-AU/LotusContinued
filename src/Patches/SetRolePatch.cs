@@ -37,7 +37,7 @@ class CoSetRolePatch
 {
     public static void Postfix(PlayerControl __instance, [HarmonyArgument(0)] RoleTypes roleType)
     {
-        if (!AmongUsClient.Instance.AmHost) return;
+        if (!AmongUsClient.Instance.AmHost && !ProjectLotus.DevVersion) return;
         string invokerName = new StackTrace(5)?.GetFrame(0)?.GetMethod()?.Name ?? "null";
         DevLogger.Log($"{roleType} was assigned to {__instance.name} for me. (Invoker): {invokerName}");
     }

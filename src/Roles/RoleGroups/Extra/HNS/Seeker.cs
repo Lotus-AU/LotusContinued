@@ -10,5 +10,5 @@ public class Seeker: Impostor
     public override bool TryKill(PlayerControl target) => base.TryKill(target);
 
     protected override RoleModifier Modify(RoleModifier roleModifier) => base.Modify(roleModifier)
-        .RoleFlags(RoleFlag.Hidden | RoleFlag.DontRegisterOptions);
+        .RoleFlags(GetType() == typeof(Seeker) ? RoleFlag.Hidden | RoleFlag.DontRegisterOptions : RoleFlags);
 }

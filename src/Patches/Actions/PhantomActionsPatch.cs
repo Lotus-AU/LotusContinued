@@ -127,6 +127,7 @@ public static class PhantomActionsPatch
         PlayerControl phantom = __instance;
 
         log.Debug($"{phantom.name} {(isActive ? "is going invisible as Phantom." : "is appearing as Phantom.")}");
+        Hooks.PlayerHooks.PlayerPhantomHook.Propagate(new PlayerPhantomHookEvent(__instance, isActive));
 
         List<byte> alliedPlayerIds = Players.GetPlayers()
             .Where(p => phantom.Relationship(p) is Relation.FullAllies)
@@ -191,7 +192,7 @@ public static class PhantomActionsPatch
                 }
                 else writer.Send(otherPlayer.OwnerId);
 
-                if (hasRanFinish) return;
+                if (hasRanFinish) continue;
                 Async.Schedule(() => FinishVanishDesync(phantom, isImpFaction, alliedPlayerIds), 1.2f);
             }
             else // is returning
@@ -205,7 +206,7 @@ public static class PhantomActionsPatch
                 }
                 else writer.Send(otherPlayer.OwnerId);
 
-                if (hasRanFinish) return;
+                if (hasRanFinish) continue;
                 // Async.Schedule(() => StartAppearDesync(phantom, isImpFaction, alliedPlayerIds), .01f);
                 Async.Schedule(() => FinishAppearDesync(phantom, isImpFaction, alliedPlayerIds), 1.8f);
             }
@@ -228,13 +229,14 @@ public static class PhantomActionsPatch
             if (phantom.AmOwner)
             {
                 DestroyableSingleton<HudManager>.Instance.AbilityButton.SetFromSettings(phantom.Data.Role.Ability);
+                phantom.SetKillTimer(GameOptionsManager.Instance.CurrentGameOptions.GetFloat(FloatOptionNames.KillCooldown));
                 phantom.Data.Role.SetCooldown();
                 phantom.PrimaryRole().UIManager.ForceUpdate();
                 return false;
             }
 
             RpcV3.Immediate(phantom.NetId, RpcCalls.SetRole).Write((ushort)RoleTypes.Phantom).Write(true).Send(phantom.GetClientId());
-            Async.Schedule(() => phantom.RpcResetAbilityCooldown(), NetUtils.DeriveDelay(0.2f));
+            Async.Schedule(phantom.RpcResetAbilityCooldown, NetUtils.DeriveDelay(0.2f));
             // Async.Schedule(() => phantom.SetKillCooldown(phantom.PrimaryRole().GetOverride(Override.KillCooldown)?.GetValue() as float? ?? AUSettings.KillCooldown()), NetUtils.DeriveDelay(0.2f));
 
             return false;

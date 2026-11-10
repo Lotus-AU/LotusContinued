@@ -24,6 +24,17 @@ public enum Override
     VitalsCooldown,
     VitalsBatteryCharge,
 
+    // Hns Game Override
+    EscapeTime,
+    MaxPingTime,
+    UseFlashlight,
+    SeekerFinalMap,
+    FinalEscapeTime,
+    CrewmateVentUses,
+    CrewmateTimeInVent,
+    CrewmateFlashlightSize,
+    ImpostorFlashlightSize,
+
     // Role specific overrides
     ShapeshiftDuration,
     ShapeshiftCooldown,
@@ -47,7 +58,9 @@ public enum Override
 
     DetectiveSuspectsPerCase,
 
-    ViperDissolveTime
+    ViperDissolveTime,
+
+    JudgeTaskRequirementPercentage
 }
 
 public static class OverrideExtensions
@@ -84,6 +97,16 @@ public static class OverrideExtensions
             Override.PhantomVanishCooldown => gameOptions.GetFloat(FloatOptionNames.PhantomCooldown),
             Override.DetectiveSuspectsPerCase => gameOptions.GetFloat(FloatOptionNames.DetectiveSuspectLimit),
             Override.ViperDissolveTime => gameOptions.GetFloat(FloatOptionNames.ViperDissolveTime),
+            Override.JudgeTaskRequirementPercentage => gameOptions.GetFloat(FloatOptionNames.JudgeTaskRequirementPercentage),
+            Override.EscapeTime => gameOptions.GetFloat(FloatOptionNames.EscapeTime),
+            Override.MaxPingTime => gameOptions.GetFloat(FloatOptionNames.MaxPingTime),
+            Override.UseFlashlight => gameOptions.GetBool(BoolOptionNames.UseFlashlight),
+            Override.SeekerFinalMap => gameOptions.GetBool(BoolOptionNames.SeekerFinalMap),
+            Override.FinalEscapeTime => gameOptions.GetFloat(FloatOptionNames.FinalEscapeTime),
+            Override.CrewmateVentUses => gameOptions.GetInt(Int32OptionNames.CrewmateVentUses),
+            Override.CrewmateTimeInVent => gameOptions.GetFloat(FloatOptionNames.CrewmateTimeInVent),
+            Override.CrewmateFlashlightSize => gameOptions.GetFloat(FloatOptionNames.CrewmateFlashlightSize),
+            Override.ImpostorFlashlightSize => gameOptions.GetFloat(FloatOptionNames.ImpostorFlashlightSize),
             _ => throw new ArgumentOutOfRangeException(nameof(__override), __override, null)
         };
     }
@@ -121,7 +144,7 @@ public static class OverrideExtensions
             Override.CrewLightMod => SetFloatOption(FloatOptionNames.CrewLightMod),
             Override.ImpostorLightMod => SetFloatOption(FloatOptionNames.ImpostorLightMod),
             Override.KillCooldown => SetFloatOption(FloatOptionNames.KillCooldown, 0.1f),
-            Override.KillDistance => SetIntOption(Int32OptionNames.KillDistance, 0, 3),
+            Override.KillDistance => SetIntOption(Int32OptionNames.KillDistance),
             Override.ShapeshiftDuration => SetFloatOption(FloatOptionNames.ShapeshifterDuration),
             Override.ShapeshiftCooldown => SetFloatOption(FloatOptionNames.ShapeshifterCooldown, 0.01f),
             Override.ShapeshifterEvidence => SetBoolOption(BoolOptionNames.ShapeshifterLeaveSkin),
@@ -140,6 +163,16 @@ public static class OverrideExtensions
             Override.PhantomVanishCooldown => SetFloatOption(FloatOptionNames.PhantomCooldown),
             Override.DetectiveSuspectsPerCase => SetFloatOption(FloatOptionNames.DetectiveSuspectLimit),
             Override.ViperDissolveTime => SetFloatOption(FloatOptionNames.ViperDissolveTime),
+            Override.JudgeTaskRequirementPercentage => SetFloatOption(FloatOptionNames.JudgeTaskRequirementPercentage, 0, 100),
+            Override.EscapeTime => SetFloatOption(FloatOptionNames.EscapeTime),
+            Override.MaxPingTime  => SetFloatOption(FloatOptionNames.MaxPingTime),
+            Override.UseFlashlight  => SetBoolOption(BoolOptionNames.UseFlashlight),
+            Override.SeekerFinalMap => SetBoolOption(BoolOptionNames.SeekerFinalMap),
+            Override.FinalEscapeTime => SetFloatOption(FloatOptionNames.FinalEscapeTime),
+            Override.CrewmateVentUses => SetIntOption(Int32OptionNames.CrewmateVentUses),
+            Override.CrewmateTimeInVent => SetFloatOption(FloatOptionNames.CrewmateTimeInVent),
+            Override.CrewmateFlashlightSize => SetFloatOption(FloatOptionNames.CrewmateFlashlightSize),
+            Override.ImpostorFlashlightSize => SetFloatOption(FloatOptionNames.ImpostorFlashlightSize),
             _ => throw new ArgumentOutOfRangeException(nameof(__override), __override, null)
         };
     }

@@ -26,21 +26,12 @@ public class Viper : Impostor
     [RoleAction(LotusActionType.Attack, Subclassing = false)]
     public override bool TryKill(PlayerControl target) => base.TryKill(target);
 
-    [RoleAction(LotusActionType.Attack, priority:Priority.VeryHigh)]
-    public void SendDissolveTime()
-    {
-        List<Remote<GameOptionOverride>> remoteOverrides = [];
-        Players.GetAllPlayers().ForEach(p => remoteOverrides.Add(Game.MatchData.Roles.AddOverride(p.PlayerId, new GameOptionOverride(Override.ViperDissolveTime, DissolveTime))));
-        Game.SyncAll();
-        DevLogger.Log("Synced dissolve time.");
-        Async.Schedule(() => remoteOverrides.RemoveAll(remote => remote.Delete()), NetUtils.DeriveDelay(0.5f));
-    }
-
     protected GameOptionBuilder AddViperOptions(GameOptionBuilder builder) => builder
-        .SubOption(sub => sub.KeyName("Dissolve Time", Translations.Options.DissolveTime)
-                .AddFloatRange(0, 30, 2.5f, 6, GeneralOptionTranslations.SecondsSuffix)
-                .BindFloat(f => DissolveTime = f)
-                .Build());
+        .SubOption(sub => sub
+            .KeyName("Dissolve Time", Translations.Options.DissolveTime)
+            .AddFloatRange(2.5f, 30, 2.5f, 5, GeneralOptionTranslations.SecondsSuffix)
+            .BindFloat(f => DissolveTime = f)
+            .Build());
 
 
     protected override GameOptionBuilder RegisterOptions(GameOptionBuilder optionStream)
@@ -67,6 +58,7 @@ public class Viper : Impostor
         base.Modify(roleModifier)
             .VanillaRole(RoleTypes.Viper)
             .RoleColor(Color.red)
+            .OptionOverride(Override.ViperDissolveTime, DissolveTime)
             .CanVent(true);
 
     [Localized(nameof(Viper))]

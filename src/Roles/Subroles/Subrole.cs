@@ -60,11 +60,11 @@ public abstract class Subrole : CustomRole, ISubrole
             {
                 if (cr is not Subrole sub) return false;
                 var restrictedRoles = sub.RestrictedRoles();
-                if (restrictedRoles == null || restrictedRoles.Count == 0) return true;
+                if (restrictedRoles == null || restrictedRoles.Count == 0) return false;
 
                 bool anyMatchRoles = restrictedRoles.Contains(this.GetType());
-                if (anyMatchRoles && sub.RoleCompatabilityMode is CompatabilityMode.Blacklisted) return false;
-                return anyMatchRoles || sub.FactionCompatabilityMode is not CompatabilityMode.Whitelisted;
+                if (anyMatchRoles && sub.RoleCompatabilityMode is CompatabilityMode.Blacklisted) return true;
+                return !anyMatchRoles;
             })) return false;
 
         var restrictedRoles = RestrictedRoles();

@@ -9,8 +9,8 @@ public static class RoleTypesExtension
         or RoleTypes.ImpostorGhost
         or RoleTypes.Phantom
         or RoleTypes.Viper;
-    
-    public static bool IsCrewmate(this RoleTypes roleTypes) => !IsImpostor(roleTypes);
+
+    public static bool IsCrewmate(this RoleTypes roleTypes) => !roleTypes.IsImpostor();
 
     public static RoleTypes GhostEquivalent(this RoleTypes roleTypes) => roleTypes.IsImpostor() ? RoleTypes.ImpostorGhost : RoleTypes.CrewmateGhost;
 }

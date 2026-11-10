@@ -5,23 +5,24 @@ namespace Lotus.RPC.CustomObjects.Builtin;
 
 public sealed class FakePlayer : CustomNetObject
 {
-    public NetworkedPlayerInfo.PlayerOutfit outfitToCopy;
+    public NetworkedPlayerInfo.PlayerOutfit OutfitToCopy;
     public byte OwnerId;
-    public FakePlayer(NetworkedPlayerInfo.PlayerOutfit outfitToCopy, Vector2 position, byte OwnerId)
+
+    public FakePlayer(NetworkedPlayerInfo.PlayerOutfit outfitToCopy, Vector2 position, byte ownerId)
     {
-        this.OwnerId = OwnerId;
-        this.outfitToCopy = outfitToCopy.DeepCopy();
-        CreateNetObject(this.outfitToCopy.PlayerName, position);
+        this.OwnerId = ownerId;
+        this.OutfitToCopy = outfitToCopy.DeepCopy();
+        CreateNetObject(this.OutfitToCopy.PlayerName, position);
     }
     public override void SetupOutfit()
     {
-        PlayerControl.LocalPlayer.Data.Outfits[PlayerOutfitType.Default].PlayerName = outfitToCopy.PlayerName;
-        PlayerControl.LocalPlayer.Data.Outfits[PlayerOutfitType.Default].ColorId = outfitToCopy.ColorId;
-        PlayerControl.LocalPlayer.Data.Outfits[PlayerOutfitType.Default].HatId = outfitToCopy.HatId;
-        PlayerControl.LocalPlayer.Data.Outfits[PlayerOutfitType.Default].SkinId = outfitToCopy.SkinId;
-        PlayerControl.LocalPlayer.Data.Outfits[PlayerOutfitType.Default].PetId = outfitToCopy.PetId;
-        PlayerControl.LocalPlayer.Data.Outfits[PlayerOutfitType.Default].VisorId = outfitToCopy.VisorId;
-        this.playerControl.RawSetColor(outfitToCopy.ColorId);
+        PlayerControl.LocalPlayer.Data.Outfits[PlayerOutfitType.Default].PlayerName = OutfitToCopy.PlayerName;
+        PlayerControl.LocalPlayer.Data.Outfits[PlayerOutfitType.Default].ColorId = OutfitToCopy.ColorId;
+        PlayerControl.LocalPlayer.Data.Outfits[PlayerOutfitType.Default].HatId = OutfitToCopy.HatId;
+        PlayerControl.LocalPlayer.Data.Outfits[PlayerOutfitType.Default].SkinId = OutfitToCopy.SkinId;
+        PlayerControl.LocalPlayer.Data.Outfits[PlayerOutfitType.Default].PetId = OutfitToCopy.PetId;
+        PlayerControl.LocalPlayer.Data.Outfits[PlayerOutfitType.Default].VisorId = OutfitToCopy.VisorId;
+        this.playerControl.RawSetColor(OutfitToCopy.ColorId);
     }
     public override bool CanTarget() => true;
 }

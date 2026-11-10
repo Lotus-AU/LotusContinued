@@ -53,7 +53,6 @@ public class Drafter: CustomRole
             myRoleOptions = [];
             DraftGameMode.Instance.SetNextPlayersTurn();
         }
-        base.HandleDisconnect();
     }
 
     public void SetMyTurn()

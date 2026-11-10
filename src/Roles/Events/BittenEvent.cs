@@ -18,6 +18,11 @@ public class BittenEvent : TargetedAbilityEvent, IRoleEvent
 
 public class BittenDeathEvent : DeathEvent
 {
+    BittenDeathEvent()
+    {
+
+    }
+
     public BittenDeathEvent(PlayerControl deadPlayer, PlayerControl? killer) : base(deadPlayer, killer)
     {
     }

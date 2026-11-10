@@ -12,6 +12,7 @@ using Lotus.API.Vanilla.Meetings;
 using Lotus.Roles.Internals;
 using Lotus.Utilities;
 using Lotus.Extensions;
+using Lotus.Factions;
 using Lotus.Logging;
 using Lotus.Managers.History.Events;
 using Lotus.Options.General;
@@ -49,7 +50,8 @@ public class CheckForEndVotingPatch
 
         if (GeneralOptions.MeetingOptions.NoVoteMode is not SkipVoteMode.None)
             Players.GetPlayers(PlayerFilter.Alive)
-                .Where(p => new Dictionary<byte, List<Optional<byte>>>(meetingDelegate.CurrentVotes()).GetOptional(p.PlayerId).Compare(r => !r.IsEmpty()) == false).ForEach(p =>
+                .Where(p => meetingDelegate.CurrentVotes().GetOrCompute(p.PlayerId, () => []).Any())
+                .ForEach(p =>
                 {
                     DevLogger.Log($"Non-Voters: {p.name}");
                     switch (GeneralOptions.MeetingOptions.NoVoteMode)
@@ -64,7 +66,7 @@ public class CheckForEndVotingPatch
                             ProtectedRpc.CheckMurder(p, p);
                             break;
                         default:
-                            throw new ArgumentOutOfRangeException();
+                            throw new ArgumentException("Unsupported NoVoteMode value");
                     }
                 });
 
@@ -73,16 +75,43 @@ public class CheckForEndVotingPatch
         log.Trace($"End Vote Count: {meetingDelegate.CurrentVoteCount().Select(kv => $"{Utils.GetPlayerById(kv.Key).GetNameWithRole()}: {kv.Value}").Join()}");
         meetingDelegate.CalculateExiledPlayer();
 
+        bool wasOverruled = false;
+        ushort overruleNonce = 0;
+        if (meetingDelegate.TryGetWinningOverrule(out JudgeOverrule? winningOverrule, out PlayerControl? judge, out PlayerControl? target))
+        {
+            wasOverruled = true;
+            overruleNonce = winningOverrule.OverruleNonce;
+            meetingDelegate.ExiledPlayer = judge.PrimaryRole().Relationship(target.PrimaryRole()) is Relation.None
+                ? target.Data
+                : judge.Data;
+        }
+
         byte exiledPlayer = meetingDelegate.ExiledPlayer?.PlayerId ?? 255;
 
-        RoleOperations.Current.Trigger(LotusActionType.VotingComplete, null, meetingDelegate);
+        RoleOperations.Current.Trigger(LotusActionType.VotingComplete, null, meetingDelegate, wasOverruled, overruleNonce);
 
         // WE DO NOT RECALCULATE THE EXILED PLAYER!
         // This means its up to roles that modify the meeting delegate to properly update the exiled player
 
-        if (GeneralOptions.MeetingOptions.ResolveTieMode is ResolveTieMode.Random)
-            if (meetingDelegate.TiedPlayers.Count >= 2)
-                meetingDelegate.ExiledPlayer = Players.PlayerById(meetingDelegate.TiedPlayers.ToList().GetRandom()).Map(p => p.Data).OrElse(null!);
+        if (GeneralOptions.MeetingOptions.ResolveTieMode is not ResolveTieMode.None && meetingDelegate.TiedPlayers.Count >= 2 && !wasOverruled
+            && !meetingDelegate.ExiledPlayer && meetingDelegate.IsTie)
+            switch (GeneralOptions.MeetingOptions.ResolveTieMode)
+            {
+                case ResolveTieMode.Random:
+                    meetingDelegate.ExiledPlayer = Players.PlayerById(meetingDelegate.TiedPlayers.ToList().GetRandom())
+                        .Map(p => p.Data)
+                        .OrElse(null!);
+                    meetingDelegate.IsTie = false;
+                    break;
+                case ResolveTieMode.KillAll:
+                    meetingDelegate.TiedPlayers
+                        .Select(Players.PlayerById)
+                        .ForEach(o => o.IfPresent(p => ProtectedRpc.CheckMurder(p,p)));
+                    break;
+                default:
+                    throw new ArgumentException("Unsupported ResolveTieMode");
+            }
+
 
         // Generate voter states to reflect voting
         List<VoterState> votingStates = GenerateVoterStates(meetingDelegate);
@@ -96,7 +125,7 @@ public class CheckForEndVotingPatch
 
 
         if (meetingDelegate.ExiledPlayer != null) Hooks.MeetingHooks.ExiledHook.Propagate(new ExiledHookEvent(meetingDelegate.ExiledPlayer, playerVotes));
-        __instance.RpcVotingComplete(votingStates.ToArray(), meetingDelegate.ExiledPlayer, meetingDelegate.IsTie);
+        __instance.RpcVotingComplete(votingStates.ToArray(), meetingDelegate.ExiledPlayer, meetingDelegate.IsTie, wasOverruled, overruleNonce);
         DevLogger.GameInfo();
         return false;
     }

@@ -8,6 +8,7 @@ using Lotus.Chat;
 using Lotus.Chat.Commands;
 using Lotus.GameModes.Normal.CTF.Conditions;
 using Lotus.GameModes.Normal.CTF.Distributions;
+using Lotus.GameModes.Normal.Standard;
 using Lotus.Options;
 using Lotus.Roles;
 using Lotus.Roles.RoleGroups.Extra.CTF;
@@ -66,7 +67,7 @@ public class CTFGamemode : GameMode
 
     public override void Activate()
     {
-        Hooks.PlayerHooks.PlayerDeathHook.Bind(CTFGamemodeHookKey, ShowInformationToGhost, priority: API.Priority.VeryLow);
+        Hooks.PlayerHooks.PlayerDeathHook.Bind(CTFGamemodeHookKey, NormalStandardGameMode.ShowInformationToGhost, priority: API.Priority.VeryLow);
     }
 
     public override void Deactivate()
@@ -74,7 +75,7 @@ public class CTFGamemode : GameMode
         Hooks.UnbindAll(CTFGamemodeHookKey);
     }
 
-    public override IEnumerable<GameOptionTab> EnabledTabs() => DefaultTabs.CaptureTabs;
+    public override IEnumerable<GameOptionTab> EnabledTabs() => DefaultTabs.EmptyTabs;
     public override MainSettingTab MainTab() => DefaultTabs.CaptureTab;
 
     public override void Setup()
@@ -127,31 +128,5 @@ public class CTFGamemode : GameMode
             hasReturnedBlue = true;
             BlueFlag.Return();
         }
-    }
-
-    public static void ShowInformationToGhost(PlayerDeathHookEvent hookEvent)
-    {
-        PlayerControl player = hookEvent.Player;
-        ShowInformationToGhost(player);
-    }
-
-    public static void ShowInformationToGhost(PlayerControl player)
-    {
-        if (player == null) return;
-
-        log.Trace($"Showing all name components to ghost {player.name}");
-        if (GeneralOptions.MiscellaneousOptions.AutoDisplayCOD)
-        {
-            FrozenPlayer? fp = Game.MatchData.FrozenPlayers.GetValueOrDefault(player.GetGameID());
-            if (fp != null) DeathCommand.ShowMyDeath(player, fp);
-        }
-
-        Players.GetAllPlayers().Where(p => p.PlayerId != player.PlayerId)
-            .Select(p => p.NameModel().GetComponentHolder<GUI.Name.Holders.RoleHolder>())
-            .ForEach(h => h.Components().ForEach(components => components.AddViewer(player)));
-
-        ChatHandler.Of(Striker.Translations.OvertimeDeathMessage, Color.red.Colorize(Striker.Translations.OvertimeTitle)).Send(player);
-
-        player.NameModel().Render(force: true);
     }
 }

@@ -121,7 +121,7 @@ public class Swooper : Impostor, IRoleUI
             case ReturnLocation.Current:
                 UnityEngine.Vector2 currentLocation = MyPlayer.GetTruePosition();
                 Async.Schedule(() => MyPlayer.MyPhysics.RpcBootFromVent(ventId), NetUtils.DeriveDelay(0.4f));
-                Async.Schedule(() => Utils.Teleport(MyPlayer.NetTransform, currentLocation), NetUtils.DeriveDelay(0.8f));
+                Async.Schedule(() => Utils.Teleport(MyPlayer.NetTransform, currentLocation, this), NetUtils.DeriveDelay(0.8f));
                 break;
         }
         if (MyPlayer.AmOwner) UIManager.VentButton.BindCooldown(swooperCooldown);

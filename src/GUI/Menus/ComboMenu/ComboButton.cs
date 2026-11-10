@@ -33,7 +33,8 @@ public class ComboButton: MonoBehaviour
         comboButton.transform.localPosition = comboButton.position = new Vector3(-4.7f, -2.285f, -1f);
         comboButton.GetComponentInChildren<PassiveButton>().Modify(menuHandler.OpenMenu);
         comboButton.name = "ComboButton";
-        comboButton.SetActive(true);
+        comboButton.ToggleVisible(true);
+        comboButton.SetEnabled();
         // if (AmongUsClient.Instance.AmHost) EnableButton();
         // else DisableButton();
         EnableButton();

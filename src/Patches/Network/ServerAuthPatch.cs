@@ -42,13 +42,20 @@ public class ServerAuthPatch
         __result = !IsLocal;
     }
 
-
     [QuickPostfix(typeof(HostLocalGameButton), nameof(HostLocalGameButton.OnClick))]
     public static void OverrideLocalVersion(HostLocalGameButton __instance)
     {
         _ignoreBroadcastQueue.Enqueue(0);
         log.Debug("Queued Local Lobby (0) to broadcast.");
     }
+
+    [QuickPostfix(typeof(HostLocalGameButton), nameof(HostLocalGameButton.ClickHideNSeek))]
+    public static void OverrideLocalVersionHns(HostLocalGameButton __instance)
+    {
+        _ignoreBroadcastQueue.Enqueue(0);
+        log.Debug("Queued Local Lobby (0) to broadcast.");
+    }
+
 
     [QuickPostfix(typeof(ConfirmCreatePopUp), nameof(ConfirmCreatePopUp.SetupInfo))]
     public static void OverrideOnlineVersion(ConfirmCreatePopUp __instance)

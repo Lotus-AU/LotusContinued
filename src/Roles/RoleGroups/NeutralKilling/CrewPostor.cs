@@ -76,6 +76,11 @@ public class CrewPostor : Engineer
 
     class TaskDeathEvent : DeathEvent
     {
+        TaskDeathEvent()
+        {
+
+        }
+
         public TaskDeathEvent(PlayerControl deadPlayer, PlayerControl? killer) : base(deadPlayer, killer)
         {
         }

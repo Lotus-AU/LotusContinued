@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text.RegularExpressions;
 using AmongUs.Data;
 using InnerNet;
@@ -91,10 +92,13 @@ public class TemplateUnit
         { "GameMode", _ => Game.CurrentGameMode.Name },
         { "Date", _ => DateTime.Now.ToShortDateString() },
         { "Time", _ => DateTime.Now.ToShortTimeString() },
+        { "CurrentPreset", GetPresetName },
         { "Players", _ => PlayerControl.AllPlayerControls.ToArray().Select(p => p.name).Fuse() },
         { "PlayerCount", _ => PlayerControl.AllPlayerControls.Count.ToString() },
         { "AllRoles", _ => TUAllRoles.GetAllRoles(RoleSearchType.OnlyRoles) },
         { "AllModifiers", _ => TUAllRoles.GetAllRoles(RoleSearchType.OnlyModifiers).Replace("Modifiers\n", "") },
+        { "MeetingsCalled", _ => Game.MatchData.MeetingsCalled.ToString() },
+        { "EmergencyButtonsCalled", _ => Game.MatchData.EmergencyButtonsUsed.ToString() },
 
         { "AlivePlayers", _ => Players.GetAlivePlayers().Select(p => p.name).Fuse() },
         { "AlivePlayerCount", _ => Players.GetAlivePlayers().Count().ToString() },
@@ -218,6 +222,15 @@ public class TemplateUnit
             string symbol = sr is ISubrole subrole ? sr.RoleColor.Colorize(subrole.Identifier() ?? "") : "";
             return $"{symbol}{sr.RoleColor.Colorize(sr.RoleName)}\n{sr.Blurb}";
         }).Fuse("\n\n");
+    }
+
+    public static string GetPresetName(object? _ = null)
+    {
+        object? presetObject = typeof(PresetManager)
+            .GetField("CurrentPreset", BindingFlags.NonPublic | BindingFlags.Static)
+            ?.GetValue(null);
+        if (presetObject == null) return string.Empty;
+        return presetObject.GetType().GetField("Name")?.GetValue(presetObject) as string ?? string.Empty;
     }
 
     private static Func<object, string> QW(Func<PlayerControl, string> playerToString) => obj => playerToString((PlayerControl)obj);

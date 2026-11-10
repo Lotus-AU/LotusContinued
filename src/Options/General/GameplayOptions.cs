@@ -450,7 +450,7 @@ public class GameplayOptions: LotusOptionHolder
     private GameOptionBuilder Builder(string key) => new GameOptionBuilder().Key(key).Color(_optionColor);
 
     [Localized("Gameplay")]
-    private static class GameplayOptionTranslations
+    public static class GameplayOptionTranslations
     {
 
         [Localized("SectionTitle")]

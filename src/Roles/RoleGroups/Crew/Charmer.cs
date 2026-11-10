@@ -41,6 +41,7 @@ using Lotus.Roles.GUI.Interfaces;
 using Lotus.RPC;
 using VentLib;
 using VentLib.Networking.RPC.Attributes;
+using VentLib.Options.IO;
 
 namespace Lotus.Roles.RoleGroups.Crew;
 
@@ -61,6 +62,8 @@ public class Charmer : Crewmate, IRoleUI
     private bool charmedPlayersWinWithCrew;
     private bool breakCharmOnDeath;
     private int maxCharmedPlayers;
+
+    private float charmCooldown;
 
     private int TasksPerUsage => usesKillButton ? 0 : tasksPerUsage;
 
@@ -90,6 +93,7 @@ public class Charmer : Crewmate, IRoleUI
 
     protected override void PostSetup()
     {
+        charmingCooldown.SetDuration(charmCooldown <= 0 ? AUSettings.KillCooldown() : charmCooldown);
         if (charmedPlayersWinWithCrew) Game.GetWinDelegate().AddSubscriber(CharmedWinWithCrew);
         if (TasksPerUsage == 0) return;
         LiveString taskCounter = new(() => RoleUtils.Counter(taskAbilityCount, TasksPerUsage, RoleColor), Color.white);
@@ -140,14 +144,12 @@ public class Charmer : Crewmate, IRoleUI
     {
         if (usesKillButton) return;
         if (charmingCooldown.NotReady()) return;
-        PlayerControl? closestPlayer = MyPlayer.GetPlayersInAbilityRangeSorted().FirstOrDefault();
-        if (closestPlayer == null) return;
+        PlayerControl closestPlayer = MyPlayer.GetPlayersInAbilityRangeSorted().FirstOrDefault()!;
+        if (!closestPlayer) return;
         if (charmedPlayers.ContainsKey(closestPlayer.PlayerId)) return;
-        if (CharmPlayer(closestPlayer))
-        {
-            charmingCooldown.Start();
-            if (MyPlayer.IsModded()) Vents.FindRPC((uint)ModCalls.UpdateCharmer)?.Send([MyPlayer.OwnerId], taskAbilityCount, true);
-        }
+        if (!CharmPlayer(closestPlayer)) return;
+        charmingCooldown.Start();
+        if (MyPlayer.IsModded()) Vents.FindRPC((uint)ModCalls.UpdateCharmer)?.Send([MyPlayer.OwnerId], taskAbilityCount, true);
     }
 
     [RoleAction(LotusActionType.Interaction, ActionFlag.WorksAfterDeath | ActionFlag.GlobalDetector)]
@@ -204,11 +206,12 @@ public class Charmer : Crewmate, IRoleUI
                     .BindInt(i => tasksPerUsage = i)
                     .Build())
                 .Build())
-            .SubOption(sub2 => sub2.Name(Translations.Options.CharmingCooldown)
-                .Key("Charming Cooldown")
+            .SubOption(sub2 => sub2
+                .KeyName("Charming Cooldown", Translations.Options.CharmingCooldown)
                 .Value(v => v.Text(GeneralOptionTranslations.GlobalText).Color(new Color(1f, 0.61f, 0.33f)).Value(-1).Build())
-                .AddFloatRange(0, 120, 2.5f, 25, GeneralOptionTranslations.SecondsSuffix)
-                .BindFloat(charmingCooldown.SetDuration)
+                .AddFloatRange(2.5f, 120, 2.5f, 24, GeneralOptionTranslations.SecondsSuffix)
+                .BindFloat(f => charmCooldown = f)
+                .IOSettings(o => o.UnknownValueAction = ADEAnswer.Allow)
                 .Build())
             .SubOption(sub => sub.KeyName("Charmed Players Win with Crew", Translations.Options.CharmedPlayersWinWithCrew)
                 .BindBool(b => charmedPlayersWinWithCrew = b)
@@ -230,7 +233,7 @@ public class Charmer : Crewmate, IRoleUI
             .DesyncRole(usesKillButton ? RoleTypes.Impostor : RoleTypes.Crewmate)
             .RoleAbilityFlags(RoleAbilityFlag.CannotVent | RoleAbilityFlag.CannotSabotage | RoleAbilityFlag.UsesPet)
             .OptionOverride(Override.ImpostorLightMod, () => AUSettings.CrewLightMod())
-            .OptionOverride(new IndirectKillCooldown(() => charmingCooldown.Duration <= -1 ? AUSettings.KillCooldown() : charmingCooldown.Duration));
+            .OptionOverride(new IndirectKillCooldown(() => charmCooldown <= 0 ? AUSettings.KillCooldown() : charmCooldown));
 
     private class Charmed : Faction<Charmed>
     {

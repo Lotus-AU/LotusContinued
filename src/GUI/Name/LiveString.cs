@@ -22,7 +22,7 @@ public class LiveString
     {
     }
 
-    // hopefully this wont decrease performance too bad
+    // hopefully this won't decrease performance too bad
     public LiveString(Func<String> supplier, Color? color = null) : this(_ => supplier(), color)
     { }
 

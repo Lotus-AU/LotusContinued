@@ -236,7 +236,7 @@ public class GuesserRole : CustomRole, IInfoResender
     {
         bool canSeeRole = false;
         RoleComponent? roleComponent = targetPlayer.NameModel().GetComponentHolder<RoleHolder>().LastOrDefault();
-        if (roleComponent != null) canSeeRole = roleComponent.Viewers().Any(p => p == MyPlayer);
+        if (roleComponent != null) canSeeRole = roleComponent.Viewers().Any(p => p.PlayerId == MyPlayer.PlayerId);
         return canSeeRole ? CancelGuessReason.CanSeeRole : CancelGuessReason.None;
     }
     protected virtual bool CanGuessRole(CustomRole role) => true;

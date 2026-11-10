@@ -13,5 +13,5 @@ public class MadGuardian : MadCrewmate
         if (interaction.Intent is not (IFatalIntent or IHostileIntent)) return;
         handle.Cancel();
     }
-    protected override string ForceRoleImageDirectory() => "RoleOutfits/Imposter/madguardian.yaml";
+    protected override string ForceRoleImageDirectory() => "RoleOutfits/Imposter/madguardian";
 }

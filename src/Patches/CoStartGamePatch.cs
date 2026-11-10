@@ -13,6 +13,7 @@ using Lotus.Utilities;
 using Lotus.RPC.CustomObjects;
 using Lotus.Patches.Systems;
 using Lotus.Patches.Actions;
+using Lotus.Patches.Client;
 
 namespace Lotus.Patches;
 
@@ -30,6 +31,7 @@ class CoStartGamePatch
             if (player == null) return;
             SetRolePatch.RoleAssigned[player.PlayerId] = false;
             if (!GeneralOptions.MiscellaneousOptions.ColoredNameMode) return;
+            if (!AmongUsClient.Instance.AmHost) return;
             string colorName = player.Data.ColorName.Trim('(', ')');
             player.RpcSetName(colorName);
             Api.Local.SetName(player, colorName, true);
@@ -38,6 +40,7 @@ class CoStartGamePatch
         Game.Setup();
         Game.CurrentGameMode.Setup();
         RpcSetTasksPatch.OnGameStart();
+        DisconnectCheck.DisconnectPlayers = [];
         log.Trace("Setup Game!");
     }
 
@@ -45,6 +48,7 @@ class CoStartGamePatch
     {
         ProjectLotus.ResetCamPlayerList = new List<byte>();
         CustomNetObject.Reset();
+        EnterVentPatch.Reset();
         FallFromLadder.Reset();
 
         try

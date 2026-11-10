@@ -23,8 +23,8 @@ public class RoleAction : LotusAction
     public bool CanExecute(PlayerControl executer, PlayerControl? source)
     {
         if (!executer.IsAlive() && !TriggerWhenDead) return false;
-        if (!ReferenceEquals(source, null) && !Flags.HasFlag(ActionFlag.GlobalDetector) && executer.PlayerId != source.PlayerId) return false;
-        return true;
+        if (!source) return true;
+        return Flags.HasFlag(ActionFlag.GlobalDetector) || executer.PlayerId == source!.PlayerId;
     }
 
     public new RoleAction Clone()

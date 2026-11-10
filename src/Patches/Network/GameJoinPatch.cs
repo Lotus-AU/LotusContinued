@@ -10,6 +10,7 @@ using Lotus.API.Reactive.HookEvents;
 using Lotus.Extensions;
 using Lotus.GameModes;
 using Lotus.Managers;
+using Lotus.Network;
 using Lotus.Options;
 using Lotus.Options.General;
 using VentLib.Localization;
@@ -23,9 +24,11 @@ class GameJoinPatch
     private static readonly StandardLogger log = LoggerFactory.GetLogger<StandardLogger>(typeof(GameJoinPatch));
     private static int _lastGameId;
 
+    private static bool allowedInnersloth;
+
     public static void Postfix(AmongUsClient __instance)
     {
-        log.High($"Joining Lobby (GameID={__instance.GameId})", "GameJoin");
+        log.High($"Joining Lobby (GameID={__instance.GameId}, {_lastGameId})", "GameJoin");
         SoundManager.Instance.ChangeMusicVolume(DataManager.Settings.Audio.MusicVolume);
         AddonManager.PlayerAddons = new();
         Game.State = GameState.InLobby;
@@ -37,14 +40,19 @@ class GameJoinPatch
         Async.WaitUntil(() => PlayerControl.LocalPlayer, p => p != null, p =>
         {
             gameJoinHookEvent.Loaded = true;
-            AddonManager.SendAddonsToHost();
             ProjectLotus.GameModeManager.UpdateGameModeOption();
+            AddonManager.SendAddonsToHost();
             PluginDataManager.TitleManager.ApplyTitleWithChatFix(p);
             if (AmongUsClient.Instance.AmHost)
             {
                 ModVersion.AddVersionShowerToPlayer(p, ModVersion.Version);
                 if (DataManager.Settings.Multiplayer.ChatMode == QuickChatModes.QuickChatOnly)
                     AmongUsClient.Instance.DisconnectWithMessage(Localizer.Translate("DisconncetReasons.FreeChatOnly"));
+                else if (AmongUsClient.Instance.NetworkMode is NetworkModes.OnlineGame && ConnectionManager.IsVanillaServer && !allowedInnersloth)
+                {
+                    allowedInnersloth = true;
+                    AmongUsClient.Instance.DisconnectWithMessage("Innersloth servers aren't recommended as they may sometimes kick you for hacking. If you insist, this message will only pop up once.");
+                }
             }
         }, 0.25f, 20);
         if (!AmongUsClient.Instance.AmHost) return;

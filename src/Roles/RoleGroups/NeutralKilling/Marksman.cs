@@ -64,17 +64,17 @@ public class Marksman : NeutralKillingBase
             .SubOption(sub => sub
                 .KeyName("Can Vent", RoleTranslations.CanVent)
                 .BindBool(v => canVent = v)
-                .AddOnOffValues()
+                .AddBoolean()
                 .Build())
             .SubOption(sub => sub
                 .KeyName("Can Sabotage", RoleTranslations.CanSabotage)
                 .BindBool(v => canSabotage = v)
-                .AddOnOffValues()
+                .AddBoolean()
                 .Build())
             .SubOption(sub => sub
                 .KeyName("Impostor Vision", RoleTranslations.ImpostorVision)
                 .BindBool(v => impostorVision = v)
-                .AddOnOffValues()
+                .AddBoolean()
                 .Build());
 
     protected override RoleModifier Modify(RoleModifier roleModifier) =>

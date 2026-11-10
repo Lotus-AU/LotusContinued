@@ -1,5 +1,6 @@
 using System.Linq;
 using Lotus.API.Odyssey;
+using Lotus.API.Reactive;
 using Lotus.Options;
 using Lotus.Extensions;
 using Lotus.Roles;
@@ -40,6 +41,13 @@ public static class GeneralModRpc
     public static void SetGameState(int state)
     {
         Game.State = (GameState)state;
+    }
+
+    [ModRPC((uint)ModCalls.HookEvent, RpcActors.Host, RpcActors.NonHosts)]
+    public static void CallHookEvent(uint hookId, INetworkedHookEvent hookEvent)
+    {
+        if (AmongUsClient.Instance.AmHost) return;
+        if (Hooks.Events.TryGetValue(hookId, out var handler)) handler(hookEvent);
     }
 
     // GENERAL ROLE RPC

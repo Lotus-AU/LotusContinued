@@ -8,6 +8,7 @@ using Lotus.Managers;
 using Lotus.Utilities;
 using UnityEngine;
 using VentLib.Logging.Appenders;
+using VentLib.Logging.Default;
 using VentLib.Utilities;
 using VentLib.Utilities.Attributes;
 using VentLib.Utilities.Collections;
@@ -22,14 +23,14 @@ public class LogManager
     private static LogUI _logUI = null!;
 
     private static Remote<FlushingMemoryAppender> _sessionAppender;
-    private static DirectoryInfo _dailyDirectory = null!;
+    private static DirectoryInfo _dailyDirectory;
     private static int _logIndex;
 
 
     static LogManager()
     {
         string directory = CreateSessionDirectory();
-        _sessionAppender = GlobalLogAppenders.AddAppender(new FlushingMemoryAppender(directory, null!, LogLevel.Debug) { AutoFlush = false }).Cast<FlushingMemoryAppender>();
+        _sessionAppender = GlobalLogAppenders.AddAppender(new FlushingMemoryAppender(directory, "yyyy-mm-dd-##.txt", LogLevel.Debug) { AutoFlush = false }).Cast<FlushingMemoryAppender>();
         Hooks.NetworkHooks.GameJoinHook.Bind(nameof(LogManager), e => BeginGameLogSession(e.IsNewLobby));
     }
 
@@ -49,18 +50,17 @@ public class LogManager
     public static void SendInGame(string message, params object[] args)
     {
         log.Debug($"Sending In Game: {message}", args);
-        if (DestroyableSingleton<HudManager>.InstanceExists)
-        {
-            DestroyableSingleton<HudManager>.Instance.Chat.AddChat(PlayerControl.LocalPlayer, message, false);
-            NotificationPopper notifier = DestroyableSingleton<HudManager>.Instance.Notifier;
+        if (!DestroyableSingleton<HudManager>.InstanceExists) return;
 
-            LobbyNotificationMessage newMessage = UnityEngine.Object.Instantiate<LobbyNotificationMessage>(notifier.notificationMessageOrigin, Vector3.zero, Quaternion.identity, notifier.transform);
-            newMessage.transform.localPosition = new Vector3(0f, 0f, -2f);
-            newMessage.SetUp("  " + message.Trim(), LotusAssets.LoadSprite("Lotus_Icon.png", 1100), Color.white, (Action)(() => notifier.OnMessageDestroy(newMessage)));
-            notifier.ShiftMessages();
-            notifier.AddMessageToQueue(newMessage);
-            SoundManager.Instance.PlaySound(notifier.playerDisconnectSound, false, 1f, null);
-        }
+        DestroyableSingleton<HudManager>.Instance.Chat.AddChat(PlayerControl.LocalPlayer, message, false);
+        NotificationPopper notifier = DestroyableSingleton<HudManager>.Instance.Notifier;
+
+        var newMessage = UnityEngine.Object.Instantiate<LobbyNotificationMessage>(notifier.notificationMessageOrigin, Vector3.zero, Quaternion.identity, notifier.transform);
+        newMessage.transform.localPosition = new Vector3(0f, 0f, -2f);
+        newMessage.SetUp("  " + message.Trim(), LotusAssets.LoadSprite("Lotus_Icon.png", 1100), Color.white, (Action)(() => notifier.OnMessageDestroy(newMessage)));
+        notifier.ShiftMessages();
+        notifier.AddMessageToQueue(newMessage);
+        SoundManager.Instance.PlaySound(notifier.playerDisconnectSound, false, 1f, null);
     }
     public static void BeginGameLogSession(bool isNewGame)
     {
@@ -68,8 +68,8 @@ public class LogManager
         if (!isNewGame)
         {
             var appender = _sessionAppender.Get();
-            appender.FileNamePattern = $"_game-{LogDirectory.GetLogs("_game-", _dailyDirectory).Count().ToString()}.log";
-            appender.LogFile = LogDirectory.CreateLog(appender.FileNamePattern, _dailyDirectory);
+            appender.LogFile = LogDirectory.CreateCustomLog($"_game-{LogDirectory.GetLogs("_game-", _dailyDirectory).Count().ToString()}", dir: _dailyDirectory);
+            appender.ForceFlush();
             appender.Clear();
         }
 

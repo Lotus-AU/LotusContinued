@@ -95,16 +95,16 @@ public class NormalStandardGameMode : GameMode
     public static void ShowInformationToGhost(PlayerControl player)
     {
         if (player == null) return;
-        if (!GeneralOptions.GameplayOptions.GhostsSeeInfo) return;
+        if (GeneralOptions.GameplayOptions.IsSubscribed(Game.CurrentGameMode.MainTab()) && !GeneralOptions.GameplayOptions.GhostsSeeInfo) return;
 
-        if (Players.GetAlivePlayers().Any(p => p.PrimaryRole() is Altruist))
+        if (Players.GetAliveRoles().Any(r => r.RoleAbilityFlags.HasFlag(RoleAbilityFlag.CanRevivePlayers)))
         {
-            log.Trace($"Not showing all name components to ghost {player.name} because there is an alive altruist.");
+            log.Trace($"Not showing all name components to ghost {player.name} because there is a role that can revive players");
             return;
         }
 
         log.Trace($"Showing all name components to ghost {player.name}");
-        if (GeneralOptions.MiscellaneousOptions.AutoDisplayCOD)
+        if (GeneralOptions.MiscellaneousOptions.IsSubscribed(Game.CurrentGameMode.MainTab()) && GeneralOptions.MiscellaneousOptions.AutoDisplayCOD)
         {
             FrozenPlayer? fp = Game.MatchData.FrozenPlayers.GetValueOrDefault(player.GetGameID());
             if (fp != null) DeathCommand.ShowMyDeath(player, fp);

@@ -43,6 +43,8 @@ public class Striker : NeutralKillingBase, IRoleUI
     private bool overtimeActive;
     private bool suddenDeath;
 
+    public override string GetRoleOutfitPath() => $"RoleOutfits/Extra/{EnglishRoleName}".ToLower();
+
     [UIComponent(UI.Counter)]
     public string GameTimerText() => (overtimeActive ? Color.green : Color.white).Colorize($"\n{gameTimer}{GeneralOptionTranslations.SecondsSuffix}");
 
@@ -70,6 +72,8 @@ public class Striker : NeutralKillingBase, IRoleUI
     private string killButtonImage = "Buttons/Extra/striker_attack_";
     private string takeFlagImage = "Buttons/Extra/striker_take_";
     private bool updatedImages;
+
+    private bool isDead;
 
     protected override void PostSetup()
     {
@@ -100,7 +104,7 @@ public class Striker : NeutralKillingBase, IRoleUI
             CTFGamemode.BlueFlag = new BlueFlag(CTFGamemode.SpawnLocations[1]);
         }
 
-        Utils.Teleport(MyPlayer.NetTransform, CTFGamemode.SpawnLocations[MyPlayer.cosmetics.bodyMatProperties.ColorId]);
+        Utils.Teleport(MyPlayer.NetTransform, CTFGamemode.SpawnLocations[MyPlayer.cosmetics.bodyMatProperties.ColorId], this);
 
         SetupImages();
         UpdateUI(StrikerRpcType.UpdateKillButton);
@@ -120,16 +124,34 @@ public class Striker : NeutralKillingBase, IRoleUI
     {
         if (suddenDeath)
         {
+            if (reviveTimer.NotReady() || gracePeriod.NotReady())
+            {
+                handle.Cancel();
+                return;
+            }
             // dont revive on sudden death
             PutDownFlag(false);
             return;
         }
 
         handle.Cancel(); // Stops me from dying and does RpcMark.
-        if (reviveTimer.NotReady() || gracePeriod.NotReady() || MyPlayer.inVent || MyPlayer.walkingToVent) return;
+        if (reviveTimer.NotReady() || gracePeriod.NotReady()) return;
+        // if (reviveTimer.NotReady() || gracePeriod.NotReady() || MyPlayer.inVent || MyPlayer.walkingToVent) return;
+        if (isDead) return;
+        isDead = true;
 
-        Utils.Teleport(MyPlayer.NetTransform, new Vector2(Random.RandomRange(5000, 99999), Random.RandomRange(5000, 99999)));
-        reviveTimer.StartThenRun(RevivePlayer);
+        float delay = 0f;
+        if (MyPlayer.inVent || MyPlayer.walkingToVent)
+        {
+            delay = NetUtils.DeriveDelay(0.2f);
+            MyPlayer.MyPhysics.RpcBootFromVent(ShipStatus.Instance.AllVents.First().Id);
+        }
+
+        Async.Schedule(() =>
+        {
+            Utils.Teleport(MyPlayer.NetTransform, new Vector2(Random.RandomRange(5000, 99999), Random.RandomRange(5000, 99999)), this);
+            reviveTimer.StartThenRun(RevivePlayer);
+        }, delay);
 
         PutDownFlag(false);
     }
@@ -137,21 +159,31 @@ public class Striker : NeutralKillingBase, IRoleUI
     [RoleAction(LotusActionType.OnPet)]
     private void OnTouchFlag()
     {
-        if (MyPlayer.inVent || MyPlayer.walkingToVent)
-        {
-            int ventId;
-
-            ISystemType ventilation = ShipStatus.Instance.Systems[SystemTypes.Ventilation];
-            if (ventilation.TryCast(out VentilationSystem ventilationSystem))
-            {
-                if (ventilationSystem.PlayersInsideVents.TryGetValue(MyPlayer.PlayerId, out byte byteId)) ventId = byteId;
-                else ventId = Object.FindObjectsOfType<Vent>().ToList().GetRandom().Id;
-            }
-            else ventId = Object.FindObjectsOfType<Vent>().ToList().GetRandom().Id;
-
-            MyPlayer.MyPhysics.RpcBootFromVent(ventId);
-            return;
-        }
+        // if (MyPlayer.inVent || MyPlayer.walkingToVent)
+        // {
+        //     int ventId;
+        //
+        //     ISystemType ventilation = ShipStatus.Instance.Systems[SystemTypes.Ventilation];
+        //     if (ventilation.TryCast(out VentilationSystem ventilationSystem))
+        //     {
+        //         if (ventilationSystem.PlayersInsideVents.TryGetValue(MyPlayer.PlayerId, out byte byteId)) ventId = byteId;
+        //         else
+        //         {
+        //             ventId = Object.FindObjectsOfType<Vent>().ToList().GetRandom().Id;
+        //             MyPlayer.inVent = false;
+        //             MyPlayer.walkingToVent = false;
+        //         }
+        //     }
+        //     else
+        //     {
+        //         ventId = Object.FindObjectsOfType<Vent>().ToList().GetRandom().Id;
+        //         MyPlayer.inVent = false;
+        //         MyPlayer.walkingToVent = false;
+        //     }
+        //
+        //     MyPlayer.MyPhysics.RpcBootFromVent(ventId);
+        //     return;
+        // }
         bool atRedFlag = RoleUtils.GetPlayersWithinDistance(CTFGamemode.SpawnLocations[0], 2f).Any(p => p.PlayerId == MyPlayer.PlayerId);
         bool atBlueFlag = RoleUtils.GetPlayersWithinDistance(CTFGamemode.SpawnLocations[1], 2f).Any(p => p.PlayerId == MyPlayer.PlayerId);
         if (!atRedFlag && !atBlueFlag) return;
@@ -184,13 +216,20 @@ public class Striker : NeutralKillingBase, IRoleUI
     {
         if (ExtraGamemodeOptions.CaptureOptions.CarryingCanVent) return;
 
-        if (CTFGamemode.Team0FlagCarrier == MyPlayer.PlayerId || CTFGamemode.Team1FlagCarrier == MyPlayer.PlayerId) handle.Cancel();
+        if (CTFGamemode.Team0FlagCarrier == MyPlayer.PlayerId || CTFGamemode.Team1FlagCarrier == MyPlayer.PlayerId)
+        {
+            handle.Cancel();
+            MyPlayer.inVent = false;
+            MyPlayer.walkingToVent = false;
+        }
     }
 
     private void RevivePlayer()
     {
         gracePeriod.Start();
-        Utils.Teleport(MyPlayer.NetTransform, CTFGamemode.SpawnLocations[MyPlayer.cosmetics.bodyMatProperties.ColorId]);
+        Utils.Teleport(MyPlayer.NetTransform, CTFGamemode.SpawnLocations[MyPlayer.cosmetics.bodyMatProperties.ColorId],
+            this);
+        isDead = false;
     }
 
     private void PutDownFlag(bool awardPoint)

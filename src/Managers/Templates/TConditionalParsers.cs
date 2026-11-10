@@ -36,7 +36,9 @@ public class TConditionalParsers
         { "NotRoles", value => new TConditionalNotRole(value) },
         { "EnabledRoles", value => new TConditionalEnabledRoles(value) },
 
-        { "Evaluate", value => new TConditionalEvaluate(value) }
+        { "Evaluate", value => new TConditionalEvaluate(value) },
+
+        { "Preset", value => new TConditionalPreset(value) }
     };
 
 

@@ -112,7 +112,11 @@ public static class PluginDataManager
         catch (Exception exception)
         {
             if (onError != null) onError((exception, name));
-            else log.Exception($"Failed to load {name}", exception);
+            else
+            {
+                log.Exception($"Failed to load {name}");
+                log.Exception(exception);
+            }
             return default;
         }
     }

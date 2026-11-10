@@ -55,6 +55,12 @@ public class WinDelegate
         winCondition = condition;
         winNotifiers.ForEach(notify => notify(this));
 
+        if (winCondition.GetWinReason().ReasonType is ReasonType.HostForceEnd)
+        {
+            winners = [];
+            additionalWinners = [];
+        }
+
         if (forcedCancel)
         {
             winCondition = null;

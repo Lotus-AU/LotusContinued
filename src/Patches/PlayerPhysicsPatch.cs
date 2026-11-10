@@ -11,8 +11,9 @@ public class PlayerPhysicsPatch
     [QuickPrefix(typeof(PlayerPhysics), nameof(PlayerPhysics.ExitAllVents))]
     public static void ExitAllVentsPrefix(PlayerPhysics __instance)
     {
+        if (!AmongUsClient.Instance.AmHost) return;
         if (!__instance.myPlayer.inVent) return;
-        int ventId = Object.FindObjectsOfType<Vent>().FirstOrDefault()?.Id ?? 1;
+        int ventId = ShipStatus.Instance.AllVents.First().Id;
 
         if (ShipStatus.Instance.Systems.TryGetValue(SystemTypes.Ventilation, out var ventilationType))
         {
@@ -22,6 +23,6 @@ public class PlayerPhysicsPatch
             }
         }
 
-        RpcV3.Immediate(__instance.NetId, RpcCalls.BootFromVent).Write(ventId).Send();
+        RpcV3.Immediate(__instance.NetId, RpcCalls.BootFromVent).WritePacked(ventId).Send();
     }
 }

@@ -132,6 +132,7 @@ public class EndGameResultPatch
 
         Object.FindObjectsOfType<PoolablePlayer>()
             .Where(p => p.transform.parent == __instance.transform)
+            .Where(Object.IsNativeObjectAlive)
             .Do(p => p.gameObject.Destroy());
 
         bool flag = GameManager.Instance.DidHumansWin(EndGameResult.CachedGameOverReason);

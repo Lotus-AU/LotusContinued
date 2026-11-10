@@ -71,12 +71,12 @@ public class NormalStandardRoleOperations : RoleOperations
         {
             foreach (CustomRole role in recipients)
             {
-                if (role.RoleActions.TryGetValue(action, out List<RoleAction>? actions) && actions.Count > 0)
-                {
-                    if (!actions[0].CanExecute(role.MyPlayer, null)) continue;
-                    actions[0].SetExecuter(role);
-                    actions[0].ExecuteFixed();
-                }
+                if (!role.RoleActions.TryGetValue(action, out List<RoleAction>? actions)) continue;
+                if (!actions.Any()) continue;
+                var mainAction = actions.First();
+                if (!mainAction.CanExecute(role.MyPlayer, null)) continue;
+                mainAction.SetExecuter(role);
+                mainAction.ExecuteFixed();
             }
             return handle;
         }

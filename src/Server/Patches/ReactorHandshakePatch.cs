@@ -1,4 +1,5 @@
 ﻿using System;
+using BepInEx.Unity.IL2CPP;
 using HarmonyLib;
 using Hazel;
 using Il2CppInterop.Runtime.InteropTypes.Arrays;
@@ -83,7 +84,7 @@ public static class ReactorHandshakePatch
     public static void Postfix(ref Il2CppStructArray<byte> __result)
     {
         if (ConnectionManager.IsVanillaServer) return;
-        if (ProjectLotus.HasReactorPlugin) return;
+        if (IL2CPPChainloader.Instance.Plugins.ContainsKey("gg.reactor.api")) return;
         var handshake = new MessageWriter(1000);
 
         // Original data

@@ -15,7 +15,7 @@ namespace Lotus.Roles.RoleGroups.Extra.April;
 
 public class Child: Crewmate, IAprilFoolsRole
 {
-    public override string GetRoleOutfitPath() => "RoleOutfits/Neutral/Jester".ToLower();
+    public override string GetRoleOutfitPath() => $"RoleOutfits/April/{EnglishRoleName}".ToLower();
 
     [RoleAction(LotusActionType.PlayerDeath)]
     private void MyDeath()

@@ -255,6 +255,7 @@ public class BasicCommands : CommandTranslations
 
         if (context.Args.Length < 2)
         {
+            target.ResetPlayerCam();
             if (!LegacyResolver.PerformForcedReset(target)) ChatHandler.Of("Unable to perform forced Blackscreen Fix. No players have died yet.", CommandError).LeftAlign().Send(source);
             else ChatHandler.Of($"Successfully cleared blackscreen of \"{target.name}\"").LeftAlign().Send(source);
         }

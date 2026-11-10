@@ -89,11 +89,7 @@ public class SimpleNameModel : INameModel
         if (sendToPlayer)
         {
             if (rPlayer.IsHost()) Api.Local.SetName(player, cacheString);
-            else
-            {
-                int clientId = rPlayer.GetClientId();
-                if (clientId != -1) RpcV3.Immediate(player.NetId, RpcCalls.SetName).Write(player.Data.NetId).Write(cacheString).Send(clientId);
-            }
+            else RpcV3.Immediate(player.NetId, RpcCalls.SetName).Write(player.Data.NetId).Write(cacheString).Send(rPlayer.OwnerId);
         }
         Profilers.Global.Sampler.Stop(id);
         return cacheString;

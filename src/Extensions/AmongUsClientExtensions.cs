@@ -10,7 +10,7 @@ public static class AmongUsClientExtensions
 
     public static void KickPlayerWithMessage(this AmongUsClient client, PlayerControl target, string message, bool banPlayer = false)
     {
-        if (client == null) return;
+        if (!client) return;
         message += "<size=0>"; // removes the "left the game" text.
         target.SetName(message);
         RpcV3.Immediate(target.NetId, RpcCalls.SetName).Write(target.Data.NetId).Write(message).Send();
@@ -23,7 +23,7 @@ public static class AmongUsClientExtensions
 
     public static void DisconnectWithMessage(this AmongUsClient client, string message)
     {
-        if (client == null) return;
+        if (!client) return;
         _disconnectMessage = message;
         client.ExitGame(DisconnectReasons.Destroy);
     }

@@ -20,7 +20,7 @@ public class Lagger: Subrole, IAprilFoolsRole
 
     public override string Identifier() => "☹";
 
-    public override string GetRoleOutfitPath() => "RoleOutfits/Neutral/Jester".ToLower();
+    public override string GetRoleOutfitPath() => $"RoleOutfits/April/{EnglishRoleName}".ToLower();
 
     [RoleAction(LotusActionType.RoundStart)]
     private void StartLagLoop()

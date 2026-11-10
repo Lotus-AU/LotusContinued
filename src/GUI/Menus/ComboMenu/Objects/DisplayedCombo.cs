@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.IO;
 using System.Linq;
 using Lotus.Extensions;
 using Lotus.GUI.Menus.ComboMenu.Areas;
@@ -76,8 +77,8 @@ public class DisplayedCombo: MonoBehaviour
     private void AddRoleToObject(bool isTop)
     {
         CustomRole targetRole = isTop ? role1 : role2;
-        string roleImagePath = targetRole.GetRoleOutfitPath().Replace("roleoutfits", "roleimages");
-        if (!roleImagePath.EndsWith(".png")) roleImagePath += ".png";
+        string roleImagePath = targetRole.GetRoleOutfitPath().ToLower().Replace("roleoutfits", "roleimages");
+        roleImagePath = Path.ChangeExtension(roleImagePath, "png");
         if (!LotusAssets.TryLoadSprite(roleImagePath, out Sprite? sprite))
             // Replace sprite with Missing one
             sprite = LotusAssets.LoadSprite("RoleImages/Missing.png");

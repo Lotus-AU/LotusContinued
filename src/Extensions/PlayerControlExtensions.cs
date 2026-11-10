@@ -24,6 +24,7 @@ using VentLib.Utilities.Collections;
 using VentLib.Utilities.Optionals;
 using Lotus.Roles.Managers.Interfaces;
 using System.Linq;
+using Lotus.API;
 using Lotus.Factions.Impostors;
 using VentLib;
 using Lotus.RPC;
@@ -38,7 +39,7 @@ public static class PlayerControlExtensions
 
     public static CustomRole PrimaryRole(this PlayerControl player)
     {
-        if (player == null)
+        if (!player)
         {
             var callerMethod = Mirror.GetCaller();
             string callerMethodName = callerMethod?.Name ?? "(Null callerMethod Name)";
@@ -52,7 +53,7 @@ public static class PlayerControlExtensions
 
     public static CustomRole? GetCustomRoleSafe(this PlayerControl player)
     {
-        return player == null ? null : Game.MatchData.Roles.MainRoles.GetValueOrDefault(player.PlayerId);
+        return !player ? null : Game.MatchData.Roles.MainRoles.GetValueOrDefault(player.PlayerId);
     }
 
     public static CustomRole GetSubrole(this PlayerControl player)
@@ -61,25 +62,21 @@ public static class PlayerControlExtensions
         if (role == null || role.Count == 0) return null!;
         return role[0];
     }
-    public static List<CustomRole> GetSubroles(this PlayerControl player)
-    {
-        List<CustomRole>? roleList = Game.MatchData.Roles.SubRoles.GetValueOrDefault(player.PlayerId);
-        if (roleList == null || roleList.Count == 0) return new List<CustomRole>();
-        return roleList;
-    }
+
+    public static List<CustomRole> GetSubroles(this PlayerControl player) => player.SecondaryRoles();
 
     public static List<CustomRole> SecondaryRoles(this PlayerControl player) => Game.MatchData.Roles.GetSubroles(player.PlayerId);
 
     public static void SyncAll(this PlayerControl player)
     {
-        if (player == null) return;
+        if (!player) return;
         if (!AmongUsClient.Instance.AmHost) return;
         RoleOperations.Current.SyncOptions(player);
     }
 
     public static void RpcSetRoleDesync(this PlayerControl player, RoleTypes role, PlayerControl target)
     {
-        if (player == null) return;
+        if (!player) return;
         if (target.AmOwner)
         {
             player.StartCoroutine(player.CoSetRole(role, ProjectLotus.AdvancedRoleAssignment));
@@ -89,25 +86,21 @@ public static class PlayerControlExtensions
         RpcV3.Immediate(player.NetId, RpcCalls.SetRole).Write((ushort)role).Write(ProjectLotus.AdvancedRoleAssignment).Send(target.GetClientId());
     }
 
-    public static void RpcMark(this PlayerControl killer, PlayerControl? target = null, int colorId = 0)
+    public static void RpcMark(this PlayerControl killer, PlayerControl? target = null, int colorIdd = 0)
     {
-        if (target == null) target = killer;
+        if (!target) target = killer;
         MurderPatches.Lock(killer.PlayerId);
 
         // Host
         if (killer.AmOwner)
-        {
+
             // killer.ProtectPlayer(target, colorId);
             killer.MurderPlayer(target, MurderResultFlags.FailedProtected);
-        }
-
-        // Other Clients
-        if (killer.PlayerId == 0) return;
-
-        RpcV3.Mass()
-            // .Start(killer.NetId, RpcCalls.ProtectPlayer).Write(target).Write(colorId).End()
-            .Start(killer.NetId, RpcCalls.MurderPlayer).Write(target).Write((int)MurderResultFlags.FailedProtected).End()
-            .Send(killer.GetClientId());
+        else
+            RpcV3.Mass()
+                // .Start(killer.NetId, RpcCalls.ProtectPlayer).Write(target).Write(colorId).End()
+                .Start(killer.NetId, RpcCalls.MurderPlayer).Write(target!).Write((int)MurderResultFlags.FailedProtected).End()
+                .Send(killer.GetClientId());
     }
 
     public static T? PrimaryRole<T>(this PlayerControl player) where T : CustomRole
@@ -116,7 +109,7 @@ public static class PlayerControlExtensions
     }
     public static T? GetSubrole<T>(this PlayerControl player) where T : CustomRole
     {
-        return player.GetSubroles().Where(sR => sR is T).FirstOrDefault() as T ?? null;
+        return player.GetSubroles().FirstOrDefault(sr => sr is T) as T ?? null;
     }
 
     public static void SetKillCooldown(this PlayerControl player, float time)
@@ -203,7 +196,8 @@ public static class PlayerControlExtensions
         if (ReferenceEquals(target, null)) target = pc;
 
         var systemtypes = SystemTypes.Reactor;
-        if (ProjectLotus.NormalOptions.MapId == 2) systemtypes = SystemTypes.Laboratory;
+        byte mapId = AUSettings.MapId();
+        if (mapId == 2) systemtypes = SystemTypes.Laboratory;
 
         Async.Schedule(() => pc.RpcDesyncRepairSystem(systemtypes, 128), 0f + delay);
         Async.Schedule(() => pc.RpcMurderSpecificPlayer(target), 0.2f + delay);
@@ -211,7 +205,7 @@ public static class PlayerControlExtensions
         Async.Schedule(() =>
         {
             pc.RpcDesyncRepairSystem(systemtypes, 16);
-            if (ProjectLotus.NormalOptions.MapId == 4) //Airship用
+            if (mapId == 4) //Airship用
                 pc.RpcDesyncRepairSystem(systemtypes, 17);
             if (ProjectLotus.AdvancedRoleAssignment)
             {

@@ -8,6 +8,7 @@ using Lotus.API.Reactive.HookEvents;
 using Lotus.Chat.Commands;
 using Lotus.GameModes.Normal.Colorwars.Conditions;
 using Lotus.GameModes.Normal.Colorwars.Distributions;
+using Lotus.GameModes.Normal.Standard;
 using Lotus.Options;
 using Lotus.Options.Gamemodes;
 using Lotus.Roles;
@@ -58,7 +59,7 @@ public class ColorwarsGamemode : GameMode
     public override void Activate()
     {
         PlayerToTeam = new();
-        Hooks.PlayerHooks.PlayerDeathHook.Bind(ColorwarsGamemodeHookKey, ShowInformationToGhost, priority: API.Priority.VeryLow);
+        Hooks.PlayerHooks.PlayerDeathHook.Bind(ColorwarsGamemodeHookKey, NormalStandardGameMode.ShowInformationToGhost, priority: API.Priority.VeryLow);
         Hooks.GameStateHooks.RoundStartHook.Bind(ColorwarsGamemodeHookKey, CheckForRandomSpawn);
         Hooks.NetworkHooks.GameJoinHook.Bind(ColorwarsGamemodeHookKey, RefreshOptions);
 
@@ -78,7 +79,7 @@ public class ColorwarsGamemode : GameMode
         playerOptions.Clear();
     }
 
-    public override IEnumerable<GameOptionTab> EnabledTabs() => DefaultTabs.ColorwarsTabs;
+    public override IEnumerable<GameOptionTab> EnabledTabs() => DefaultTabs.EmptyTabs;
     public override MainSettingTab MainTab() => DefaultTabs.ColorwarsTab;
 
     public override void Setup()
@@ -147,33 +148,5 @@ public class ColorwarsGamemode : GameMode
     {
         if (!ExtraGamemodeOptions.ColorwarsOptions.RandomSpawn) return;
         Players.GetPlayers().ForEach(Game.RandomSpawn.Spawn);
-    }
-
-    public static void ShowInformationToGhost(PlayerDeathHookEvent hookEvent)
-    {
-        PlayerControl player = hookEvent.Player;
-        ShowInformationToGhost(player);
-    }
-
-    public static void ShowInformationToGhost(PlayerControl player)
-    {
-        if (player == null) return;
-
-        log.Trace($"Showing all name components to ghost {player.name}");
-        if (GeneralOptions.MiscellaneousOptions.AutoDisplayCOD)
-        {
-            FrozenPlayer? fp = Game.MatchData.FrozenPlayers.GetValueOrDefault(player.GetGameID());
-            if (fp != null) DeathCommand.ShowMyDeath(player, fp);
-        }
-        Players.GetAllPlayers().Where(p => p.PlayerId != player.PlayerId)
-            .SelectMany(p => p.NameModel().ComponentHolders())
-            .ForEach(holders =>
-                {
-                    holders.AddListener(component => component.AddViewer(player));
-                    holders.Components().ForEach(components => components.AddViewer(player));
-                }
-            );
-
-        player.NameModel().Render(force: true);
     }
 }

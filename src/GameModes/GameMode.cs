@@ -20,9 +20,15 @@ using Lotus.API.Player;
 using VentLib.Utilities.Extensions;
 using Lotus.Extensions;
 using AmongUs.GameOptions;
+using AmongUs.InnerNet.GameDataMessages;
 using Lotus.Factions;
 using Lotus.Factions.Impostors;
 using Hazel;
+using Lotus.GUI.Name;
+using Lotus.GUI.Name.Components;
+using Lotus.GUI.Name.Holders;
+using Lotus.Patches;
+using Lotus.Patches.Client;
 
 namespace Lotus.GameModes;
 
@@ -96,6 +102,8 @@ public abstract class GameMode : IGameMode
             lastPlayerInfos.ForEach(lp =>
             {
                 // log.Debug($"Assigning {lp.TargetRoleForSeer} for {lp.Target} on {lp.Seer}'s screen.");
+                if (DisconnectCheck.DisconnectPlayers.Contains(lp.Seer.PlayerId)) return;
+
                 if (lp.Seer.AmOwner) lp.Target.SetRole(lp.TargetRoleForSeer, ProjectLotus.AdvancedRoleAssignment);
                 else RpcV3.Immediate(lp.Target.NetId, RpcCalls.SetRole)
                     .Write((ushort)lp.TargetRoleForSeer)
@@ -110,7 +118,7 @@ public abstract class GameMode : IGameMode
             players.ForEach(pc =>
             {
                 bool disconnected = realDisconnectInfo[pc.PlayerId];
-                pc.Data.Disconnected = disconnected;
+                pc.Data.Disconnected = DisconnectCheck.DisconnectPlayers.Contains(pc.PlayerId) ? true : disconnected;
                 if (!disconnected)
                 {
                     pc.Data.MarkDirty();

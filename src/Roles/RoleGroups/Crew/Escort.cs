@@ -151,14 +151,17 @@ public class Escort : Crewmate, IRoleUI
 
             PlayerControl? thisPlayer = Utils.GetPlayerById(Player);
             if (thisPlayer == null) return;
-            TextComponent component = new(new LiveString("BLOCKED!", Color.red), GameState.Roaming, ViewMode.Absolute, thisPlayer);
-            Remote<TextComponent> text = thisPlayer.NameModel().GetComponentHolder<TextHolder>().Add(component);
-            Async.Schedule(() => text.Delete(), 1f);
+            Async.Schedule(() =>
+            {
+                TextComponent component = new(new LiveString("BLOCKED!", Color.red), GameState.Roaming, ViewMode.Absolute, thisPlayer);
+                Remote<TextComponent> text = thisPlayer.NameModel().GetComponentHolder<TextHolder>().Add(component);
+                Async.Schedule(() => text.Delete(), 1f);
 
-            if (BlockedCounter != null) return;
-            LiveString liveString = new(_ => RelRbIndicator(BlockDuration?.TimeRemaining() ?? 60));
-            BlockedCounter = thisPlayer.NameModel().GetComponentHolder<IndicatorHolder>().Add(new IndicatorComponent(liveString, GameState.Roaming, viewers: thisPlayer));
-        }
+                if (BlockedCounter != null) return;
+                LiveString liveString = new(_ => RelRbIndicator(BlockDuration?.TimeRemaining() ?? 60));
+                BlockedCounter = thisPlayer.NameModel().GetComponentHolder<IndicatorHolder>().Add(new IndicatorComponent(liveString, GameState.Roaming, viewers: thisPlayer));
+            }, 0.05f, false, true);
+    }
 
         private string RelRbIndicator(float timeRemaining)
         {

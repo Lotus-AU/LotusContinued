@@ -331,8 +331,7 @@ public abstract class CustomRole : AbstractBaseRole, IRpcSendable<CustomRole>
 
             // they are imp and our role is impostor.
             // set them to crew and make sure they see us as crew
-            teamInfo.AddVanillaCrewmate(MyPlayer.PlayerId);
-            if (player == null) return;
+            Game.MatchData.VanillaRoleTracker.GetInfo(player.PlayerId).AddVanillaCrewmate(MyPlayer.PlayerId);
             MyPlayer.RpcSetRoleDesync(crewRole, player);
 
             // set them as crewmate for us so we can interact with them.
@@ -419,17 +418,13 @@ public abstract class CustomRole : AbstractBaseRole, IRpcSendable<CustomRole>
             return BaseFontSize;
         }
 
-        string IconText = "<color=#ffffff>|</color>";
-        string Font = "<font=\"VCR SDF\" material=\"VCR Black Outline\">";
-        string SelfTeamName = $"<size=450%>{IconText} {Font}{this.Faction.Color.Colorize(this.Faction.Name())}</font> {IconText}</size><size=900%>\n \n</size>\r\n";
-        string SelfRoleName = $"<size=185%>{Font}{this.RoleColor.Colorize(this.RoleName)}</font></size>";
-        string SelfSubRolesName = Utils.GetSubRolesText(MyPlayer.PlayerId);
-        string SeerRealName = MyPlayer.name;
-        string SelfName = this.RoleColor.Colorize(SeerRealName);
-        string RoleInfo = $"<size=25%>\n</size><size={GetInfoSize(this.Blurb)}%>{Font}{this.RoleColor.Colorize(this.Blurb)}</font></size>";
-        string RoleNameUp = "<size=1350%>\n\n\n\n\n</size>";
+        string iconText = "<color=#ffffff>|</color>";
+        string fontStart = "<font=\"VCR SDF\" material=\"VCR Black Outline\">";
 
-        string finalString = $"{SelfTeamName}{SelfRoleName}{SelfSubRolesName}\r\n{RoleInfo}{RoleNameUp}";
+        string selfTeamName = $"<size=150%>{iconText} {fontStart}{this.Faction.Color.Colorize(this.Faction.Name())}</font> {iconText}</size>";
+        string roleInfo = $"<size=25%>\n</size><size={GetInfoSize(this.Blurb)}%>{fontStart}{this.RoleColor.Colorize(this.Blurb)}</font></size>";
+
+        string finalString = $"{selfTeamName}{roleInfo}\r\n\r\n\r\n\r\n";
         return finalString;
     }
 
@@ -463,8 +458,8 @@ public abstract class CustomRole : AbstractBaseRole, IRpcSendable<CustomRole>
         {
             nameModel.GetComponentHolder<RoleHolder>()
                 .Add(new RoleComponent(this, gameStates, ViewMode.Overriden, MyPlayer));
-            desyncedIntroText = nameModel.GetComponentHolder<TextHolder>()
-                .Add(new TextComponent(GetRoleIntroString(), [GameState.InIntro], ViewMode.Absolute, MyPlayer));
+            if (Game.State is GameState.InIntro) desyncedIntroText = nameModel.GetComponentHolder<TextHolder>()
+                .Add(new TextComponent(GetRoleIntroString(), [GameState.Roaming, GameState.InIntro], ViewMode.Additive, MyPlayer));
         }
         SetupUiFields(nameModel);
         SetupUiMethods(nameModel);

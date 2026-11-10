@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text.RegularExpressions;
 using Assets.CoreScripts;
 using HarmonyLib;
@@ -27,6 +28,7 @@ internal class RpcSendChatPatch
     private static int _index = -1;
 
     private const bool RemoveHtmlTags = false;
+    private const bool RemoveNewLines = true;
 
     static RpcSendChatPatch()
     {
@@ -61,12 +63,13 @@ internal class RpcSendChatPatch
     public static bool Prefix(PlayerControl __instance, string chatText, ref bool __result)
     {
         if (RemoveHtmlTags) chatText = Regex.Replace(chatText, "<.*?>", string.Empty);
+        if (RemoveNewLines) chatText = chatText.Replace("\r", "").Replace("\n", "");
         if (string.IsNullOrWhiteSpace(chatText) || (!__instance.AmOwner && ConnectionManager.IsVanillaServer))
         {
             __result = false;
             return false;
         }
-        if (chatText.StartsWith(CommandRunner.Prefix))
+        if (CommandRunner.Prefixes.Any(chatText.StartsWith))
         {
             if (!AmongUsClient.Instance.AmHost) return true;
             __result = false;

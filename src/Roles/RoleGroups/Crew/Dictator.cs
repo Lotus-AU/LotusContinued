@@ -74,7 +74,7 @@ public class Dictator : Crewmate
         else if (showDictatorVoteAtEnd) return;
 
         FinalizeDictate(meetingDelegate);
-        meetingDelegate.EndVoting(dictatedPlayer);
+        meetingDelegate.EndVoting(dictatedPlayer, checkOverrule:false);
     }
 
     [RoleAction(LotusActionType.VotingComplete, priority: Priority.High)]

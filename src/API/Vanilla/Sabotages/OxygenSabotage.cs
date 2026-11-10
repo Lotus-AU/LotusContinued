@@ -38,6 +38,7 @@ public class OxygenSabotage : ISabotage
         }
 
         oxygen.Countdown = 10000f;
+        oxygen.IsDirty = true;
         SabotagePatch.CurrentSabotage = null;
         Hooks.SabotageHooks.SabotageFixedHook.Propagate(new SabotageFixHookEvent(fixer, this));
         return true;

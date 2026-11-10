@@ -94,7 +94,13 @@ public class Romantic : Subrole, IInfoResender
         if (dead.PlayerId != partner) return;
         MyPlayer.GetSubroles().Remove(this);
         winDelegateRemote?.Delete();
-        if (Random.RandomRange(0, 100) < _ruthlessRomantic.Chance) Game.AssignSubRole(MyPlayer, _ruthlessRomantic);
+        if (Random.RandomRange(0, 100) < _ruthlessRomantic.Chance)
+        {
+            MyPlayer.PrimaryRole().Faction = FactionInstances.Neutral;
+            MyPlayer.PrimaryRole().RoleAbilityFlags |= RoleAbilityFlag.IsAbleToKill;
+            MyPlayer.PrimaryRole().SpecialType = SpecialType.NeutralKilling;
+            Game.AssignSubRole(MyPlayer, _ruthlessRomantic);
+        }
         else
         {
             Game.AssignSubRole(MyPlayer, _vengefulRomantic);
@@ -163,7 +169,7 @@ public class Romantic : Subrole, IInfoResender
         NormalStandardGameMode.Instance.Assign(partnerControl.Get(), new Partner(), false);
         bool hasRomantic = winDelegate.GetWinners().Any(w => w.PlayerId == MyPlayer.PlayerId);
         bool hasPartner = winDelegate.GetWinners().Any(w => w.PlayerId == partner);
-        if ((!hasRomantic && !hasPartner) || (hasRomantic && hasPartner)) return; // includes neither or both us so we skip.
+        if ((!hasRomantic && !hasPartner) || (hasRomantic && hasPartner)) return; // includes neither nor both us so we skip.
         if (parterCanWin)
         {
             if (hasRomantic && !hasPartner) winDelegate.AddAdditionalWinner(partnerControl.Get()); // add partner if we win

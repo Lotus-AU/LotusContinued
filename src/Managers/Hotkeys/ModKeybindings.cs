@@ -1,3 +1,4 @@
+using System;
 using Lotus.API.Odyssey;
 using Lotus.API.Vanilla;
 using Lotus.API.Vanilla.Meetings;
@@ -19,6 +20,7 @@ using Lotus.GUI.Keybinds;
 using Lotus.GUI.Menus.ComboMenu;
 using Lotus.GUI.Menus.HistoryMenu2;
 using VentLib.Localization;
+using Object = UnityEngine.Object;
 
 namespace Lotus.Managers.Hotkeys;
 
@@ -26,8 +28,6 @@ namespace Lotus.Managers.Hotkeys;
 public class ModKeybindings
 {
     private static readonly StandardLogger log = LoggerFactory.GetLogger<StandardLogger>(typeof(ModKeybindings));
-
-    private static bool hudActive = true;
 
     static ModKeybindings()
     {
@@ -52,7 +52,7 @@ public class ModKeybindings
 
         // Instant begin game
         Bind(KeyCode.LeftShift)
-            .If(p => p.HostOnly().Predicate(() => MatchState.IsCountDown && !HudManager.Instance.Chat.IsOpenOrOpening))
+            .If(p => p.HostOnly().Predicate(() => MatchState.IsCountDown && HudManager.InstanceExists && !HudManager.Instance.Chat.IsOpenOrOpening))
             .Name("Begin Game")
             .Do(() =>
             {
@@ -62,7 +62,7 @@ public class ModKeybindings
 
         // Restart countdown timer
         Bind(KeyCode.C)
-            .If(p => p.HostOnly().Predicate(() => MatchState.IsCountDown && !HudManager.Instance.Chat.IsOpenOrOpening))
+            .If(p => p.HostOnly().Predicate(() => MatchState.IsCountDown && HudManager.InstanceExists && !HudManager.Instance.Chat.IsOpenOrOpening))
             .Name("End Start Countdown")
             .Do(() =>
             {
@@ -102,9 +102,8 @@ public class ModKeybindings
 
         // Change Hud Active
         Bind(KeyCode.F7)
-            .If(p => p.State(GameState.InLobby, GameState.Roaming).Predicate(() => MeetingHud.Instance == null))
-            .Do(() => HudManager.Instance.gameObject.SetActive(hudActive = !hudActive))
-            .Name("Toggle Hud Visibility");
+            .If(p => p.State(GameState.InLobby, GameState.Roaming).Predicate(() => !MeetingHud.Instance && HudManager.InstanceExists))
+            .Do(() => HudManager.Instance.gameObject.SetActive(!HudManager.Instance.gameObject.activeSelf));
 
         // Close all open menus
         Bind(KeyCode.Escape)
@@ -129,6 +128,12 @@ public class ModKeybindings
             .If(p => p.HostOnly().State(GameState.Roaming, GameState.InMeeting))
             .Name("Toggle Chat")
             .Do(ToggleChat);
+
+        // Log Position
+        Bind(KeyCode.LeftShift, KeyCode.Q, KeyCode.Return)
+            .If(p => p.HostOnly().State(GameState.Roaming))
+            .DevOnly()
+            .Do(LogPosition);
     }
 
     private static void DumpLog()
@@ -149,6 +154,16 @@ public class ModKeybindings
     private static void Suicide()
     {
         PlayerControl.LocalPlayer.InteractWith(PlayerControl.LocalPlayer, LotusInteraction.FatalInteraction.Create(PlayerControl.LocalPlayer));
+    }
+
+    private static void LogPosition()
+    {
+        var position = PlayerControl.LocalPlayer.NetTransform.body.position;
+        int decimalCount = 1;
+        string output =
+            $"new Vector2({Math.Round((decimal)position.x, decimalCount)}f, {Math.Round((decimal)position.y, decimalCount)}f)";
+        log.Debug(output);
+        ClipboardHelper.PutClipboardString(output);
     }
 
     private static void ResetGameOptions()

@@ -29,6 +29,7 @@ using Il2CppInterop.Runtime.InteropTypes;
 using Lotus.API;
 using Lotus.GameModes;
 using Lotus.GameModes.Normal.Standard;
+using Lotus.Managers;
 using Lotus.Utilities;
 
 namespace Lotus.Patches.Intro;
@@ -37,6 +38,8 @@ namespace Lotus.Patches.Intro;
 class IntroDestroyPatch
 {
     private static readonly StandardLogger log = LoggerFactory.GetLogger<StandardLogger>(typeof(IntroDestroyPatch));
+
+    private static int gamesPlayed = 0;
 
     public static MethodBase TargetMethod()
     {
@@ -73,9 +76,27 @@ class IntroDestroyPatch
         Game.State = GameState.Roaming;
         Game.MatchData.StartTime = DateTime.Now;
 
+        gamesPlayed++;
+        int currentSet = gamesPlayed;
+        Players.GetPlayers().Do(p =>
+        {
+            PluginDataManager.TemplateManager.GetTemplates("game-start")
+                ?.ForEach(t =>
+                {
+                    Async.Schedule(() =>
+                    {
+                        if (Game.State is not GameState.Roaming and not GameState.InMeeting) return;
+                        if (gamesPlayed != currentSet) return;
+                        t.SendMessage(PlayerControl.LocalPlayer, p, p, ignoreDelay: true);
+                    }, t.Delay);
+                });
+        });
+
         Profiler.Sample propSample = Global.Sampler.Sampled("Propagation Sample");
         RoleOperations.Current.TriggerForAll(LotusActionType.RoundStart, null, true);
         propSample.Stop();
+
+        if (HudManager.InstanceExists) HudManager.Instance.SetMapAndInfoButtonsEnabled(true);
 
         Hooks.GameStateHooks.RoundStartHook.Propagate(new GameStateHookEvent(Game.MatchData, ProjectLotus.GameModeManager.CurrentGameMode));
         destroySample.Stop();
@@ -124,11 +145,7 @@ class IntroDestroyPatch
         if (!hasPet) player.CRpcShapeshift(player, false);
 
         INameModel nameModel = player.NameModel();
-        if (role.desyncedIntroText != null)
-        {
-            role.desyncedIntroText.Delete();
-            role.desyncedIntroText = null;
-        }
+        Async.Schedule(() => role.desyncedIntroText?.Delete(), GeneralOptions.MiscellaneousOptions.RoleIntroTextTime);
 
         Players.GetPlayers().ForEach(p => nameModel.RenderFor(p, GameState.Roaming, force: true));
         player.SyncAll();

@@ -22,6 +22,7 @@ public interface ISabotage
             Sabotages.SabotageType.Oxygen => new OxygenSabotage(caller),
             Sabotages.SabotageType.Reactor => new ReactorSabotage(caller),
             Sabotages.SabotageType.Helicopter => new HelicopterSabotage(caller),
+            Sabotages.SabotageType.Door => new DoorSabotage(null, -1, caller),
             _ => throw new ArgumentOutOfRangeException(nameof(type), type, null)
         };
     }

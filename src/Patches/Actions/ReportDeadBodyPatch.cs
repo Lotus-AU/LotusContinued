@@ -45,7 +45,10 @@ public class ReportDeadBodyPatch
             if (deadBody == null) return false; // trying to report a local or non-existent body.
             if (deadBody.TryCast(out ViperDeadBody viperDeadBody))
                 if (viperDeadBody.dissolveCurrentTime <= 0)
+                {
+                    log.Trace("Not reporting body because body already dissolved.");
                     return false;
+                }
 
 
             log.Trace($"Triggering ReportBody with parameters: {__instance}, {handle}, {target}");

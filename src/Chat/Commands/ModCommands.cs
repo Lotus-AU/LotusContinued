@@ -135,7 +135,7 @@ public class ModCommands : ICommandReceiver
             return;
         }
         PluginDataManager.ModManager.AdminPlayer(target);
-        ChatHandlers.InvalidCmdUsage(SuccessfulMod.Formatted(target.name)).Send(source);
+        ChatHandler.Of(SuccessfulMod.Formatted(target.name)).Send(source);
     }
 
     public static void StartGame(PlayerControl source, CommandContext context)

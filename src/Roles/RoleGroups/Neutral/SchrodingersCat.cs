@@ -93,7 +93,7 @@ public class SchrodingersCat : CustomRole
                 .BindInt(i => numberOfLives = i)
                 .Build())
             .SubOption(sub => sub.KeyName("Killer Knows Cat", TranslationUtil.Colorize(Translations.Options.KillerKnowsCat, RoleColor, RoleColor))
-                .AddOnOffValues()
+                .AddBoolean()
                 .BindBool(b => KillerKnowsCat = b)
                 .Build());
 

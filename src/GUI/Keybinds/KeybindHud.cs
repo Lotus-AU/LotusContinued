@@ -56,7 +56,8 @@ public class KeybindHud
 
     public void UpdateAspectPos()
     {
-        _buttonAspectPos.DistanceFromEdge = MeetingHud.Instance || HudManager.Instance.Chat.chatButton.gameObject.active || PlayerControl.LocalPlayer.Data.IsDead
+        if (PlayerCustomizationMenu.Instance) _buttonAspectPos.DistanceFromEdge = new Vector3(-3, 0, 0);
+        else _buttonAspectPos.DistanceFromEdge = MeetingHud.Instance || HudManager.Instance.Chat.chatButton.gameObject.active || PlayerControl.LocalPlayer.Data.IsDead
             ? new Vector3(2.75f, 0.505f, -400f) : new Vector3(2.15f, 0.505f, -400f);
 
         _buttonAspectPos.AdjustPosition();
@@ -155,7 +156,7 @@ public class KeybindHud
             {
                 GameObject button = backgroundSprite.gameObject.CreateChild("PressButton", new Vector3(curX, curY, -1f));
                 var buttonComponent = button.AddComponent<MonoToggleButton>();
-                buttonComponent.ConfigureAsPressButton(h.Text, () =>
+                buttonComponent.ConfigureAsPressButton(h.GetName(), () =>
                 {
                     if (!h.PredicatesPass()) return;
                     h.Call();

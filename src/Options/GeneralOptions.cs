@@ -16,6 +16,9 @@ public static class GeneralOptions
     public static readonly OptionManager StandardOptionManager = OptionManager.GetManager(file: "standard.txt", managerFlags: OptionManagerFlags.SyncOverRpc);
     public static readonly OptionManager CaptureOptionManager = OptionManager.GetManager(file: "ctf.txt", managerFlags: OptionManagerFlags.SyncOverRpc);
     public static readonly OptionManager ColorwarsOptionManager = OptionManager.GetManager(file: "colorwars.txt", managerFlags: OptionManagerFlags.SyncOverRpc);
+    public static readonly OptionManager SpeedrunOptionManager = OptionManager.GetManager(file: "speedrun.txt", managerFlags: OptionManagerFlags.SyncOverRpc);
+
+    public static readonly OptionManager EscapeOptionManager = OptionManager.GetManager(file: "escapethefacility.txt", managerFlags: OptionManagerFlags.SyncOverRpc);
 
     public static readonly AdminOptions AdminOptions;
     public static readonly DebugOptions DebugOptions;
@@ -36,15 +39,23 @@ public static class GeneralOptions
         GameplayOptions.AddTabListener(DefaultTabs.NormalStandardTab, () => 2 + AdminOptions.AllOptions.Count);
 
         SabotageOptions = new SabotageOptions();
-        SabotageOptions.AddTabListener(DefaultTabs.NormalStandardTab, () => 2 + AdminOptions.AllOptions.Count + SabotageOptions.AllOptions.Count);
+        SabotageOptions.AddTabListener(DefaultTabs.NormalStandardTab, () => 2 + AdminOptions.AllOptions.Count + GameplayOptions.AllOptions.Count);
 
         MeetingOptions = new MeetingOptions();
         MeetingOptions.AddTabListener(DefaultTabs.NormalStandardTab,
-            () => 2 + AdminOptions.AllOptions.Count + SabotageOptions.AllOptions.Count + SabotageOptions.AllOptions.Count);
+            () => 2
+                  + AdminOptions.AllOptions.Count
+                  + GameplayOptions.AllOptions.Count
+                  + SabotageOptions.AllOptions.Count);
 
         MayhemOptions = new MayhemOptions();
         MayhemOptions.AddTabListener(DefaultTabs.NormalStandardTab,
-            () => 2 + AdminOptions.AllOptions.Count + SabotageOptions.AllOptions.Count + SabotageOptions.AllOptions.Count);
+            () => 2
+                  + AdminOptions.AllOptions.Count
+                  + GameplayOptions.AllOptions.Count
+                  + SabotageOptions.AllOptions.Count
+                  + MeetingOptions.AllOptions.Count);
+
         MiscellaneousOptions = new MiscellaneousOptions();
         // MiscellaneousOptions.AddTabListener(DefaultTabs.StandardTab);
 
@@ -52,12 +63,19 @@ public static class GeneralOptions
         // DebugOptions.AddTabListener(DefaultTabs.StandardTab);
 
         RoleOptions.LoadMadmateOptions().AddTabListener(DefaultTabs.NormalStandardTab,
-            () => 2 + AdminOptions.AllOptions.Count + SabotageOptions.AllOptions.Count + SabotageOptions.AllOptions.Count + MayhemOptions.AllOptions.Count );
+            () => 2 + AdminOptions.AllOptions.Count + GameplayOptions.AllOptions.Count + SabotageOptions.AllOptions.Count + MeetingOptions.AllOptions.Count
+                  + MayhemOptions.AllOptions.Count);
         RoleOptions.LoadNeutralOptions().AddTabListener(DefaultTabs.NormalStandardTab,
-            () => 2 + AdminOptions.AllOptions.Count + SabotageOptions.AllOptions.Count + SabotageOptions.AllOptions.Count + MayhemOptions.AllOptions.Count
-                  + RoleOptions.LoadMadmateOptions().AllOptions.Count);
+            () => 2 + AdminOptions.AllOptions.Count + GameplayOptions.AllOptions.Count + SabotageOptions.AllOptions.Count + MeetingOptions.AllOptions.Count
+                  + MayhemOptions.AllOptions.Count+ RoleOptions.LoadMadmateOptions().AllOptions.Count);
         RoleOptions.LoadSubroleOptions().AddTabListener(DefaultTabs.NormalStandardTab,
-            () => 2 + AdminOptions.AllOptions.Count + SabotageOptions.AllOptions.Count + SabotageOptions.AllOptions.Count + MayhemOptions.AllOptions.Count
-                  + RoleOptions.LoadMadmateOptions().AllOptions.Count + RoleOptions.LoadNeutralOptions().AllOptions.Count);
+            () => 2
+                  + AdminOptions.AllOptions.Count
+                  + GameplayOptions.AllOptions.Count
+                  + SabotageOptions.AllOptions.Count
+                  + MeetingOptions.AllOptions.Count
+                  + MayhemOptions.AllOptions.Count
+                  + RoleOptions.LoadMadmateOptions().AllOptions.Count
+                  + RoleOptions.LoadNeutralOptions().AllOptions.Count);
     }
 }

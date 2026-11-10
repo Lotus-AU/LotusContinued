@@ -19,7 +19,7 @@ public class Madmate : Impostor
                 .AddOnOffValues()
                 .Build());
 
-    protected override string ForceRoleImageDirectory() => "RoleOutfits/Imposter/madmate.yaml";
+    protected override string ForceRoleImageDirectory() => "RoleOutfits/Imposter/madmate";
 
     protected override RoleModifier Modify(RoleModifier roleModifier) =>
         roleModifier

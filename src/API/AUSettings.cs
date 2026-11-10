@@ -9,8 +9,8 @@ public static class AUSettings
 
     public static IGameOptions StaticOptions
     {
-        set => _originalHostOptions = value;
         get => _originalHostOptions ?? GameOptionsManager.Instance?.CurrentGameOptions!;
+        private set => _originalHostOptions = value;
     }
 
     private static IGameOptions? _originalHostOptions;
@@ -25,13 +25,6 @@ public static class AUSettings
     public static float PlayerSpeedMod(float defaultValue = 1) => StaticOptions?.GetFloat(FloatOptionNames.PlayerSpeedMod) ?? defaultValue;
     public static float ImpostorLightMod(float defaultValue = 1) => StaticOptions?.GetFloat(FloatOptionNames.ImpostorLightMod) ?? defaultValue;
     public static float CrewLightMod(float defaultValue = 1) => StaticOptions?.GetFloat(FloatOptionNames.CrewLightMod) ?? defaultValue;
-    public static float CrewmateTimeInVent() => StaticOptions.GetFloat(FloatOptionNames.CrewmateTimeInVent);
-    public static float FinalEscapeTime() => StaticOptions.GetFloat(FloatOptionNames.FinalEscapeTime);
-    public static float EscapeTime() => StaticOptions.GetFloat(FloatOptionNames.EscapeTime);
-    public static float SeekerFinalSpeed() => StaticOptions.GetFloat(FloatOptionNames.SeekerFinalSpeed);
-    public static float MaxPingTime() => StaticOptions.GetFloat(FloatOptionNames.MaxPingTime);
-    public static float CrewmateFlashlightSize() => StaticOptions.GetFloat(FloatOptionNames.CrewmateFlashlightSize);
-    public static float ImpostorFlashlightSize() => StaticOptions.GetFloat(FloatOptionNames.ImpostorFlashlightSize);
     public static float ShapeshifterCooldown() => StaticOptions.GetFloat(FloatOptionNames.ShapeshifterCooldown);
     public static float ShapeshifterDuration() => StaticOptions.GetFloat(FloatOptionNames.ShapeshifterDuration);
     public static float ProtectionDurationSeconds() => StaticOptions.GetFloat(FloatOptionNames.ProtectionDurationSeconds);
@@ -48,6 +41,7 @@ public static class AUSettings
     public static float PhantomDuration() => StaticOptions.GetFloat(FloatOptionNames.PhantomDuration);
     public static float DetectiveSuspectsPerCase() => StaticOptions.GetFloat(FloatOptionNames.DetectiveSuspectLimit);
     public static float ViperDissolveTime() => StaticOptions.GetFloat(FloatOptionNames.ViperDissolveTime);
+    public static float JudgeTaskRequirementPercentage() => StaticOptions.GetFloat(FloatOptionNames.JudgeTaskRequirementPercentage);
 
     public static int NumImpostors() => StaticOptions.GetInt(Int32OptionNames.NumImpostors);
     public static int KillDistance() => StaticOptions.GetInt(Int32OptionNames.KillDistance);
@@ -63,8 +57,22 @@ public static class AUSettings
     public static int NumLongTasks() => StaticOptions.GetInt(Int32OptionNames.NumLongTasks);
     public static int TaskBarMode() => StaticOptions.GetInt(Int32OptionNames.TaskBarMode);
     public static int CrewmatesRemainingForVitals() => StaticOptions.GetInt(Int32OptionNames.CrewmatesRemainingForVitals);
+
+    public static float CrewmateTimeInVent() => StaticOptions.GetFloat(FloatOptionNames.CrewmateTimeInVent);
+    public static float FinalEscapeTime() => StaticOptions.GetFloat(FloatOptionNames.FinalEscapeTime);
+    public static float EscapeTime() => StaticOptions.GetFloat(FloatOptionNames.EscapeTime);
+    public static float SeekerFinalSpeed() => StaticOptions.GetFloat(FloatOptionNames.SeekerFinalSpeed);
+    public static float MaxPingTime() => StaticOptions.GetFloat(FloatOptionNames.MaxPingTime);
     public static int CrewmateVentUses() => StaticOptions.GetInt(Int32OptionNames.CrewmateVentUses);
     public static int ImpostorPlayerID() => StaticOptions.GetInt(Int32OptionNames.ImpostorPlayerID);
+    public static float CrewmateFlashlightSize() => StaticOptions.GetFloat(FloatOptionNames.CrewmateFlashlightSize);
+    public static float ImpostorFlashlightSize() => StaticOptions.GetFloat(FloatOptionNames.ImpostorFlashlightSize);
+    public static bool IsDefaults() => StaticOptions.GetBool(BoolOptionNames.IsDefaults);
+    public static bool UseFlashlight() => StaticOptions.GetBool(BoolOptionNames.UseFlashlight);
+    public static bool SeekerFinalVents() => StaticOptions.GetBool(BoolOptionNames.SeekerFinalVents);
+    public static bool SeekerFinalMap() => StaticOptions.GetBool(BoolOptionNames.SeekerFinalMap);
+    public static bool SeekerPings() => StaticOptions.GetBool(BoolOptionNames.SeekerPings);
+    public static bool ShowCrewmateNames() => StaticOptions.GetBool(BoolOptionNames.ShowCrewmateNames);
 
     public static int[] MaxImpostorArray() => StaticOptions.GetIntArray(Int32ArrayOptionNames.MaxImpostors);
     public static int[] MinPlayerArray() => StaticOptions.GetIntArray(Int32ArrayOptionNames.MinPlayers);
@@ -73,11 +81,6 @@ public static class AUSettings
     public static bool GhostsDoTasks() => StaticOptions.GetBool(BoolOptionNames.GhostsDoTasks);
     public static bool ConfirmImpostor() => StaticOptions.GetBool(BoolOptionNames.ConfirmImpostor);
     public static bool AnonymousVotes() => StaticOptions.GetBool(BoolOptionNames.AnonymousVotes);
-    public static bool IsDefaults() => StaticOptions.GetBool(BoolOptionNames.IsDefaults);
-    public static bool UseFlashlight() => StaticOptions.GetBool(BoolOptionNames.UseFlashlight);
-    public static bool SeekerFinalVents() => StaticOptions.GetBool(BoolOptionNames.SeekerFinalVents);
-    public static bool SeekerPings() => StaticOptions.GetBool(BoolOptionNames.SeekerPings);
-    public static bool ShowCrewmateNames() => StaticOptions.GetBool(BoolOptionNames.ShowCrewmateNames);
     public static bool ShapeshifterLeaveSkin() => StaticOptions.GetBool(BoolOptionNames.ShapeshifterLeaveSkin);
     public static bool ImpostorsCanSeeProtect() => StaticOptions.GetBool(BoolOptionNames.ImpostorsCanSeeProtect);
     public static bool NoisemakerImpostorAlert() => StaticOptions.GetBool(BoolOptionNames.NoisemakerImpostorAlert);

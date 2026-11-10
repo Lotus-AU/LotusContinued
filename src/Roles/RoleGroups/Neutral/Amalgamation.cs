@@ -93,6 +93,18 @@ public class Amalgamation : CustomRole
             else MyPlayer.NameModel().GCH<RoleHolder>().RemoveLast();
         }
 
+        if (absorbModifiers)
+        {
+            List<CustomRole> reportedSubroles = Game.MatchData.Roles.GetSubroles(reported.Get().PlayerId);
+            reportedSubroles
+                .Where(sr => sr.RoleFlags.HasFlag(RoleFlag.IsSubrole))
+                .ForEach(sr =>
+                {
+                    reportedSubroles.Remove(sr);
+                    Game.AssignSubRole(MyPlayer, ProjectLotus.GameModeManager.CurrentGameMode.RoleManager.GetCleanRole(sr));
+                });
+        }
+
         CustomRole role = MyPlayer.PrimaryRole();
         role.DesyncRole = RoleTypes.Impostor;
         handle.Cancel();

@@ -14,11 +14,12 @@ public class AssignRoleOnDeathPatch
 
     public static bool Prefix(RoleManager __instance, [HarmonyArgument(0)] PlayerControl player)
     {
-        return false;
+        return !AmongUsClient.Instance.AmHost;
     }
 
     public static void Postfix(RoleManager __instance, [HarmonyArgument(0)] PlayerControl player, [HarmonyArgument(1)] bool specialRolesAllowed)
     {
+        if (!AmongUsClient.Instance.AmHost) return;
         RpcV3.Immediate(player.NetId, RpcCalls.SetRole)
             .Write((ushort)(player.GetVanillaRole().IsImpostor() ? RoleTypes.ImpostorGhost : RoleTypes.CrewmateGhost))
             .Write(ProjectLotus.AdvancedRoleAssignment)

@@ -43,11 +43,17 @@ public class ConnectionManager
     {
         get
         {
-            // From Reactor.gg
             const string Domain = "among.us";
+            bool IsVanilla(string value) =>  Uri.TryCreate(value, UriKind.Absolute, out var uri) &&
+               (uri.Host.Equals(Domain, StringComparison.Ordinal) ||
+                uri.Host.EndsWith("." + Domain, StringComparison.Ordinal));
+
+            // return ServerManager.Instance.CurrentRegion?.TryCast<StaticHttpRegionInfo>() is { } regionInfo &&
+            //        regionInfo.PingServer.EndsWith(Domain, System.StringComparison.Ordinal) &&
+            //        regionInfo.Servers.All(serverInfo => serverInfo.Ip.EndsWith(Domain, System.StringComparison.Ordinal));
             return ServerManager.Instance.CurrentRegion?.TryCast<StaticHttpRegionInfo>() is { } regionInfo &&
-                   regionInfo.PingServer.EndsWith(Domain, System.StringComparison.Ordinal) &&
-                   regionInfo.Servers.All(serverInfo => serverInfo.Ip.EndsWith(Domain, System.StringComparison.Ordinal));
+                   IsVanilla(regionInfo.PingServer) &&
+                   regionInfo.Servers.All(serverInfo => IsVanilla(serverInfo.Ip));
         }
     }
 

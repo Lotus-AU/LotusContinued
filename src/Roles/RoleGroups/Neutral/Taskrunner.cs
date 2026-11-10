@@ -80,11 +80,13 @@ public class Taskrunner : Crewmate, IPhantomRole
     {
         if (isRevealed) return;
         MyPlayer.NameModel().GetComponentHolder<IndicatorHolder>().Add(new IndicatorComponent(new LiveString("⚠", RoleColor), Game.InGameStates));
+        var components = MyPlayer.NameModel().GetComponentHolder<RoleHolder>().Components();
 
         Players.GetAlivePlayers().Where(p => p.PlayerId != MyPlayer.PlayerId).ForEach(p =>
         {
             LiveString liveString = new(() => RoleUtils.CalculateArrow(p, MyPlayer, RoleColor));
             var remote = p.NameModel().GetComponentHolder<IndicatorHolder>().Add(new IndicatorComponent(liveString, GameState.Roaming, viewers: p));
+            components.ForEach(rc => rc.AddViewer(p));
             indicatorComponents.Add(remote);
         });
         isRevealed = true;
@@ -94,7 +96,7 @@ public class Taskrunner : Crewmate, IPhantomRole
          AddTaskOverrideOptions(base.RegisterOptions(optionStream)
              .Tab(DefaultTabs.NeutralTab)
              .SubOption(sub => sub.KeyName("Immune to Ranged Interactions", Translations.Options.ImmuneToRangedInteractions)
-                 .AddOnOffValues()
+                 .AddBoolean()
                  .BindBool(b => immuneToRangedInteractions = b)
                  .Build())
              .SubOption(opt =>

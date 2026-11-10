@@ -170,6 +170,7 @@ public class NormalStandardRoles : RoleHolder
         public Herbalist Herbalist = new();
         public Investigator Investigator = new();
         public Jailor Jailor = new();
+        public Judge Judge = new();
         public Mayor Mayor = new();
         public Medic Medic = new();
         public Medium Medium = new();

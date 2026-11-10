@@ -14,7 +14,10 @@ public class TTrigger: TemplateUnit
     private static readonly StandardLogger log = LoggerFactory.GetLogger<StandardLogger>(typeof(TTrigger));
 
     public static Dictionary<string, Hook> BoundHooks = new();
+
     public List<string>? Events { get; set; }
+    public bool ShownToEveryone { get; set; } = true;
+
     public Template Parent = null!;
 
     public void Setup(Template parent)
@@ -40,11 +43,15 @@ public class TTrigger: TemplateUnit
         {
             MetaVariable = result.Data;
             DevLogger.Log($"Meta Variable: {MetaVariable}");
-            if (result.Player != null) Triggerer = result.Player.PlayerId;
+            if (result.Player) Triggerer = result.Player!.PlayerId;
 
-            DevLogger.Log($"Result: {Evaluate(result.Player)}");
-            if (Evaluate(result.Player))
-                Players.GetPlayers().ForEach(p => Parent.SendMessage(p, p, p));
+            bool evaluateResult = Evaluate(result.Player);
+            DevLogger.Log($"Result: {evaluateResult}");
+            if (evaluateResult)
+            {
+                if (!ShownToEveryone && result.Player) Parent.SendMessage(result.Player!, result.Player, result.Player);
+                else Players.GetPlayers().ForEach(p => Parent.SendMessage(p, p, p));
+            }
 
             MetaVariable = null;
             Triggerer = byte.MaxValue;

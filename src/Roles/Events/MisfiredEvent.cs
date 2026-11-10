@@ -5,6 +5,11 @@ namespace Lotus.Roles.Events;
 
 public class MisfiredEvent: DeathEvent
 {
+    MisfiredEvent()
+    {
+
+    }
+
     public MisfiredEvent(PlayerControl deadPlayer) : base(deadPlayer, deadPlayer)
     {
     }

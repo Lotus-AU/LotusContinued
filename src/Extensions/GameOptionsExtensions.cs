@@ -7,9 +7,9 @@ namespace Lotus.Extensions;
 public static class GameOptionsExtensions
 {
     [Obsolete("Looking into new TOH code to figure out a better way to do this")]
-    public static NormalGameOptionsV10? AsNormalOptions(this IGameOptions options)
+    public static NormalGameOptionsV12? AsNormalOptions(this IGameOptions options)
     {
-        return options.Cast<NormalGameOptionsV10>();
+        return options.Cast<NormalGameOptionsV12>();
     }
 
     public static Byte[] ToBytes(this IGameOptions gameOptions)

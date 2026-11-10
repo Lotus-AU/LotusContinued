@@ -12,6 +12,8 @@ public static class ModConstants
 
     public const int MaxPlayers = 15;
 
+    public const byte PackedGameDataTo = 26;
+
     // Minimum distance for arrow to show (versus dot)
     public const float ArrowActivationMin = 3;
 

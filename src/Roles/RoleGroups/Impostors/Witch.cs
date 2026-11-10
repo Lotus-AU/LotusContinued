@@ -111,11 +111,15 @@ public class Witch : Vanilla.Impostor, IRoleUI
     {
         if (exiledPlayer.Compare(p => p.PlayerId == MyPlayer.PlayerId)) return;
 
-        cursedPlayers.Keys.Filter(Players.PlayerById).ForEach(p =>
+        var toKillPlayers = cursedPlayers.Keys.Filter(Players.PlayerById);
+
+        toKillPlayers.ForEach(p =>
         {
             IDeathEvent cod = new CustomDeathEvent(MyPlayer, p, Translations.HexedCauseOfDeath);
             MyPlayer.InteractWith(p, new UnblockedInteraction(new FatalIntent(false, () => cod), this));
-            cursedPlayers[p.PlayerId]?.Delete();
+            if (!cursedPlayers.TryGetValue(p.PlayerId, out var cursed)) return;
+            cursed?.Delete();
+            cursedPlayers.Remove(p.PlayerId);
         });
     }
 

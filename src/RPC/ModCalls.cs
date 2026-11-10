@@ -10,6 +10,9 @@ public enum ModCalls : uint
     SetGameState,
     ShowPlayerVersion,
     ShowChat,
+    HookEvent,
+
+    // Role UI Updates (for modded clients)
     UpdateExConvict,
     UpdateBlackmailer,
     UpdateEscapist,
@@ -45,5 +48,6 @@ public enum ModCalls : uint
     UpdateWarlock,
     UpdateArsonist,
     UpdateJackal,
-    UpdateStriker
+    UpdateStriker,
+    UpdateFugitive
 }

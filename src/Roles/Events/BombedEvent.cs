@@ -4,6 +4,11 @@ namespace Lotus.Roles.Events;
 
 public class BombedEvent : DeathEvent
 {
+    BombedEvent()
+    {
+
+    }
+
     public BombedEvent(PlayerControl deadPlayer, PlayerControl? killer) : base(deadPlayer, killer)
     {
     }

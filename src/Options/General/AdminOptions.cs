@@ -41,6 +41,8 @@ public class AdminOptions: LotusOptionHolder
     public Cooldown AutoCooldown = new();
     public bool AutoStartEnabled;
 
+    public bool HandicapHost;
+
     public AdminOptions()
     {
         AllOptions.Add(new GameOptionTitleBuilder()
@@ -155,6 +157,13 @@ public class AdminOptions: LotusOptionHolder
             .BindBool(b => AutoPlayAgain = b)
             .Build());
 
+        AllOptions.Add(new GameOptionBuilder()
+            .Builder("Handicap Host", _optionColor)
+            .Name(AdminOptionTranslations.HandicapHost)
+            .AddBoolean(false)
+            .BindBool(b => HandicapHost = b)
+            .Build());
+
         AllOptions.Where(o => !o.Attributes.ContainsKey("Title")).ForEach(o => GeneralOptions.StandardOptionManager.Register(o, VentLib.Options.OptionLoadMode.LoadOrCreate));
         PostInitialize();
     }
@@ -207,6 +216,9 @@ public class AdminOptions: LotusOptionHolder
 
         [Localized(nameof(EnableWhitelist))]
         public static string EnableWhitelist = "Enable Whitelist via Friendcode";
+
+        [Localized(nameof(HandicapHost))]
+        public static string HandicapHost = "Handicap Host";
     }
 
 }

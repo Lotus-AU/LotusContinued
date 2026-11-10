@@ -54,10 +54,10 @@ public static class Utils
         return taskHolder.TasksApplyToTotal() && taskHolder.HasTasks();
     }
 
-    public static void Teleport(CustomNetworkTransform nt, Vector2 location)
+    public static void Teleport(CustomNetworkTransform nt, Vector2 location, CustomRole? initiatorRole = null)
     {
         Vector2 currentLocation = nt.lastPosSent;
-        if (Game.State is not GameState.InLobby) Hooks.PlayerHooks.PlayerTeleportedHook.Propagate(new PlayerTeleportedHookEvent(nt.myPlayer, currentLocation, location));
+        if (Game.State is not GameState.InLobby) Hooks.PlayerHooks.PlayerTeleportedHook.Propagate(new PlayerTeleportedHookEvent(nt.myPlayer, currentLocation, location, initiatorRole));
         float delay = 0f;
         if (nt.myPlayer.petting)
         {

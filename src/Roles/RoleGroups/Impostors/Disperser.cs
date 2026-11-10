@@ -53,7 +53,7 @@ public class Disperser : Impostor, IRoleUI
             .Do(p =>
             {
                 Vector2 ventPosition = vents.GetRandom().transform.position;
-                Utils.Teleport(p.NetTransform, new Vector2(ventPosition.x, ventPosition.y + 0.3636f));
+                Utils.Teleport(p.NetTransform, new Vector2(ventPosition.x, ventPosition.y + 0.3636f), this);
             });
     }
 

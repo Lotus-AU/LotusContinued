@@ -3,6 +3,7 @@ using Lotus.API.Player;
 using Lotus.Chat;
 using Lotus.Logging;
 using Lotus.Managers.Templates.Models.Units;
+using VentLib.Utilities;
 using VentLib.Utilities.Extensions;
 using VentLib.Utilities.Optionals;
 
@@ -17,6 +18,7 @@ public class Template : TemplateUnit
     public List<TTrigger>? Triggers { get; set; }
     public List<TAction>? Actions { get; set; } = new();
     public bool AliasOnly { get; set; } = false;
+    public int Delay { get; set; } = 0;
 
     public Template()
     {
@@ -29,11 +31,16 @@ public class Template : TemplateUnit
         Title = title;
     }
 
-    public void SendMessage(PlayerControl user, PlayerControl? viewer, object? data = null)
+    public void SendMessage(PlayerControl user, PlayerControl? viewer, object? data = null, bool ignoreDelay = false)
     {
-        if (Text == null && !Actions.IsEmpty()) Actions.ForEach(a => a.Execute(data?.ToString() ?? "", data));
-        else if (viewer == null) Players.GetPlayers().ForEach(p => SendTo(p, data));
-        else SendTo(viewer, data);
+        int delayToUse =  ignoreDelay ? 0 : Delay;
+
+        Async.Schedule(() =>
+        {
+            if (Text == null && !Actions.IsEmpty()) Actions.ForEach(a => a.Execute(data?.ToString() ?? "", data));
+            else if (viewer == null) Players.GetPlayers().ForEach(p => SendTo(p, data));
+            else SendTo(viewer, data);
+        }, delayToUse);
     }
 
     private void SendTo(PlayerControl player, object? data)

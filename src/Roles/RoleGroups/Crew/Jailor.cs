@@ -104,16 +104,13 @@ public class Jailor: Crewmate, IRoleUI
     private bool TryKill(PlayerControl target)
     {
         MyPlayer.RpcMark(target);
-        InteractionResult result = MyPlayer.InteractWith(target, LotusInteraction.NeutralInteraction.Create(this));
-        if (result is InteractionResult.Proceed)
-        {
-            jailedPlayer = target.PlayerId;
-            jailedText?.Delete();
-            TextComponent textComponent = new(new LiveString(Translations.JailedText, RoleColor), Game.InGameStates, viewers: MyPlayer);
-            jailedText = target.NameModel().GetComponentHolder<TextHolder>().Add(textComponent);
-            return true;
-        }
-        return false;
+        InteractionResult result = MyPlayer.InteractWith(target, LotusInteraction.HostileInteraction.Create(this));
+        if (result is not InteractionResult.Proceed) return false;
+        jailedPlayer = target.PlayerId;
+        jailedText?.Delete();
+        TextComponent textComponent = new(new LiveString(Translations.JailedText, RoleColor), Game.InGameStates, viewers: MyPlayer);
+        jailedText = target.NameModel().GetComponentHolder<TextHolder>().Add(textComponent);
+        return true;
     }
 
     [RoleAction(LotusActionType.Vote)]

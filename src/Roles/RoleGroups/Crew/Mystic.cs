@@ -56,17 +56,16 @@ public class Mystic : Crewmate, ISubrole
         if (MyPlayer.Data.IsDead) return;
         if (deadPlayer.GetSubrole<Bait>() != null) return;
 
-
         Remote<GameOptionOverride> optionOverride = AddOverride(new GameOptionOverride(Override.CrewLightMod, 0f));
         SyncOptions();
 
         bool didReactorAlert = false;
-        if (sendAudioAlert && SabotagePatch.CurrentSabotage?.SabotageType() is not SabotageType.Reactor)
+        if (sendAudioAlert && (SabotagePatch.CurrentSabotage == null || SabotagePatch.CurrentSabotage?.SabotageType() is not SabotageType.Reactor))
         {
             didReactorAlert = true;
-            if (!MyPlayer.IsModded()) RoleUtils.PlayReactorsForPlayer(MyPlayer);
-            else if (MyPlayer.IsHost()) reactorFlashRpc.InvokeTrampoline(false);
-            else reactorFlashRpc.Send(new[] { MyPlayer.GetClientId() }, false);
+            if (MyPlayer.IsHost()) ReactorFlash(false);
+            else if (MyPlayer.IsModded()) reactorFlashRpc.Send([MyPlayer.OwnerId], false);
+            else RoleUtils.PlayReactorsForPlayer(MyPlayer);
         }
 
         Async.Schedule(() => MysticRevertAlert(optionOverride, didReactorAlert), NetUtils.DeriveDelay(flashDuration));
@@ -77,14 +76,15 @@ public class Mystic : Crewmate, ISubrole
         remote.Delete();
         SyncOptions();
         if (!didReactorAlert) return;
-        if (!MyPlayer.IsModded()) RoleUtils.EndReactorsForPlayer(MyPlayer);
-        else if (MyPlayer.IsHost()) reactorFlashRpc.InvokeTrampoline(true);
-        else reactorFlashRpc.Send(new[] { MyPlayer.GetClientId() }, true);
+        if (MyPlayer.IsHost()) ReactorFlash(true);
+        else if (MyPlayer.IsModded()) reactorFlashRpc.Send([MyPlayer.OwnerId], true);
+        else RoleUtils.EndReactorsForPlayer(MyPlayer);
     }
 
     [ModRPC(RoleRPC.ReactorFlash, invocation: MethodInvocation.ExecuteAfter)]
     private static void ReactorFlash(bool finish)
     {
+        DevLogger.Log($"{finish}");
         if (finish) HudManager.Instance.StopReactorFlash();
         else HudManager.Instance.StartReactorFlash();
     }

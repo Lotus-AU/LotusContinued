@@ -58,12 +58,12 @@ public class ChatDarkMode
             if (OpenBanMenuIcon == null)
                 OpenBanMenuIcon = __instance.GetComponentsInChildren<SpriteRenderer>(true).FirstOrDefault(c => c.name == "OpenBanMenuIcon")!;
             else if (!string.IsNullOrEmpty(OpenBanMenuIcon.sprite.name))
-                OpenBanMenuIcon.sprite = LotusAssets.LoadSprite("DarkTheme/DarkKeyboard.png");
+                OpenBanMenuIcon.sprite = LotusAssets.LoadSprite("DarkTheme/DarkReport.png");
 
             if (OpenKeyboardIcon == null)
                 OpenKeyboardIcon = __instance.GetComponentsInChildren<SpriteRenderer>(true).FirstOrDefault(c => c.name == "OpenKeyboardIcon")!;
             else if (!string.IsNullOrEmpty(OpenKeyboardIcon.sprite.name))
-                OpenKeyboardIcon.sprite = LotusAssets.LoadSprite("DarkTheme/DarkReport.png");
+                OpenKeyboardIcon.sprite = LotusAssets.LoadSprite("DarkTheme/DarkKeyboard.png");
         }
         else __instance.freeChatField.textArea.outputText.color = Color.black;
     }

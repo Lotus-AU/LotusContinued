@@ -87,7 +87,7 @@ public class Altruist : Scientist, IRoleCandidate, IRoleUI
             }
             else return false;
         });
-        Utils.Teleport(player.NetTransform, position);
+        Utils.Teleport(player.NetTransform, position, this);
         player.PrimaryRole().Revive(); // custom method to revive the player
         deadPlayers.Remove(player);
         // act like they never died smh
@@ -166,6 +166,7 @@ public class Altruist : Scientist, IRoleCandidate, IRoleUI
     protected override RoleModifier Modify(RoleModifier roleModifier) =>
         base.Modify(roleModifier)
         .RoleColor(new Color(0.4f, 0f, 0f))
+        .RoleAbilityFlags(RoleAbilityFlag.CanRevivePlayers)
         .VanillaRole(altruistHasVitals ? RoleTypes.Scientist : RoleTypes.Crewmate);
 
     [Localized(nameof(Altruist))]

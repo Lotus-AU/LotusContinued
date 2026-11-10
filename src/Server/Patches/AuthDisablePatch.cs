@@ -3,23 +3,11 @@ using System.Linq;
 using System.Reflection;
 using HarmonyLib;
 using Il2CppInterop.Runtime.InteropTypes;
+using Lotus.Network;
 using Lotus.Utilities;
 
 // code from: https://github.com/NuclearPowered/Reactor/blob/master/Reactor/Patches/Miscellaneous/CustomServersPatch.cs
 namespace Lotus.Server.Patches;
-
-[HarmonyPatch]
-internal static class AuthDisablePatch
-{
-    public static bool IsCurrentServerOfficial()
-    {
-        const string Domain = "among.us";
-
-        return ServerManager.Instance.CurrentRegion?.TryCast<StaticHttpRegionInfo>() is { } regionInfo &&
-               regionInfo.PingServer.EndsWith(Domain, StringComparison.Ordinal) &&
-               regionInfo.Servers.All(serverInfo => serverInfo.Ip.EndsWith(Domain, StringComparison.Ordinal));
-    }
-}
 
 [HarmonyPatch]
 class AuthManagerCoConnectPatch
@@ -31,10 +19,7 @@ class AuthManagerCoConnectPatch
 
     public static bool Prefix(ref bool __result)
     {
-        if (AuthDisablePatch.IsCurrentServerOfficial())
-        {
-            return true;
-        }
+        if (ConnectionManager.IsVanillaServer) return true;
 
         __result = false;
         return false;
@@ -50,10 +35,7 @@ class AuthManagerCoWaitForNoncePatch
 
     public static bool Prefix(ref bool __result)
     {
-        if (AuthDisablePatch.IsCurrentServerOfficial())
-        {
-            return true;
-        }
+        if (ConnectionManager.IsVanillaServer) return true;
 
         __result = false;
         return false;

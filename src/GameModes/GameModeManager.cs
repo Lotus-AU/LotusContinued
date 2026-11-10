@@ -10,10 +10,12 @@ using VentLib.Options;
 using VentLib.Options.UI;
 using Lotus.Options;
 using Lotus.Extensions;
+using Lotus.GameModes.HideAndSeek.ETF;
 using Lotus.GameModes.HideAndSeek.Standard;
 using Lotus.GameModes.Normal.Colorwars;
 using Lotus.GameModes.Normal.CTF;
 using Lotus.GameModes.Normal.Draft;
+using Lotus.GameModes.Normal.Speedrun;
 using Lotus.GameModes.Normal.Standard;
 using VentLib.Options.UI.Tabs;
 using VentLib.Utilities;
@@ -74,7 +76,10 @@ public class GameModeManager
             new ColorwarsGamemode(),
             new CTFGamemode(),
             new DraftGameMode(),
-            new HNSStandardGameMode()
+            new SpeedrunGamemode(),
+
+            new HNSStandardGameMode(),
+            new ETFGameMode()
         ]);
 
     public void Setup()
@@ -106,14 +111,15 @@ public class GameModeManager
         if (RanSetup)
         {
             if (isHns == WasHns) return;
-            WasHns = isHns;
         } else RanSetup = true;
+        WasHns = isHns;
         GameOptionBuilder builder = new();
 
         for (int i = 0; i < GameModes.Count; i++)
         {
             IGameMode gameMode = GameModes[i];
-            if (gameMode.BaseGameMode is BaseGameMode.Standard && isHns || gameMode.BaseGameMode is BaseGameMode.HideAndSeek && !isHns) continue;
+            if ((gameMode.BaseGameMode is BaseGameMode.Standard && isHns) ||
+                (gameMode.BaseGameMode is BaseGameMode.HideAndSeek && !isHns)) continue;
             var index = i;
             builder.Value(v => v.Text(gameMode.Name).Value(index).Build());
         }
@@ -139,9 +145,20 @@ public class GameModeManager
 
         // Add Miscellaneous Options
         GeneralOptions.MiscellaneousOptions.AddTabListener(tab,
-            () => options.Count - GeneralOptions.DebugOptions.AllOptions.Count - GeneralOptions.MiscellaneousOptions.AllOptions.Count);
+            () =>
+            {
+                List<GameOption> opts = tab.GetOptions();
 
-        // Add Debug Options
-        GeneralOptions.DebugOptions.AddTabListener(tab, () => options.Count - GeneralOptions.DebugOptions.AllOptions.Count);
+                GameOption? debugAnchor =
+                    GeneralOptions.DebugOptions.AllOptions
+                        .FirstOrDefault(opts.Contains);
+
+                return debugAnchor != null
+                    ? opts.IndexOf(debugAnchor)
+                    : opts.Count;
+            });
+
+        GeneralOptions.DebugOptions.AddTabListener(tab,
+            () => tab.GetOptions().Count);
     }
 }

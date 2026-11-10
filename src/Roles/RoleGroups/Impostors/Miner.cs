@@ -51,7 +51,7 @@ public class Miner : Impostor, IRoleUI
 
         if (lastEnteredVentLocation == Vector2.zero) return;
         log.Trace($"{MyPlayer.Data.PlayerName}:{lastEnteredVentLocation}", "MinerTeleport");
-        Utils.Teleport(MyPlayer.NetTransform, new Vector2(lastEnteredVentLocation.x, lastEnteredVentLocation.y + 0.3636f));
+        Utils.Teleport(MyPlayer.NetTransform, new Vector2(lastEnteredVentLocation.x, lastEnteredVentLocation.y + 0.3636f), this);
     }
 
     [ModRPC((uint)ModCalls.UpdateMiner, RpcActors.Host, RpcActors.NonHosts)]

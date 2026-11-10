@@ -14,6 +14,7 @@ using Lotus.Roles.Internals.Trackers;
 using Lotus.API.Player;
 using System;
 using System.Linq;
+using Lotus.GameModes;
 using Lotus.GameModes.Normal.Standard;
 using VentLib.Utilities.Extensions;
 using Lotus.Roles.Interfaces;
@@ -59,6 +60,13 @@ public class Genie : Crewmate, IInfoResender
     {
         NormalStandardRoles.Callbacks.Add(PopulateGenieOptions);
     }
+
+    public override HashSet<Type> BannedModifiers() => ProjectLotus.GameModeManager.CurrentGameMode.RoleManager
+        .RoleHolder.AllRoles
+        .Where(r => r.RoleFlags.HasFlag(RoleFlag.IsSubrole))
+        .Where(r => r.GetActions(LotusActionType.Vote).Any())
+        .Select(r => r.GetType())
+        .ToHashSet();
 
     protected override void PostSetup() => remainingWishes = totalWishes;
 

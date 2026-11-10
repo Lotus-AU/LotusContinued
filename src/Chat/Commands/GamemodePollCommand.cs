@@ -55,7 +55,7 @@ public class GamemodePollCommand : ICommandReceiver
     [Command("start")]
     private void PollStartCommand(PlayerControl source, CommandContext context)
     {
-        if (!PluginDataManager.ModManager.IsPlayerModded(source) || !source.IsHost())
+        if (!PluginDataManager.ModManager.IsPlayerModded(source) && !source.IsHost())
         {
             ChatHandlers.NotPermitted(Localizer.Translate("Commands.NotPermittedText")).Send(source);
             return;

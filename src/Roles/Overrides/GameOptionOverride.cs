@@ -40,6 +40,7 @@ public class GameOptionOverride
         if (!CanApply()) return;
 
         object? value = GetValue();
+        DevLogger.Low($"Applying Override: {Option} => {DebugValue}");
 
         switch (Option)
         {
@@ -124,13 +125,41 @@ public class GameOptionOverride
             case Override.ShapeshifterEvidence:
                 options.SetBool(BoolOptionNames.ShapeshifterLeaveSkin, (bool)(value ?? AUSettings.ShapeshifterLeaveSkin()));
                 break;
+            case Override.JudgeTaskRequirementPercentage:
+                options.SetFloat(FloatOptionNames.JudgeTaskRequirementPercentage, (float)(value ?? AUSettings.JudgeTaskRequirementPercentage()));
+                break;
+            case Override.EscapeTime:
+                options.SetFloat(FloatOptionNames.EscapeTime, (float)(value ?? AUSettings.EscapeTime()));
+                break;
+            case Override.MaxPingTime:
+                options.SetFloat(FloatOptionNames.MaxPingTime, (float)(value ?? AUSettings.MaxPingTime()));
+                break;
+            case Override.UseFlashlight:
+                options.SetBool(BoolOptionNames.UseFlashlight, (bool)(value ?? AUSettings.UseFlashlight()));
+                break;
+            case Override.SeekerFinalMap:
+                options.SetBool(BoolOptionNames.SeekerFinalMap, (bool)(value ?? AUSettings.SeekerFinalMap()));
+                break;
+            case Override.FinalEscapeTime:
+                options.SetFloat(FloatOptionNames.FinalEscapeTime, (float)(value ?? AUSettings.FinalEscapeTime()));
+                break;
+            case Override.CrewmateVentUses:
+                options.SetInt(Int32OptionNames.CrewmateVentUses, (int)(value ?? AUSettings.CrewmateVentUses()));
+                break;
+            case Override.CrewmateTimeInVent:
+                options.SetFloat(FloatOptionNames.CrewmateTimeInVent, (float)(value ?? AUSettings.CrewmateTimeInVent()));
+                break;
+            case Override.CrewmateFlashlightSize:
+                options.SetFloat(FloatOptionNames.CrewmateFlashlightSize, (float)(value ?? AUSettings.CrewmateFlashlightSize()));
+                break;
+            case Override.ImpostorFlashlightSize:
+                options.SetFloat(FloatOptionNames.ImpostorFlashlightSize, (float)(value ?? AUSettings.ImpostorFlashlightSize()));
+                break;
             case Override.CanUseVent:
             default:
                 log.Warn($"Invalid Option Override: {this}", "ApplyOverride");
                 break;
         }
-
-        DevLogger.Low($"Applying Override: {Option} => {DebugValue}");
     }
 
     public virtual object? GetValue() => DebugValue = supplier == null ? (ForceValue ?? value) : supplier.Invoke();

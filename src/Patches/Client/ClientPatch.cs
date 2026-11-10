@@ -38,6 +38,13 @@ class KickPlayerPatch
     public static void Prefix(InnerNetClient __instance, int clientId, bool ban)
     {
         if (!AmongUsClient.Instance.AmHost) return;
-        if (ban) PluginDataManager.BanManager.AddBanPlayer(AmongUsClient.Instance.GetClient(clientId));
+        if (!ban)  return;
+        var client = AmongUsClient.Instance.GetClient(clientId);
+        if (PluginDataManager.BanManager == null!)
+        {
+            LogManager.SendInGame($"Couldn't ban {client.Character?.name ?? client.PlayerName} because BannedPlayers.yaml is corrupted.");
+            return;
+        }
+        PluginDataManager.BanManager.AddBanPlayer(client);
     }
 }

@@ -58,7 +58,8 @@ public class HM2 : MonoBehaviour
         historyButton = Instantiate(hudManager.ReportButton, buttonObject.transform);
         historyButton.graphic.sprite = LotusAssets.LoadSprite("History.png", 800);
         historyButton.GetComponentInChildren<PassiveButton>().Modify(ToggleMenu);
-        historyButton.SetActive(true);
+        historyButton.ToggleVisible(true);
+        historyButton.SetEnabled();
         Async.Schedule(() => historyButton.buttonLabelText.text = _buttonText, 0.05f);
 
         // ===================

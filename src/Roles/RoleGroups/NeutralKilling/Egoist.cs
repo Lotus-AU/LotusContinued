@@ -58,7 +58,7 @@ public class Egoist : Shapeshifter
         else winDelegate.CancelGameWin();
     }
 
-    protected override string ForceRoleImageDirectory() => "RoleOutfits/Neutral/egoist.yaml";
+    protected override string ForceRoleImageDirectory() => "RoleOutfits/Neutral/egoist";
 
     protected override GameOptionBuilder RegisterOptions(GameOptionBuilder optionStream) =>
         base.RegisterOptions(optionStream)

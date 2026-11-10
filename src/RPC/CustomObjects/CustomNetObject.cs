@@ -57,7 +57,7 @@ public class CustomNetObject
         PlayerControl.LocalPlayer.Data.Outfits[PlayerOutfitType.Default].VisorId = "";
     }
 
-    public void RpcChangeSprite(string sprite)
+    protected void RpcChangeSprite(string sprite)
     {
         log.Info($" Change Custom Net Object {GetType().Name} (ID {Id}) sprite");
 
@@ -65,7 +65,6 @@ public class CustomNetObject
 
         Async.Execute(() =>
         {
-            playerControl.RawSetName(sprite);
             string name = PlayerControl.LocalPlayer.Data.Outfits[PlayerOutfitType.Default].PlayerName;
             int colorId = PlayerControl.LocalPlayer.Data.Outfits[PlayerOutfitType.Default].ColorId;
             string hatId = PlayerControl.LocalPlayer.Data.Outfits[PlayerOutfitType.Default].HatId;
@@ -79,6 +78,7 @@ public class CustomNetObject
             writer.Write(AmongUsClient.Instance.GameId);
 
             SetupOutfit();
+            playerControl.RawSetName(PlayerControl.LocalPlayer.Data.Outfits[PlayerOutfitType.Default].PlayerName);
             writer.StartMessage(1);
             {
                 writer.WritePacked(PlayerControl.LocalPlayer.Data.NetId);
@@ -121,7 +121,7 @@ public class CustomNetObject
         });
     }
 
-    public void SnapTo(Vector2 position, SendOption sendOption = SendOption.None)
+    public virtual void SnapTo(Vector2 position, SendOption sendOption = SendOption.None)
     {
         if (AmongUsClient.Instance.AmClient)
             playerControl.NetTransform.SnapTo(position, (ushort)(playerControl.NetTransform.lastSequenceId + 1U));
@@ -160,6 +160,8 @@ public class CustomNetObject
         {
             log.Exception(e);
         }
+
+        OnDestroy();
     }
 
     protected void Hide(PlayerControl player)
@@ -270,7 +272,6 @@ public class CustomNetObject
         Async.Schedule(() =>
         {
             playerControl.NetTransform.RpcSnapTo(position);
-            playerControl.RawSetName(sprite);
             string name = PlayerControl.LocalPlayer.Data.Outfits[PlayerOutfitType.Default].PlayerName;
             int colorId = PlayerControl.LocalPlayer.Data.Outfits[PlayerOutfitType.Default].ColorId;
             string hatId = PlayerControl.LocalPlayer.Data.Outfits[PlayerOutfitType.Default].HatId;
@@ -284,6 +285,7 @@ public class CustomNetObject
             writer.Write(AmongUsClient.Instance.GameId);
 
             SetupOutfit();
+            playerControl.RawSetName(PlayerControl.LocalPlayer.Data.Outfits[PlayerOutfitType.Default].PlayerName);
             writer.StartMessage(1);
 
             {
@@ -332,7 +334,7 @@ public class CustomNetObject
             if (MaxId != int.MaxValue) ++MaxId;
             Id = MaxId;
 
-            AllObjects.Add(this);
+            Async.Schedule(() => AllObjects.Add(this), 0.05f, false, true);
         }
 
         foreach (PlayerControl pc in Players.GetAllPlayers())
@@ -390,6 +392,8 @@ public class CustomNetObject
         // Async.Schedule(() => Vents.FindRPC((uint)ModCalls.FixModdedClientCNO).Send([player.GetClientId()], playerControl), 0.4f); // Fix for Non-Host Modded
         Async.Schedule(() => RpcChangeSprite(sprite), .6f);
     }
+
+    protected virtual void OnDestroy() {}
 
     private void RecreateNetObject()
     {

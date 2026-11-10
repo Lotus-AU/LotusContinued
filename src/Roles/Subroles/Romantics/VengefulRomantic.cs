@@ -61,11 +61,13 @@ public class VengefulRomantic : Subrole
     [RoleAction(LotusActionType.PlayerDeath, ActionFlag.GlobalDetector)]
     public void CheckPlayerDeaths(PlayerControl dead, PlayerControl killer)
     {
-        if (dead.PlayerId != killerId && killer.PlayerId == MyPlayer.PlayerId) MyPlayer.InteractWith(MyPlayer, new UnblockedInteraction(new FatalIntent(), this));
+        if (dead.PlayerId != killerId && killer.PlayerId == MyPlayer.PlayerId && dead.PlayerId != MyPlayer.PlayerId)
+            MyPlayer.InteractWith(MyPlayer, new UnblockedInteraction(new FatalIntent(), this));
         else if (dead.PlayerId == killerId)
         {
             killerId = byte.MaxValue;
-            if (killer.PlayerId == MyPlayer.PlayerId && suicideAfterRevenge) MyPlayer.InteractWith(MyPlayer, new UnblockedInteraction(new FatalIntent(), this));
+            if (killer.PlayerId == MyPlayer.PlayerId && suicideAfterRevenge && MyPlayer.IsAlive())
+                MyPlayer.InteractWith(MyPlayer, new UnblockedInteraction(new FatalIntent(), this));
             remote?.Delete();
             Async.Schedule(() => MyPlayer.GetSubroles().Remove(this), 0.001f);
             MyPlayer.PrimaryRole().Faction = faction;

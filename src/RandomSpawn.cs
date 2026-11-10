@@ -10,7 +10,7 @@ namespace Lotus;
 
 public class RandomSpawn
 {
-    public static Dictionary<string, Vector2> SkeldLocations = new()
+    public static readonly Dictionary<string, Vector2> SkeldLocations = new()
     {
         ["Cafeteria"] = new(-1.0f, 3.0f),
         ["Weapons"] = new(9.3f, 1.0f),
@@ -28,7 +28,7 @@ public class RandomSpawn
         ["MedBay"] = new(-9.0f, -4.0f)
     };
 
-    public static Dictionary<string, Vector2> MiraLocations = new()
+    public static readonly Dictionary<string, Vector2> MiraLocations = new()
     {
         ["Cafeteria"] = new(25.5f, 2.0f),
         ["Balcony"] = new(24.0f, -2.0f),
@@ -46,7 +46,7 @@ public class RandomSpawn
         ["Greenhouse"] = new(17.8f, 23.0f)
     };
 
-    public static Dictionary<string, Vector2> PolusLocations = new()
+    public static readonly Dictionary<string, Vector2> PolusLocations = new()
     {
         ["Office1"] = new(19.5f, -18.0f),
         ["Office2"] = new(26.0f, -17.0f),
@@ -65,7 +65,7 @@ public class RandomSpawn
         ["SpecimenRoom"] = new(36.5f, -22.0f)
     };
 
-    public static Dictionary<string, Vector2> AirshipLocations = new()
+    public static readonly Dictionary<string, Vector2> AirshipLocations = new()
     {
         ["Brig"] = new(-0.7f, 8.5f),
         ["Engine"] = new(-0.7f, -1.0f),

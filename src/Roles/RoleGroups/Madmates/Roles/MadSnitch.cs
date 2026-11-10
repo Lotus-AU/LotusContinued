@@ -20,5 +20,5 @@ public class MadSnitch : MadCrewmate
             .ForEach(p => p.NameModel().GetComponentHolder<RoleHolder>().Components().ForEach(rc => rc.AddViewer(MyPlayer)));
     }
 
-    protected override string ForceRoleImageDirectory() => "RoleOutfits/Imposter/madsnitch.yaml";
+    protected override string ForceRoleImageDirectory() => "RoleOutfits/Imposter/madsnitch";
 }

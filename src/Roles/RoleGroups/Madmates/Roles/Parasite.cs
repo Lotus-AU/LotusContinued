@@ -14,6 +14,7 @@ public class Parasite : Shapeshifter
     public override bool TryKill(PlayerControl target) => base.TryKill(target);
 
     public override bool CanSabotage() => true;
+    protected override string ForceRoleImageDirectory() => "RoleOutfits/Imposter/parasite";
 
     protected override GameOptionBuilder RegisterOptions(GameOptionBuilder optionStream) => AddKillCooldownOptions(base.RegisterOptions(optionStream));
 

@@ -122,7 +122,7 @@ class SplashPatch
         PassiveButton discordButton = Object.Instantiate(inventoryButton, __instance.transform);
         discordButton.transform.localPosition = new Vector3(0.08f, -2.403f, 0f);
         discordButton.transform.localScale = new Vector3(0.329f, 0.558f, 1f);
-        discordButton.Modify(() => Application.OpenURL(ModConstants.DiscordInvite));
+        discordButton.Modify(() => Constants.OpenURL(ModConstants.DiscordInvite));
         {
             var ogRender = discordButton.inactiveSprites.GetComponent<SpriteRenderer>();
             ogRender.enabled = false;
@@ -151,7 +151,7 @@ class SplashPatch
         PassiveButton websiteButton = Object.Instantiate(inventoryButton, __instance.transform);
         websiteButton.transform.localPosition = new Vector3(-0.9f, -2.4f, 0f);
         websiteButton.transform.localScale = new Vector3(0.28f, 0.278f, 1f);
-        websiteButton.Modify(() => Application.OpenURL(ModConstants.WebsiteLink));
+        websiteButton.Modify(() => Constants.OpenURL(ModConstants.WebsiteLink));
         {
             var ogRender = websiteButton.inactiveSprites.GetComponent<SpriteRenderer>();
             ogRender.enabled = false;

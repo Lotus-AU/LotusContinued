@@ -38,6 +38,11 @@ public class ManipulatedPlayerKillEvent : KillEvent
 
 public class ManipulatedPlayerDeathEvent : DeathEvent
 {
+    ManipulatedPlayerDeathEvent()
+    {
+
+    }
+
     public ManipulatedPlayerDeathEvent(PlayerControl victim, PlayerControl killer) : base(victim, killer)
     {
     }

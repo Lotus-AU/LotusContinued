@@ -18,13 +18,17 @@ public class Texture2DReplacerPatch
     public static readonly string[] ReplacedGraphics =
     [
         "GameSettingReworkAssets", "LobbyReworkAssets", "MainMenuSprites",
-        "OldButtons", "Online_EnterCode_CreateLobby", "UiButtons"
+        "OldButtons", "Online_EnterCode_CreateLobby", "UiButtons",
+        "sactx-0-1024x512-DXT5_BC3-qcSpriteAtlas-3ccae100"
     ];
 
     public const string StartPath = "Replaced/";
 
+    private static readonly HashSet<string> Done = new();
+
     public static void CheckForTextures()
     {
+        if (Done.Count >= ReplacedGraphics.Length) return;
         Resources.FindObjectsOfTypeAll(Il2CppType.Of<Texture2D>())
             .ForEach(obj =>
             {
@@ -35,6 +39,7 @@ public class Texture2DReplacerPatch
                 Sprite spriteTexture = LotusAssets.LoadAsset<Sprite>(StartPath + texture.name + ".png");
                 if (spriteTexture == null || spriteTexture.texture == null) return;
                 DevLogger.Log($"Replacing {texture.name}.");
+                Done.Add(texture.name);
 
                 if (OperatingSystem.IsAndroid()) ReplaceTextureAndroid(spriteTexture, texture);
                 else ReplaceTextureWindows(spriteTexture, texture);
@@ -91,4 +96,5 @@ public class Texture2DReplacerPatch
     [QuickPostfix(typeof(MainMenuManager), nameof(MainMenuManager.Awake))] private static void MainMenuManagerPostfix(MainMenuManager __instance) => CheckForTextures();
     [QuickPostfix(typeof(ProgressTracker), nameof(ProgressTracker.Start))] private static void ProgressTrackerPostfix(ProgressTracker __instance) => CheckForTextures();
     [QuickPostfix(typeof(LobbyViewSettingsPane), nameof(LobbyViewSettingsPane.Awake))] private static void LobbyViewSettingsPanePostfix(LobbyViewSettingsPane __instance) => CheckForTextures();
+    [QuickPostfix(typeof(LobbyViewSettingsPane), nameof(LobbyViewSettingsPane.ChangeTab))] private static void LobbyViewSettingsPanePostfix2(LobbyViewSettingsPane __instance) => CheckForTextures();
 }

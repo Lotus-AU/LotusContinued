@@ -23,6 +23,8 @@ public static class EnterVentPatch
 
     public static int GetLastEnteredVent(this PlayerControl player) => LastEnteredVent.GetValueOrDefault(player.PlayerId, -1);
 
+    public static void Reset() => LastEnteredVent = [];
+
     public static void Postfix(Vent __instance, [HarmonyArgument(0)] PlayerControl pc)
     {
         if (!AmongUsClient.Instance.AmHost) return;
@@ -55,6 +57,7 @@ class ExitVentPatch
         if (!AmongUsClient.Instance.AmHost) return;
         ActionHandle exitVent = ActionHandle.NoInit();
         RoleOperations.Current.Trigger(LotusActionType.VentExit, pc, exitVent, __instance);
-        if (exitVent.IsCanceled) Async.Schedule(() => RpcV3.Immediate(pc.MyPhysics.NetId, RpcCalls.EnterVent, SendOption.None).WritePacked(__instance.Id).Send(), 0.5f);
+        if (exitVent.IsCanceled)
+            Async.Schedule(() => RpcV3.Immediate(pc.MyPhysics.NetId, RpcCalls.EnterVent, SendOption.Reliable).WritePacked(__instance.Id).Send(), 0.5f);
     }
 }

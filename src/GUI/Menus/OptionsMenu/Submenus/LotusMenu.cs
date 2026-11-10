@@ -60,7 +60,7 @@ public class LotusMenu : MonoBehaviour, IBaseOptionMenuComponent
                 openLink = true;
                 return;
             }
-            Application.OpenURL(PrivacyPolicyPatch.PrivacyPolicyLink);
+            Constants.OpenURL(PrivacyPolicyPatch.PrivacyPolicyLink);
         });
         privacyPolicyLinkObject.transform.localPosition = new Vector3(-1.995f, 0.353f, -1);
 

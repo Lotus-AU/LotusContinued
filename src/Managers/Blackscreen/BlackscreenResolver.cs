@@ -16,6 +16,7 @@ using VentLib.Networking.RPC;
 using VentLib.Utilities;
 using VentLib.Utilities.Extensions;
 using AmongUs.GameOptions;
+using Cpp2IL.Core.Extensions;
 using HarmonyLib;
 using Lotus.Managers.Blackscreen.Interfaces;
 using Lotus.Victory.Patches;
@@ -69,7 +70,7 @@ internal class BlackscreenResolver : IBlackscreenResolver
             Dictionary<byte, (bool isDead, bool isDisconnected)> myStates;
             try
             {
-                myStates = AntiBlackoutLogic.PatchedData(player, exiledPlayer);
+                myStates = AntiBlackoutLogic.PatchedData(player, exiledPlayer, playerStates.Clone());
             }
             catch (Exception ex)
             {

@@ -18,6 +18,11 @@ public class ExecutedEvent: TargetedAbilityEvent, IRoleEvent
 
 public class ExecutedDeathEvent: DeathEvent
 {
+    ExecutedDeathEvent()
+    {
+
+    }
+
     public ExecutedDeathEvent(PlayerControl deadPlayer, PlayerControl? killer) : base(deadPlayer, killer)
     {
 

@@ -18,6 +18,8 @@ namespace Lotus.Patches.Systems;
 [HarmonyPatch(typeof(ShipStatus), nameof(ShipStatus.CloseDoorsOfType))]
 public class DoorsPatch
 {
+    private static readonly StandardLogger log = LoggerFactory.GetLogger<StandardLogger>(typeof(DoorsPatch));
+
     public static bool Prefix(ShipStatus __instance, [HarmonyArgument(0)] SystemTypes room)
     {
         if (!AmongUsClient.Instance.AmHost) return true;
@@ -34,10 +36,13 @@ public class DoorsPatch
             if (GeneralOptions.SabotageOptions.DisabledSabotages.HasFlag(SabotageType.Door))
                 return false;
 
+        log.Info("A player tried to close doors.");
+
         ISabotage sabotage = new DoorSabotage(room);
 
         ActionHandle handle = RoleOperations.Current.Trigger(LotusActionType.SabotageStarted, null, sabotage, PlayerControl.LocalPlayer);
         if (handle.IsCanceled) return false;
+        log.Info("Attempt successful.");
 
         Hooks.SabotageHooks.SabotageCalledHook.Propagate(new SabotageHookEvent(sabotage));
         return true;

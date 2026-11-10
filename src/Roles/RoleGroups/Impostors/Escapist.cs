@@ -78,7 +78,7 @@ public class Escapist : Impostor, IRoleUI
     private void TryEscape()
     {
         if (canEscapeCooldown.NotReady() || location == null) return;
-        Utils.Teleport(MyPlayer.NetTransform, location.Value);
+        Utils.Teleport(MyPlayer.NetTransform, location.Value, this);
         location = null;
         canMarkCooldown.Start();
         if (MyPlayer.AmOwner) UpdatePetButton(UIManager.PetButton);

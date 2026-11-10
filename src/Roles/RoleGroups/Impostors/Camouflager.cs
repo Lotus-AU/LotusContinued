@@ -65,7 +65,6 @@ public class Camouflager : Shapeshifter, IRoleUI
     {
         if (!camouflaged) return;
         camouflaged = false;
-        Players.GetAlivePlayers().Where(p => p.PlayerId != MyPlayer.PlayerId).Do(p => p.CRpcRevertShapeshift(false));
     }
 
     [RoleAction(LotusActionType.PlayerDeath)]

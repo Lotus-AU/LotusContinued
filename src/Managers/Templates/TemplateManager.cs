@@ -11,6 +11,7 @@ using Lotus.Managers.Hotkeys;
 using Lotus.Managers.Templates.Models;
 using Lotus.Managers.Templates.Models.Units;
 using UnityEngine;
+using VentLib.Commands;
 using VentLib.Utilities.Extensions;
 using YamlDotNet.Serialization;
 using YamlDotNet.Serialization.NamingConventions;
@@ -76,8 +77,12 @@ public class TemplateManager
 
     internal bool CheckAndRunCommand(PlayerControl source, string input)
     {
-        if (input.Length < 4 || !input.StartsWith("/cmd")) return false;
-        input = input[4..].Trim();
+        var prefix = CommandRunner.Prefixes
+            .OrderByDescending(p => p.Length)
+            .FirstOrOptional(input.StartsWith);
+        if (!prefix.Exists()) return false;
+        var actual = prefix.Get();
+        input = input[actual.Length..].Trim();
 
         string[] splitCommand = input.Split(" ");
         List<Template>? templates = Commands.GetValueOrDefault(splitCommand[0]);

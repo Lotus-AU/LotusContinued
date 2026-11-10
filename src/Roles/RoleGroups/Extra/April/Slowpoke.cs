@@ -13,7 +13,7 @@ public class Slowpoke: Subrole, IAprilFoolsRole
     private Remote<GameOptionOverride> speedOverride;
     public override string Identifier() => "《";
 
-    public override string GetRoleOutfitPath() => "RoleOutfits/Neutral/Jester".ToLower();
+    public override string GetRoleOutfitPath() => $"RoleOutfits/April/{EnglishRoleName}".ToLower();
 
 
     protected override void PostSetup()

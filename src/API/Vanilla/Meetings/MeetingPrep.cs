@@ -90,8 +90,8 @@ public class MeetingPrep
             }
             finally
             {
-                RoleOperations.Current.TriggerFor(p, LotusActionType.RoundEnd, null, handle, _meetingDelegate, false);
                 if (p.IsShapeshifted()) Async.Schedule(() => p.CRpcRevertShapeshift(false), .25f);
+                RoleOperations.Current.TriggerFor(p, LotusActionType.RoundEnd, null, handle, _meetingDelegate, false);
             }
         });
 
@@ -116,8 +116,12 @@ public class MeetingPrep
         MeetingRoomManager.Instance.AssignSelf(reporter, Reported);
         DestroyableSingleton<HudManager>.Instance.OpenMeetingRoom(reporter);
         reporter.RpcStartMeeting(Reported);
-
     }
 
     private static void FixChatNames() => Players.GetPlayers().ForEach(p => p.RpcSetName(p.name));
+
+    private static void FixFirstAliveName()
+    {
+
+    }
 }

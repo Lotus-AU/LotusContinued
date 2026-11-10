@@ -197,7 +197,11 @@ public static class SabotagePatch
 [HarmonyPatch(typeof(ShipStatus), nameof(ShipStatus.UpdateSystem), typeof(SystemTypes), typeof(PlayerControl), typeof(MessageReader))]
 class WriterSabotagePatch
 {
-    internal static SystemTypes[] WatchedSystems = { SystemTypes.Reactor, SystemTypes.Doors, SystemTypes.Sabotage, SystemTypes.Electrical, SystemTypes.LifeSupp, SystemTypes.Laboratory, SystemTypes.Comms };
+    internal static SystemTypes[] WatchedSystems =
+    [
+        SystemTypes.Reactor, SystemTypes.Doors, SystemTypes.Sabotage, SystemTypes.Electrical, SystemTypes.LifeSupp,
+        SystemTypes.Laboratory, SystemTypes.Comms
+    ];
     internal static bool Prefix(ShipStatus __instance,
         [HarmonyArgument(0)] SystemTypes systemType,
         [HarmonyArgument(1)] PlayerControl player,

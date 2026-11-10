@@ -40,6 +40,7 @@ public class MiscellaneousOptions: LotusOptionHolder
     public bool ColoredNameMode;
     public string CurrentResolver;
     public int EventLogType;
+    public int RoleIntroTextTime;
 
     public bool UseRandomMap => randomMapOn && RandomMaps != 0;
     private bool randomMapOn;
@@ -168,6 +169,14 @@ public class MiscellaneousOptions: LotusOptionHolder
             .BindInt(i => EventLogType = i)
             .Build());
 
+        AllOptions.Add(new GameOptionBuilder()
+            .Builder("Role Intro Text Duration", _optionColor)
+            .Value(v => v.Value(0).Text(GeneralOptionTranslations.OffText).Color(Color.red).Build())
+            .AddIntRange(5, 20, 1, 5, GeneralOptionTranslations.SecondsSuffix)
+            .Name(MiscOptionTranslations.RoleIntroTextTime)
+            .BindInt(i => RoleIntroTextTime = i)
+            .Build());
+
         AllOptions.Where(o => !o.Attributes.ContainsKey("Title")).ForEach(o => GeneralOptions.StandardOptionManager.Register(o, VentLib.Options.OptionLoadMode.LoadOrCreate));
         PostInitialize();
     }
@@ -226,6 +235,9 @@ public class MiscellaneousOptions: LotusOptionHolder
 
         [Localized(nameof(KillsOnly))]
         public static string KillsOnly = "Only Kills";
+
+        [Localized(nameof(RoleIntroTextTime))]
+        public static string RoleIntroTextTime = "Role Intro Text Duration";
     }
 
 }

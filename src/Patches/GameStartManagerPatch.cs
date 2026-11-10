@@ -5,8 +5,10 @@ using AmongUs.GameOptions;
 using HarmonyLib;
 using InnerNet;
 using Lotus.API;
+using Lotus.API.Odyssey;
 using Lotus.API.Player;
 using Lotus.Chat;
+using Lotus.GameModes.HideAndSeek.ETF;
 using Lotus.Options.General;
 using Lotus.Options;
 using UnityEngine;
@@ -92,14 +94,14 @@ public class GameStartRandomMap
         PetWarning.CheckForPets();
         HostRoleOptionsWarning.CheckForOptions();
 
-        __instance.ReallyBegin(false);
-        return false;
-    }
-    public static bool Prefix(GameStartRandomMap __instance)
-    {
         AUSettings.StaticOptions.SetFloat(FloatOptionNames.ProtectionDurationSeconds, 3600f);
         AUSettings.StaticOptions.SetBool(BoolOptionNames.ImpostorsCanSeeProtect, false);
-        if (!GeneralOptions.MiscellaneousOptions.UseRandomMap) return true;
+
+        if (!GeneralOptions.MiscellaneousOptions.UseRandomMap)
+        {
+            WarnForCtf();
+            return true;
+        }
 
         List<byte> randomMaps = new();
 
@@ -109,10 +111,24 @@ public class GameStartRandomMap
         if (map.HasFlag(AuMap.Polus)) randomMaps.Add(2);
         if (map.HasFlag(AuMap.Airship)) randomMaps.Add(4);
 
-        if (randomMaps.Count == 0) return true;
+        if (randomMaps.Count == 0)
+        {
+            WarnForCtf();
+            return true;
+        }
 
         AUSettings.StaticOptions.SetByte(ByteOptionNames.MapId, randomMaps.GetRandom());
-        return true;
+        WarnForCtf();
+
+        __instance.ReallyBegin(false);
+        return false;
+
+        void WarnForCtf()
+        {
+            if (Game.CurrentGameMode is not ETFGameMode) return;
+            if (AUSettings.MapId() != 1) return;
+            ChatHandler.Send(PlayerControl.LocalPlayer, "ETF & Mira map may be a bit buggy at times. It is recommended to play another map.");
+        }
     }
 }
 
@@ -123,6 +139,7 @@ class ResetStartStatePatch
     {
         if (GameStartManager.InstanceExists && GameStartManager.Instance.startState == GameStartManager.StartingStates.Countdown)
         {
+            if (!AmongUsClient.Instance.AmHost) return;
             PlayerControl.LocalPlayer.RpcSyncSettings(GameOptionsManager.Instance.gameOptionsFactory.ToBytes(GameOptionsManager.Instance.CurrentGameOptions, false));
         }
     }
@@ -132,7 +149,7 @@ class UnrestrictedNumImpostorsPatch
 {
     public static bool Prefix(ref int __result)
     {
-        __result = ProjectLotus.NormalOptions.NumImpostors;
+        __result = AUSettings.NumImpostors();
         return false;
     }
 }

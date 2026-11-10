@@ -84,9 +84,9 @@ public class Transporter : Crewmate, IRoleUI
         Vector2 player2Position = target2.GetTruePosition();
 
         if (target1.IsAlive())
-            Utils.Teleport(target1.NetTransform, new Vector2(player2Position.x, player2Position.y + 0.3636f));
+            Utils.Teleport(target1.NetTransform, new Vector2(player2Position.x, player2Position.y + 0.3636f), this);
         if (target2.IsAlive())
-            Utils.Teleport(target2.NetTransform, new Vector2(player1Position.x, player1Position.y + 0.3636f));
+            Utils.Teleport(target2.NetTransform, new Vector2(player1Position.x, player1Position.y + 0.3636f), this);
 
         target1.InteractWith(target2, new TransportInteraction(target1, MyPlayer));
         target2.InteractWith(target1, new TransportInteraction(target2, MyPlayer));

@@ -8,7 +8,8 @@ public enum RoleRPC: uint
     /// <param name="playerId">the player id for the body to clear</param>
     RemoveBody = 587,
     /// <summary>
-    /// Starts/Stop the reactor flash effect
+    /// Calls <see cref="Lotus.Roles.RoleGroups.Crew.Mystic"/>'s <i>ReactorFlash</i> method on the client that receives this.
+    /// Stop/starts reactor flash.
     /// </summary>
     /// <param name="finish"><see cref="bool"/> if true, stops the flash, otherwise starts it</param>
     ReactorFlash,

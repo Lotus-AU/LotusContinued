@@ -8,7 +8,7 @@ public sealed class RedFlag : Flag
 {
     public RedFlag(Vector2 position) : base(position)
     {
-        CreateNetObject("<size=100%><font=\"VCR SDF\"><line-height=67%><#000000>\u2588<#ff0000>\u2588<#ff0000>\u2588<#ff0000>\u2588<alpha=#00>\u2588<alpha=#00>\u2588<br><#000000>\u2588<#ff0000>\u2588<#ff0000>\u2588<#ff0000>\u2588<#ff0000>\u2588<#ff0000>\u2588<br><#000000>\u2588<alpha=#00>\u2588<alpha=#00>\u2588<#ff0000>\u2588<#ff0000>\u2588<#ff0000>\u2588<br><#000000>\u2588<alpha=#00>\u2588<alpha=#00>\u2588<alpha=#00>\u2588<alpha=#00>\u2588<alpha=#00>\u2588<br><#000000>\u2588<alpha=#00>\u2588<alpha=#00>\u2588<alpha=#00>\u2588<alpha=#00>\u2588<alpha=#00>\u2588<br><#000000>\u2588<alpha=#00>\u2588<alpha=#00>\u2588<alpha=#00>\u2588<alpha=#00>\u2588<alpha=#00>\u2588<br></line-height></size>", position);
+        CreateNetObject("<size=100%><line-height=97%><cspace=0.16em><mark=#000000>W</mark><mark=#ff0000>WWW</mark><#0000>WW</color>\n<mark=#000000>W</mark><mark=#ff0000>WWWWW</mark>\n<mark=#000000>W</mark><#0000>WW</color><mark=#ff0000>WWW</mark>\n<mark=#000000>W</mark><#0000>WWWWW</color>\n<mark=#000000>W</mark><#0000>WWWWW</color>\n<mark=#000000>W</mark><#0000>WWWWW</color>", position);
     }
 }
 
@@ -16,13 +16,13 @@ public sealed class BlueFlag : Flag
 {
     public BlueFlag(Vector2 position): base(position)
     {
-        CreateNetObject("<size=100%><font=\"VCR SDF\"><line-height=67%><#000000>\u2588<#0000ff>\u2588<#0000ff>\u2588<#0000ff>\u2588<alpha=#00>\u2588<alpha=#00>\u2588<br><#000000>\u2588<#0000ff>\u2588<#0000ff>\u2588<#0000ff>\u2588<#0000ff>\u2588<#0000ff>\u2588<br><#000000>\u2588<alpha=#00>\u2588<alpha=#00>\u2588<#0000ff>\u2588<#0000ff>\u2588<#0000ff>\u2588<br><#000000>\u2588<alpha=#00>\u2588<alpha=#00>\u2588<alpha=#00>\u2588<alpha=#00>\u2588<alpha=#00>\u2588<br><#000000>\u2588<alpha=#00>\u2588<alpha=#00>\u2588<alpha=#00>\u2588<alpha=#00>\u2588<alpha=#00>\u2588<br><#000000>\u2588<alpha=#00>\u2588<alpha=#00>\u2588<alpha=#00>\u2588<alpha=#00>\u2588<alpha=#00>\u2588<br></line-height></size>", position);
+        CreateNetObject("<size=100%><line-height=97%><cspace=0.16em><mark=#000000>W</mark><mark=#0000ff>WWW</mark><#0000>WW</color>\n<mark=#000000>W</mark><mark=#0000ff>WWWWW</mark>\n<mark=#000000>W</mark><#0000>WW</color><mark=#0000ff>WWW</mark>\n<mark=#000000>W</mark><#0000>WWWWW</color>\n<mark=#000000>W</mark><#0000>WWWWW</color>\n<mark=#000000>W</mark><#0000>WWWWW</color>", position);
     }
 }
 
 public class Flag : CustomNetObject
 {
-    protected Vector2 startPosition;
+    private Vector2 startPosition;
 
     public Flag(Vector2 position)
     {

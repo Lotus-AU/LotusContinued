@@ -38,9 +38,9 @@ public class SubroleOptions: LotusOptionHolder
             .Build());
 
         AllOptions.Add(new GameOptionBuilder()
-            .AddBoolean()
             .Builder("Evenly Distribute Modifiers")
             .Name(TranslationUtil.Colorize(SubroleOptionTranslations.EvenlyDistributeModifierText, ModifierColor))
+            .AddBoolean()
             .BindBool(b => EvenlyDistributeModifiers = b)
             // .Tab(DefaultTabs.MiscTab)
             .Build());

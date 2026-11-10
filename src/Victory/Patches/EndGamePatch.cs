@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using HarmonyLib;
@@ -24,8 +25,7 @@ class EndGamePatch
     {
         Game.Cleanup();
         CustomNetObject.Reset();
-
-        SelectRolesPatch.desyncedIntroText = new();
+        Game.MatchData.EndTime = DateTime.Now;
 
         log.Info("-----------Game End----------- Phase");
     }

@@ -66,10 +66,10 @@ public static class DesyncOptions
         writer.StartMessage(0);
         writer.Write((byte)options.GameMode);
 
-        if (options.TryCast(out NormalGameOptionsV10? normalOpt))
-            NormalGameOptionsV10.Serialize(writer, normalOpt);
-        else if (options.TryCast(out HideNSeekGameOptionsV10? hnsOpt))
-            HideNSeekGameOptionsV10.Serialize(writer, hnsOpt);
+        if (options.TryCast(out NormalGameOptionsV12? normalOpt))
+            NormalGameOptionsV12.Serialize(writer, normalOpt);
+        else if (options.TryCast(out HideNSeekGameOptionsV12? hnsOpt))
+            HideNSeekGameOptionsV12.Serialize(writer, hnsOpt);
         else
         {
             writer.Recycle();

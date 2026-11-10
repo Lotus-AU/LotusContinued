@@ -2,11 +2,15 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net.Http;
 using System.Reflection;
 using System.Text;
+using System.Threading.Tasks;
+using Lotus.Extensions;
 using Lotus.GUI;
 using Lotus.Managers.Announcements.Helpers;
 using Lotus.Managers.Announcements.Models;
+using Newtonsoft.Json.Linq;
 using UnityEngine;
 using VentLib.Utilities.Extensions;
 using YamlDotNet.Serialization;
@@ -51,6 +55,9 @@ public class CustomAnnouncementManager
             log.Exception("Error loading in manifest (global) announcements.", exception);
             CustomAnnouncements = new Dictionary<string, Announcement>();
         }
+
+        LoadFromBackend();
+
         announceFile = readAnnouncementsFileInfo;
         if (!announceFile.Exists) WriteFile(new ReadAnnouncements());
 
@@ -65,6 +72,8 @@ public class CustomAnnouncementManager
     }
 
     public IEnumerable<Announcement> GetUnReadAnnouncements() => CustomAnnouncements.Where(kvp => !HasReadAnnouncement(kvp.Value)).Select(kvp => kvp.Value);
+
+    public void AddAnnouncement(Announcement announcement, string? key = null) => CustomAnnouncements.Add(key ?? announcement.Title, announcement);
 
     public void AddAnnouncements(IEnumerable<Announcement> announcements)
     {
@@ -139,6 +148,58 @@ public class CustomAnnouncementManager
 
         return deserializer.Deserialize<Announcement>(result);
     }
+
+    private void LoadFromBackend()
+    {
+        using HttpClient httpClient = new();
+        if (ProjectLotus.DevVersion) httpClient.DefaultRequestHeaders.Add("x-dev-version", "true");
+
+        const bool isTesting = false;
+        Task<string> downloadTask = httpClient.GetStringAsync(
+            $"https://{(isTesting ? "testing-lotus.eps.lol" : "lobbies.lotusau.top")}/announcements"
+        );
+
+        try
+        {
+            downloadTask.Wait();
+        }
+        catch (Exception ex)
+        {
+            log.Debug($"Announcements download failed: {ex.Message}");
+            return;
+        }
+
+        if (downloadTask.IsFaulted)
+        {
+            log.Debug("Announcements download failed");
+            return;
+        }
+        log.Debug("Loading announcements...");
+        var json = JObject.Parse(downloadTask.Result);
+
+        var data = json["data"];
+
+        var announcements = data["announcements"];
+
+        var token = announcements.Cast<JArray>();
+        for (int i = 0; i < token.Count; i++)
+        {
+            log.Debug($"Handling announcement {i}");
+            var a = token[i];
+
+            Announcement created = new()
+            {
+                Title      = a["Title"].Value<string>(),
+                ShortTitle = a["ShortTitle"].Value<string>(),
+                Subtitle   = a["Subtitle"].Value<string>(),
+                BodyText   = a["BodyText"].Value<string>(),
+                Date       = DateOnly.ParseExact(a["Date"].Value<string>(), "yyyy-MM-dd"),
+                DevOnly    = (bool?)a["DevOnly"] ?? false
+            };
+            AddAnnouncement(created, a["ID"].Value<int>().ToString() ?? i.ToString());
+        }
+    }
+
     private void WriteFile(ReadAnnouncements newFile)
     {
         string emptyFile = serializer.Serialize(newFile);

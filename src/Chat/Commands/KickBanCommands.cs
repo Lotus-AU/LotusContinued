@@ -1,4 +1,5 @@
 using Lotus.Extensions;
+using Lotus.Logging;
 using Lotus.Managers;
 using Lotus.Utilities;
 using VentLib.Commands;
@@ -36,12 +37,7 @@ public class KickBanCommand : ICommandReceiver
 
         Optional<PlayerControl> targetPlayer = Optional<PlayerControl>.Null();
         string text = context.Join();
-        bool banWithId = false;
-        if (int.TryParse(context.Args[0], out int result))
-        {
-            targetPlayer = Utils.PlayerById((byte)result);
-            banWithId = true;
-        }
+        if (int.TryParse(context.Args[0], out int result)) targetPlayer = Utils.PlayerById((byte)result);
         else targetPlayer = PlayerControl.AllPlayerControls.ToArray()
                 .FirstOrOptional(p => p.name.ToLowerInvariant().Equals(text.ToLowerInvariant()));
 
@@ -52,12 +48,17 @@ public class KickBanCommand : ICommandReceiver
                 ChatHandlers.InvalidCmdUsage("Not able to ban the host from the game.").Send();
                 return;
             }
-            if (LobbyBehaviour.Instance == null) player.RpcExileV2(false);
-            if (banWithId && context.Args.Length > 1)
+            if (!player.Data || player.Data.Disconnected) return;
+            if (!LobbyBehaviour.Instance) player.RpcExileV2(false);
+            if (ban && context.Args.Length > 1)
             {
                 string reason = context.Args[1..].Fuse(" ");
                 if (reason.Trim() == string.Empty) reason = "Host Decision";
-                PluginDataManager.BanManager.BanWithReason(player, reason, $"{player.name} was banned for {reason}.");
+
+                if (PluginDataManager.BanManager != null!)
+                    PluginDataManager.BanManager.BanWithReason(player, reason, $"{player.name} was banned for {reason}.");
+                else
+                    LogManager.SendInGame($"Couldn't ban {player} because BannedPlayers.yaml is corrupted.");
             }
             else
             {

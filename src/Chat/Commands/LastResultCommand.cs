@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using Lotus.API.Odyssey;
 using Lotus.API.Player;
@@ -83,6 +84,8 @@ public class LastResultCommand : CommandTranslations
 
         HashSet<byte> winners = Game.MatchData.GameHistory.LastWinners.Select(p => p.MyPlayer.PlayerId).ToHashSet();
 
+        TimeSpan gameLength = Game.MatchData.EndTime.Subtract(Game.MatchData.StartTime);
+
         List<string> messages = new();
         int _maxMessagePacketSize = NetworkRules.MaxPacketSize + 200;
         List<string> playerResults = PlayerHistories
@@ -132,6 +135,7 @@ public class LastResultCommand : CommandTranslations
 
         messages.ForEach(m => ChatHandler.Of("\n", m).LeftAlign().Send(source));
         if (winResult != "") ChatHandler.Of("\n", $"<size=1.7>{winResult}</size>").LeftAlign().Send(source);
+        ChatHandler.Of("\n", LRTranslations.GameLengthText.Formatted(gameLength.ToString(@"mm\:ss", new CultureInfo("en-US"))));
         messages.Clear();
         return;
 
@@ -192,5 +196,8 @@ public class LastResultCommand : CommandTranslations
 
         [Localized(nameof(WinReasonText))]
         public static string WinReasonText = "Reason: {0}";
+
+        [Localized(nameof(GameLengthText))]
+        public static string GameLengthText = "Game Length: {0}";
     }
 }

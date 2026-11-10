@@ -80,10 +80,10 @@ public static class AntiBlackoutLogic
         return unpatchable;
     }
 
-    public static Dictionary<byte, (bool isDead, bool isDisconnected)> PatchedData(PlayerControl curPlayer, byte exiledPlayer)
+    public static Dictionary<byte, (bool isDead, bool isDisconnected)> PatchedData(PlayerControl curPlayer, byte exiledPlayer,
+        Dictionary<byte, (bool isDead, bool isDisconnected)> replacedPlayers)
     {
         log.Debug($"Patching GameData ({curPlayer.name}) ({curPlayer.PrimaryRole().RoleName})");
-        Dictionary<byte, (bool isDead, bool isDisconnected)> replacedPlayers = new();
 
         if (curPlayer.IsHost() || curPlayer.IsModded()) return replacedPlayers;
 

@@ -103,7 +103,7 @@ public class Medic : Crewmate, IInfoResender
 
         if (lastGuardedPlayer == player && mustSelectNewTarget)
         {
-            CHandler(MustSelectNewTarget.Formatted(Players.FindPlayerById(guardedPlayer)?.name)).Send(MyPlayer);
+            CHandler(MustSelectNewTarget.Formatted(Players.FindPlayerById(lastGuardedPlayer)?.name)).Send(MyPlayer);
             return;
         }
 
@@ -161,7 +161,7 @@ public class Medic : Crewmate, IInfoResender
                 .SubOption(sub2 => sub2
                     .KeyName("Change Target Every Round", MedicOptionTranslations.CanProtectSamePlayer)
                     .AddBoolean()
-                    .BindBool(b => mustSelectNewTarget = b)
+                    .BindBool(b => mustSelectNewTarget = !b)
                     .Build())
                 .Build());
 

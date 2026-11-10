@@ -38,7 +38,7 @@ public class RuthlessRomantic : NeutralKillingBase
         PlayerControl? target = MyPlayer.GetPlayersInAbilityRangeSorted().FirstOrDefault();
         if (target == null) return;
         cooldown.Start();
-        MyPlayer.InteractWith(target, new UnblockedInteraction(new FatalIntent(), this));
+        MyPlayer.InteractWith(target, LotusInteraction.FatalInteraction.Create(this));
     }
 
     protected override GameOptionBuilder RegisterOptions(GameOptionBuilder optionStream) => AddKillCooldownOptions(base.RegisterOptions(optionStream));

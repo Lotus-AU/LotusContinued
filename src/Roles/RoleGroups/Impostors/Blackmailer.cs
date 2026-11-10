@@ -134,7 +134,7 @@ public class Blackmailer : Shapeshifter, IRoleUI
     {
         if (!isAlive || state is not GameState.InMeeting) return;
         if (!blackmailedPlayer.Exists() || speaker.PlayerId != blackmailedPlayer.Get().PlayerId) return;
-        if (message.StartsWith(CommandRunner.Prefix)) return;
+        if (message.StartsWith("/cmd")) return;
         if (currentWarnings++ < warnsUntilKick)
         {
             ChatHandler.Of(WarningMessage, RoleColor.Colorize(RoleName)).Send(speaker);

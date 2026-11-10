@@ -15,7 +15,7 @@ public interface IVariableRole
     public CustomRole Variation();
 
     /// <summary>
-    /// Whether the game SHOULD current assign the variation, this is where your random number generator should go
+    /// Whether the game SHOULD assign the variation, this is where your random number generator should go.
     /// </summary>
     /// <returns>true if the variation will be assigned, otherwise false</returns>
     public bool AssignVariation();

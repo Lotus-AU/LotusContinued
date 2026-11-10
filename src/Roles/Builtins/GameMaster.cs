@@ -24,6 +24,8 @@ public sealed class GameMaster : CustomRole, IPhantomRole
     private Cooldown hauntCooldown = null!;
     public static Color GMColor = new(1f, 0.4f, 0.4f);
 
+    public override string GetRoleOutfitPath() => $"RoleOutfits/Extra/{EnglishRoleName}".ToLower();
+
     [RoleAction(LotusActionType.RoundStart, ActionFlag.WorksAfterDeath)]
     private void ExileGM(bool roundStart)
     {

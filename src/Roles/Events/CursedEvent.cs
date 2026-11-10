@@ -18,6 +18,11 @@ public class CursedEvent : TargetedAbilityEvent, IRoleEvent
 
 public class CursedDeathEvent : DeathEvent
 {
+    CursedDeathEvent()
+    {
+
+    }
+
     public CursedDeathEvent(PlayerControl deadPlayer, PlayerControl? killer) : base(deadPlayer, killer)
     {
     }
