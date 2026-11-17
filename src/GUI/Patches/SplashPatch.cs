@@ -241,7 +241,7 @@ class SplashPatch
             if (playBG.gameObject.active) onlineButtons.gameObject.SetActive(true);
         }, .1f);
 
-        if (OperatingSystem.IsAndroid())
+        if (OperatingSystem.IsMobile())
         {
             Vector3 nudgeLeft = new Vector3(-0.5f, 0, 0);
             Vector3 nudgeRight = new Vector3(0.5f, 0, 0);
@@ -438,7 +438,7 @@ class SplashPatch
         UpdateButton = UnityOptional<GameObject>.Of(updateButton);
 
         if (!ProjectLotus.ModUpdater.HasUpdate) updateButton.gameObject.SetActive(false);
-        if (OperatingSystem.IsAndroid()) updateButton.SetActive(false);
+        if (OperatingSystem.IsMobile()) updateButton.SetActive(false);
         FriendsListManager.Instance.StopPolling();
         FriendsListManager.Instance.OnSignOut();
     }

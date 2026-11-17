@@ -33,13 +33,13 @@ public class AddonManager
     internal static void ImportAddons()
     {
         DirectoryInfo addonDirectory = new(Path.Combine(Vents.BasePath,
-            OperatingSystem.IsAndroid() ? AssemblyUtils.GetAssemblyRefName(Assembly.GetExecutingAssembly()) : string.Empty,
+            OperatingSystem.IsMobile() ? AssemblyUtils.GetAssemblyRefName(Assembly.GetExecutingAssembly()) : string.Empty,
             "addons")
         );
         if (!addonDirectory.Exists)
             addonDirectory.Create();
         #if RELEASE
-            if (OperatingSystem.IsAndroid()) return; // xtra wants to disable this on android for now.
+            if (OperatingSystem.IsMobile()) return; // xtra wants to disable this on android for now.
         #endif
         addonDirectory.EnumerateFiles().Do(LoadAddon);
         Addons.ForEach(addon =>

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Lotus.Extensions;
 using Lotus.GUI.Components;
 using Lotus.GUI.Menus.OptionsMenu;
 using Lotus.GUI.Menus.OptionsMenu.Components;
@@ -62,7 +63,7 @@ public class ModUpdateMenu : MonoBehaviour
         AnchorObject.SetActive(false);
 
         log.Trace($"Update ready during Mod Menu Creation: {SplashPatch.UpdateReady}", "ModUpdateMenu");
-        if (SplashPatch.UpdateReady && !OperatingSystem.IsAndroid()) Open();
+        if (SplashPatch.UpdateReady && !OperatingSystem.IsMobile()) Open();
     }
 
     private void Start()
@@ -72,7 +73,7 @@ public class ModUpdateMenu : MonoBehaviour
 
     public void Open()
     {
-        if (OperatingSystem.IsAndroid()) return;
+        if (OperatingSystem.IsMobile()) return;
         AnchorObject.SetActive(opened = true);
     }
 

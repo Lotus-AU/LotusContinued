@@ -53,7 +53,7 @@ class BeginImpostorPatch
             }
 
             __instance.BeginCrewmate(yourTeam);
-            // if (!OperatingSystem.IsAndroid()) __instance.overlayHandle.color = Palette.CrewmateBlue;
+            // if (!OperatingSystem.IsMobile()) __instance.overlayHandle.color = Palette.CrewmateBlue;
         }
         else return true;
         if (role.Faction is not Crewmates || role.GetType() == IRoleManager.Current.FallbackRole().GetType()) return true;

@@ -1,5 +1,6 @@
 using System;
 using AmongUs.Data;
+using Lotus.Extensions;
 using Lotus.GUI.Menus.OptionsMenu.Components;
 using Lotus.Options;
 using Lotus.Options.Client;
@@ -99,7 +100,7 @@ public class GraphicsMenu : MonoBehaviour, IBaseOptionMenuComponent
             if (!opening) applyGameObject.SetActive(true);
         }));
         graphicsContent.slider.gameObject.SetActive(false);
-        if (OperatingSystem.IsAndroid())
+        if (OperatingSystem.IsMobile())
         {
             resolutionSlider.gameObject.SetActive(false);
             resolutionText.gameObject.SetActive(false);

@@ -35,6 +35,7 @@ using Lotus.Managers.Blackscreen.Interfaces;
 using Lotus.Managers.Blackscreen;
 using Lotus.API.Vanilla.Meetings;
 using Lotus.Discord.Patches;
+using Lotus.Extensions;
 using Lotus.GUI;
 using Lotus.Logging;
 using VentLib.Lobbies;
@@ -142,7 +143,7 @@ public class ProjectLotus : BasePlugin, IGitVersionEmitter
 
         CommandRunner.Prefixes.Add("/cmd");
         _harmony.PatchAll(Assembly.GetExecutingAssembly());
-        if (!OperatingSystem.IsAndroid()) DiscordPatch.Apply(_harmony);
+        if (!OperatingSystem.IsMobile()) DiscordPatch.Apply(_harmony);
 
         new GlobalRoleManager();
         GameModeManager.AddGamemodes();
