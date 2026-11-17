@@ -80,6 +80,7 @@
   <ItemGroup>
     <EmbeddedResource Include=".\assets\projectlotus_bundle-win" />
     <EmbeddedResource Include=".\assets\projectlotus_bundle-android" />
+    <EmbeddedResource Include=".\assets\projectlotus_bundle-ios" />
   </ItemGroup>
   
   <ItemGroup>
