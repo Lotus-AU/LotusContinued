@@ -19,7 +19,7 @@ public class LotusAssets
         {
             if (_loaded) return _assetBundle!;
             _loaded = true;
-            _assetBundle = AssetLoader.LoadAssetBundle("Lotus.assets.projectlotus_bundle-" + (OperatingSystem.IsAndroid() ? "android" : "win"));
+            _assetBundle = AssetLoader.LoadAssetBundle("Lotus.assets.projectlotus_bundle-" + (OperatingSystem.IsAndroid() ? "android" : OperatingSystem.IsIOS() ? "ios" : "win"));
             return _assetBundle;
         }
     }

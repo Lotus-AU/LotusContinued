@@ -9,6 +9,7 @@ using VentLib.Utilities.Attributes;
 using VentLib.Utilities.Extensions;
 using VentLib.Utilities;
 using System.Globalization;
+using Lotus.Extensions;
 
 namespace Lotus.GUI.Menus.OptionsMenu.Submenus;
 
@@ -213,7 +214,7 @@ public class GeneralMenu : MonoBehaviour, IBaseOptionMenuComponent
             optionsMenuBehaviour.JoystickSizeSlider.SetValue(mobileJoystickSize.Value);
             optionsMenuBehaviour.JoystickSizeSlider.OnValidate();
         }));
-        if (OperatingSystem.IsAndroid())
+        if (OperatingSystem.IsMobile())
         {
             mobileJoystickSize.enabled = true;
             mobileJoystickSize.SetEnabledColors();

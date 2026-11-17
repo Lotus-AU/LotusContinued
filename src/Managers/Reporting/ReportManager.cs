@@ -5,6 +5,7 @@ using System.IO.Compression;
 using System.Linq;
 using System.Reflection;
 using HarmonyLib;
+using Lotus.Extensions;
 using Lotus.Managers.Hotkeys;
 using UnityEngine;
 using VentLib;
@@ -36,7 +37,7 @@ public static class ReportManager
             .IOSettings(settings => settings.UnknownValueAction = ADEAnswer.Allow)
             .BuildAndRegister(reportingOptionManager);
 
-        ReportingDirectory = new DirectoryInfo(Path.Combine(Vents.BasePath, OperatingSystem.IsAndroid() ? AssemblyUtils.GetAssemblyRefName(Assembly.GetExecutingAssembly()) : string.Empty,
+        ReportingDirectory = new DirectoryInfo(Path.Combine(Vents.BasePath, OperatingSystem.IsMobile() ? AssemblyUtils.GetAssemblyRefName(Assembly.GetExecutingAssembly()) : string.Empty,
             reportingDirectoryOption.GetValue<string>()));
         if (!ReportingDirectory.Exists) ReportingDirectory.Create();
 

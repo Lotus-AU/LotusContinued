@@ -31,7 +31,7 @@ public class AdvancedOptions
         OptionManager defaultManager = OptionManager.GetManager(file: "advanced.txt", managerFlags: OptionManagerFlags.IgnorePreset);
 
         guiToggleOption = new GameOptionBuilder()
-            .AddBoolean(OperatingSystem.IsAndroid())
+            .AddBoolean(OperatingSystem.IsMobile())
             .KeyName("Keybinds GUI Toggle", "Keybinds GUI Toggle")
             .Description("Whether to show keybinds button in-game.")
             .BindBool(b =>

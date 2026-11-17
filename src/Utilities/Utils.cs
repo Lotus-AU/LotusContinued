@@ -40,8 +40,56 @@ public static class Utils
 
     public static Color? ConvertHexToColor(string hex)
     {
-        if (!ColorUtility.TryParseHtmlString(hex, out Color c)) return null;
+        if (!TryParseHtmlString(hex, out Color c)) return null;
         return c;
+    }
+
+    // This (ColorUtility.TryParseHtmlString) is stripped on iOS
+    public static bool TryParseHtmlString(string htmlString, out Color color)
+    {
+        color = default;
+        if (string.IsNullOrEmpty(htmlString)) return false;
+        if (htmlString[0] != '#')
+        {
+            htmlString = htmlString.ToLowerInvariant() switch
+            {
+                "red" => "#FF0000", "cyan" => "#00FFFF", "blue" => "#0000FF",
+                "darkblue" => "#0000A0", "lightblue" => "#ADD8E6", "purple" => "#800080",
+                "yellow" => "#FFFF00", "lime" => "#00FF00", "fuchsia" => "#FF00FF",
+                "white" => "#FFFFFF", "silver" => "#C0C0C0", "grey" => "#808080",
+                "black" => "#000000", "orange" => "#FFA500", "brown" => "#A52A2A",
+                "maroon" => "#800000", "green" => "#008000", "olive" => "#808000",
+                "navy" => "#000080", "teal" => "#008080", "aqua" => "#00FFFF",
+                "magenta" => "#FF00FF", "clear" => "#00000000",
+                _ => ""
+            };
+        }
+        if (htmlString.Length != 4 && htmlString.Length != 5 &&
+            htmlString.Length != 7 && htmlString.Length != 9) return false;
+
+        uint value = 0;
+        for (var i = 1; i < htmlString.Length; i++)
+        {
+            var c = htmlString[i];
+            var digit = c >= '0' && c <= '9' ? c - '0' :
+                c >= 'a' && c <= 'f' ? c - 'a' + 10 :
+                c >= 'A' && c <= 'F' ? c - 'A' + 10 : -1;
+            if (digit < 0) return false;
+            value = (value << 4) | (uint)digit;
+        }
+        if (htmlString.Length <= 5)
+        {
+            if (htmlString.Length == 4) value = (value << 4) | 0xF;
+            color = new Color(((value >> 12) & 0xF) / 15f, ((value >> 8) & 0xF) / 15f,
+                ((value >> 4) & 0xF) / 15f, (value & 0xF) / 15f);
+        }
+        else
+        {
+            if (htmlString.Length == 7) value = (value << 8) | 0xFF;
+            color = new Color(((value >> 24) & 0xFF) / 255f, ((value >> 16) & 0xFF) / 255f,
+                ((value >> 8) & 0xFF) / 255f, (value & 0xFF) / 255f);
+        }
+        return true;
     }
 
     public static bool HasTasks(NetworkedPlayerInfo p) => HasTasks(p.GetPrimaryRole());

@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using System.Reflection;
 using BepInEx;
+using Lotus.Extensions;
 using Lotus.Managers.Announcements;
 using Lotus.Managers.Combo;
 using Lotus.Managers.Friends;
@@ -21,7 +22,7 @@ public static class PluginDataManager
 {
     private static readonly StandardLogger log = LoggerFactory.GetLogger<StandardLogger>(typeof(PluginDataManager));
 
-    private static readonly  string ModifiableDataDirectoryPath = Path.Combine(Vents.BasePath, OperatingSystem.IsAndroid() ? AssemblyUtils.GetAssemblyRefName(Assembly.GetExecutingAssembly()) : string.Empty, "LOTUS_DATA");
+    private static readonly  string ModifiableDataDirectoryPath = Path.Combine(Vents.BasePath, OperatingSystem.IsMobile() ? AssemblyUtils.GetAssemblyRefName(Assembly.GetExecutingAssembly()) : string.Empty, "LOTUS_DATA");
     private static readonly  string ModifiableDataDirectoryPathOld = Path.Combine(Vents.BasePath, "TOHTOR_DATA");
     private static readonly string ModifiableHiddenDataDirectoryPath = Path.Join(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "/ProjectLotus");
     private static readonly string LegacyHiddenDataDirectoryPath = Path.Join(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "/TownOfHostTheOtherRoles");
@@ -56,7 +57,7 @@ public static class PluginDataManager
         MigrateOldDirectory();
         MigrateOldHiddenDirectory();
 
-		if (OperatingSystem.IsAndroid())
+		if (OperatingSystem.IsMobile())
         {
             ModifiableHiddenDataDirectoryPath = Path.Combine(Application.persistentDataPath, "ProjectLotus");
         }

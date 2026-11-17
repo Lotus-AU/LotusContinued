@@ -42,9 +42,13 @@ public class Texture2DReplacerPatch
                 Done.Add(texture.name);
 
                 if (OperatingSystem.IsAndroid()) ReplaceTextureAndroid(spriteTexture, texture);
+                else if (OperatingSystem.IsIOS()) ReplaceTextureIOS(spriteTexture, texture);
                 else ReplaceTextureWindows(spriteTexture, texture);
             });
     }
+
+    // needs more testing, if android "solution" works for ios too, then we'll use that
+    private static void ReplaceTextureIOS(Sprite spriteTexture, Texture2D texture) => ReplaceTextureAndroid(spriteTexture, texture);
 
     private static void ReplaceTextureAndroid(Sprite spriteTexture, Texture2D texture)
     {

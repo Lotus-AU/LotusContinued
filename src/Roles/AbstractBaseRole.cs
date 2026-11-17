@@ -730,7 +730,7 @@ public abstract class AbstractBaseRole
 
         public RoleModifier RoleColor(string htmlColor)
         {
-            if (ColorUtility.TryParseHtmlString(htmlColor, out Color color))
+            if (Utils.TryParseHtmlString(htmlColor, out Color color))
                 myRole.RoleColor = color;
             else
                 log.Fatal($"Could not parse HTML Code {htmlColor} for {myRole.EnglishRoleName}");
